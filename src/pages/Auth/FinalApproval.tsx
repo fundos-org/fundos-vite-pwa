@@ -9,7 +9,7 @@ const FinalApproval = () => {
         toast.success('KYC process completed successfully!');
         // Add small delay to ensure notification shows before navigation
         setTimeout(() => {
-            navigate(eRoutes.DASHBOARD_APP);
+            navigate(eRoutes.DASHBOARD_HOME);
         }, 100);
     };
 
@@ -30,7 +30,7 @@ const FinalApproval = () => {
 
             <button
                 onClick={handleGoToDashboard}
-                className="bg-green-400 text-gray-900 font-semibold px-8 py-4 w-full max-w-xs transition-all duration-300 hover:bg-green-500 focus:outline-none"
+                className="bg-green-400 text-gray-900 font-semibold px-8 py-4 w-full transition-all duration-300 hover:bg-green-500 focus:outline-none"
             >
                 Go to Dashboard
             </button>

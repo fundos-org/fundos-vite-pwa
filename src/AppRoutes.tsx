@@ -17,6 +17,7 @@ const UserDetails = lazy(() => import("./pages/Auth/UserDetails"));
 const ContributionAgreement = lazy(() => import("./pages/Auth/ContributionAgreement"));
 const UploadPhoto = lazy(() => import("./pages/Auth/UploadPhoto"));
 const FinalApproval = lazy(() => import("./pages/Auth/FinalApproval"));
+const Dashboard = lazy(() => import("./pages/Home/Dashboard"));
 
 const AppRoutes = () => {
     return (
@@ -115,6 +116,13 @@ const AppRoutes = () => {
                         </Layout>
                     } />
                 </Route>
+                <Route path={eRoutes.HOME}>
+                    <Route path={eRoutes.DASHBOARD_HOME} element={
+                        <Layout backRoute={eRoutes.PHONE_NUMBER}>
+                            <Dashboard />
+                        </Layout>
+                    } />
+                    </Route>
                 <Route path="*" element={<Navigate to="/" />} />
             </Routes>
         </Suspense>
