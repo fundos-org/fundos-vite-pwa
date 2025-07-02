@@ -12,6 +12,7 @@ const KycStart = lazy(() => import("./pages/KycStart"));
 const AadhaarVerification = lazy(() => import("./pages/AadhaarVerification"));
 const PanVerification = lazy(() => import("./pages/PanVerification"));
 const BankVerification = lazy(() => import("./pages/BankVerification"));
+const ProfessionalBackground = lazy(() => import("./pages/ProfessionalBackground"));
 
 const AppRoutes = () => {
     return (
@@ -82,6 +83,11 @@ const AppRoutes = () => {
                     <Route path={eRoutes.BANK_AUTH} element={
                         <Layout backRoute={eRoutes.PAN_AUTH}>
                             <BankVerification />
+                        </Layout>
+                    } />
+                    <Route path={eRoutes.PROFESSIONAL_BACKGROUND_AUTH} element={
+                        <Layout backRoute={eRoutes.BANK_AUTH}>
+                            <ProfessionalBackground />
                         </Layout>
                     } />
                 </Route>

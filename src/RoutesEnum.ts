@@ -13,6 +13,7 @@ export enum eRoutes {
     PAN_AUTH = "/auth/pan",
     BANK_AUTH = "/auth/bank",
     PROFESSIONAL_BACKGROUND_AUTH = "/auth/professional-background",
+    USER_DETAILS_AUTH = "/auth/user-details",
     CONTRIBUTION_AGREEMENT_AUTH = "/auth/contribution-agreement",
     UPLOAD_PHOTO_AUTH = "/auth/upload-photo",
     FINAL_APPROVAL_AUTH = "/auth/final-approval",
