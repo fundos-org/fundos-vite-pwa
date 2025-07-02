@@ -5,6 +5,9 @@ import { eRoutes } from "./RoutesEnum";
 const PhoneNumber = lazy(() => import("./pages/PhoneNumber"));
 const GetStarted = lazy(() => import("./pages/GetStarted"));
 const VerifyPhoneOTP = lazy(() => import("./pages/VerifyPhoneOtp"));
+const EmailInput = lazy(() => import("./pages/EmailInput"));
+const VerifyEmailOtp = lazy(() => import("./pages/VerifyEmailOtp"));
+const ChooseInvestor = lazy(() => import("./pages/ChooseInvestor"));
 
 const AppRoutes = () => {
     return (
@@ -41,6 +44,23 @@ const AppRoutes = () => {
                         </Layout>
                     }
                 />
+                <Route path={eRoutes.AUTH}>
+                    <Route path={eRoutes.EMAIL_AUTH} element={
+                        <Layout backRoute={eRoutes.VERIFY_PHONE_OTP}>
+                            <EmailInput />
+                        </Layout>
+                    } />
+                    <Route path={eRoutes.EMAIL_VERIFY_AUTH} element={
+                        <Layout backRoute={eRoutes.EMAIL_AUTH}>
+                            <VerifyEmailOtp />
+                        </Layout>
+                    } />
+                    <Route path={eRoutes.CHOOSE_INVESTOR_AUTH} element={
+                        <Layout backRoute={eRoutes.EMAIL_VERIFY_AUTH}>
+                            <ChooseInvestor />
+                        </Layout>
+                    } />
+                </Route>
                 <Route path="*" element={<Navigate to="/" />} />
             </Routes>
         </Suspense>
