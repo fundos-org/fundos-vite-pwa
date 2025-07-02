@@ -18,6 +18,9 @@ const ContributionAgreement = lazy(() => import("./pages/Auth/ContributionAgreem
 const UploadPhoto = lazy(() => import("./pages/Auth/UploadPhoto"));
 const FinalApproval = lazy(() => import("./pages/Auth/FinalApproval"));
 const Dashboard = lazy(() => import("./pages/Home/Dashboard"));
+const DealDetails = lazy(() => import("./pages/DealInvestment/DealDetails"));
+const CommitInvestment = lazy(() => import("./pages/DealInvestment/CommitInvestment"));
+const TermSheet = lazy(() => import("./pages/DealInvestment/TermSheet"));
 
 const AppRoutes = () => {
     return (
@@ -122,7 +125,22 @@ const AppRoutes = () => {
                             <Dashboard />
                         </Layout>
                     } />
-                    </Route>
+                    <Route path={eRoutes.DEAL_DETAILS_HOME} element={
+                        <Layout backRoute={eRoutes.DASHBOARD_HOME}>
+                            <DealDetails />
+                        </Layout>
+                    } />
+                    <Route path={eRoutes.COMMIT_INVESTMENT_HOME} element={
+                        <Layout backRoute={eRoutes.DEAL_DETAILS_HOME}>
+                            <CommitInvestment />
+                        </Layout>
+                    } />
+                    <Route path={eRoutes.TERM_SHEET_HOME} element={
+                        <Layout backRoute={eRoutes.COMMIT_INVESTMENT_HOME}>
+                            <TermSheet />
+                        </Layout>
+                    } />
+                </Route>
                 <Route path="*" element={<Navigate to="/" />} />
             </Routes>
         </Suspense>

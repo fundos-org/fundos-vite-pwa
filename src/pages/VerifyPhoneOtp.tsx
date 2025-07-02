@@ -62,7 +62,7 @@ const VerifyPhoneOTP: FC = () => {
 
                 if (data.onboarding_status === 'Completed') {
                     toast.success('Welcome back! Redirecting to dashboard...');
-                    navigate(eRoutes.GET_STARTED)
+                    navigate(eRoutes.DASHBOARD_HOME)
                 } else {
                     toast.error('Please complete your email verification to continue');
                     navigate(eRoutes.EMAIL_AUTH);

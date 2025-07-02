@@ -28,9 +28,9 @@ const Home: React.FC<{ investorName: string; deals: Deal[]; }> = ({ investorName
         navigate(eRoutes.PHONE_NUMBER);
     };
 
-    const handleViewDeal = (dealId: string) => {
-        navigate(`/deal-details?dealId=${dealId}`);
-    };
+    // const handleViewDeal = (dealId: string) => {
+    //     navigate(`/deal-details?dealId=${dealId}`);
+    // };
 
     return (
         <div className="fixed inset-0 h-screen w-screen bg-gradient-to-br from-[#1a1a1a] to-[#2d2d2d] flex flex-col text-white overflow-hidden box-border">
@@ -133,7 +133,7 @@ const Home: React.FC<{ investorName: string; deals: Deal[]; }> = ({ investorName
                                 </div> */}
 
                                     <button
-                                        onClick={() => handleViewDeal(deal.deal_id)}
+                                        onClick={() => navigate(eRoutes.DEAL_DETAILS_HOME.replace(':dealId', deal.deal_id))}
                                         className="bg-gradient-to-br from-[#00fb57] to-[#00d647] text-[#1a1a1a] border-none px-4 py-2 text-xs font-semibold cursor-pointer w-full transition-all duration-300"
                                     >
                                         📊 View Details
