@@ -72,12 +72,9 @@ const DealDetails = () => {
       }
       
       const mcaData = await mcaResponse.json();
-      
-      if (mcaData?.message) {
-        toast.success(mcaData.message);
-      }
-      
-      if (mcaData.sent_status === 'success' && mcaData.request_status === 'completed') {
+    
+    if (mcaData.sent_status === 'success' && mcaData.request_status === 'completed') {
+          toast.success(mcaData.message);
         navigate(eRoutes.COMMIT_INVESTMENT_HOME.replace(':dealId', dealId ?? ''));
       } else if (mcaData.sent_status === 'success' && mcaData.request_status === 'inprogress') {
         toast.error('Signing Docs in progress. Please contact admin.');
@@ -126,7 +123,7 @@ const DealDetails = () => {
   if (loading) {
     return (
     <div className="min-h-screen bg-gradient-to-br from-[#1a1a1a] to-[#2d2d2d] flex items-center justify-center text-white p-8">
-      <div className="w-full max-w-md bg-white/5 border border-white/10 rounded-xl p-8 backdrop-blur text-center">
+      <div className="w-full max-w-md bg-white/5 border border-white/10 p-8 backdrop-blur text-center">
         <div className="w-15 h-15 border-4 border-gray-700 border-t-[#00fb57] rounded-full animate-spin mx-auto mb-5"></div>
         <h2 className="text-2xl font-medium text-[#FDFDFD] mb-2">
         Loading Deal Details
@@ -142,7 +139,7 @@ const DealDetails = () => {
   if (!deal) {
     return (
     <div className="min-h-screen bg-gradient-to-br from-[#1a1a1a] to-[#2d2d2d] flex items-center justify-center text-white p-8">
-      <div className="w-full max-w-md bg-white/5 border border-white/10 rounded-xl p-8 backdrop-blur text-center">
+      <div className="w-full max-w-md bg-white/5 border border-white/10 p-8 backdrop-blur text-center">
         <h2 className="text-2xl font-medium text-[#FDFDFD] mb-5">
         Deal Not Found
         </h2>
@@ -158,15 +155,9 @@ const DealDetails = () => {
   }
 
   return (
-    <div className="fixed inset-0 min-h-screen min-w-full bg-gradient-to-br from-[#1a1a1a] to-[#2d2d2d] flex flex-col text-white p-4 overflow-hidden box-border">
-      <button 
-        onClick={() => navigate(eRoutes.DASHBOARD_HOME)}
-        className="bg-transparent border-none text-gray-400 text-2xl cursor-pointer p-4 self-start z-10"
-      >
-        ←
-      </button>
       
-      <div className="flex-1 p-8 max-h-full overflow-y-auto">
+      <>
+          <div>
         <h1 className="text-white text-2xl font-bold mb-4">
           {deal.title}
         </h1>
@@ -196,7 +187,7 @@ const DealDetails = () => {
           </h2>
 
           {/* Current Valuation - Featured */}
-          <div className="mb-6 p-4 bg-[#00fb571a] rounded-md border border-[#00fb574d]">
+          <div className="mb-6 p-4 bg-[#00fb571a] border border-[#00fb574d]">
             <p className="text-[#00fb57] text-xs mb-1 font-semibold">
               CURRENT VALUATION
             </p>
@@ -278,25 +269,26 @@ const DealDetails = () => {
               ></div>
             </div>
           </div>
-        </div>
+          </div>
+          </div>
+          
 
         {/* Action Buttons */}
         <div className="flex flex-col gap-3">
           <button
             onClick={handleCommit}
-            className="bg-[#00fb57] text-[#1a1a1a] text-base font-bold py-3 border-none rounded-lg cursor-pointer w-full transition-all duration-300"
+            className="bg-[#00fb57] text-[#1a1a1a] text-base font-bold py-3 border-none cursor-pointer w-full transition-all duration-300"
           >
             💰 Commit Investment
           </button>
           <button
             onClick={handleNotInterested}
-            className="bg-white/10 text-white text-sm font-semibold py-3 border border-white/30 rounded-lg cursor-pointer w-full transition-all duration-300"
+            className="bg-white/10 text-white text-sm font-semibold py-3 border border-white/30 cursor-pointer w-full transition-all duration-300"
           >
             Not Interested
           </button>
         </div>
-      </div>
-    </div>
+      </>
   );
 };
 

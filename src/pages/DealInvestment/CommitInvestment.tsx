@@ -130,157 +130,42 @@ const CommitInvestment: React.FC = () => {
 
   if (loading) {
     return (
-      <div style={{
-        height: '100vh',
-        width: '100vw',
-        background: 'linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)',
-        display: 'flex',
-        flexDirection: 'column',
-        color: 'white',
-        overflow: 'hidden',
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        boxSizing: 'border-box'
-      }}>
-        {/* Back Icon */}
-        <button 
-          onClick={() => navigate(eRoutes.DEAL_DETAILS_HOME.replace(':dealId', dealId || ''))}
-          style={{
-            background: 'transparent',
-            border: 'none',
-            color: '#9ca3af',
-            fontSize: '2rem',
-            cursor: 'pointer',
-            padding: '1rem',
-            alignSelf: 'flex-start',
-            zIndex: 10
-          }}
-        >
-          ←
-        </button>
-        {/* Scrollable Content */}
-        <div style={{
-          flex: 1,
-          padding: '2rem',
-          overflow: 'auto',
-          paddingBottom: '6rem',
-          maxWidth: '500px',
-          margin: '0 auto'
-        }}>
-          <div style={{ 
-            width: '100%', 
-            maxWidth: '400px',
-            background: 'rgba(255, 255, 255, 0.05)',
-            border: '1px solid rgba(255, 255, 255, 0.1)',
-            borderRadius: '12px',
-            padding: '2rem',
-            backdropFilter: 'blur(10px)',
-            textAlign: 'center'
-          }}>
-            <div style={{
-              width: '60px',
-              height: '60px',
-              border: '4px solid #374151',
-              borderTop: '4px solid #00fb57',
-              borderRadius: '50%',
-              animation: 'spin 1s linear infinite',
-              margin: '0 auto 20px'
-            }}></div>
-            <h2 style={{
-              fontSize: '1.5rem',
-              fontWeight: '500',
-              color: '#FDFDFD',
-              margin: '0 0 10px 0'
-            }}>
-              Loading Deal Details
-            </h2>
-            <p style={{
-              fontSize: '14px',
-              color: '#9ca3af',
-              margin: 0
-            }}>
-              Please wait while we load your investment details...
-            </p>
-          </div>
-        </div>
+    <div className="min-h-screen bg-gradient-to-br from-[#1a1a1a] to-[#2d2d2d] flex items-center justify-center text-white p-8">
+      <div className="w-full max-w-md bg-white/5 border border-white/10 p-8 backdrop-blur text-center">
+        <div className="w-15 h-15 border-4 border-gray-700 border-t-[#00fb57] rounded-full animate-spin mx-auto mb-5"></div>
+        <h2 className="text-2xl font-medium text-[#FDFDFD] mb-2">
+        Loading Deal Details
+        </h2>
+        <p className="text-sm text-gray-400 m-0">
+        Please wait while we fetch the deal information...
+        </p>
       </div>
+    </div>
     );
   }
 
   if (!deal) {
     return (
-      <div style={{
-        height: '100vh',
-        width: '100vw',
-        background: 'linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)',
-        display: 'flex',
-        flexDirection: 'column',
-        color: 'white',
-        overflow: 'hidden',
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        boxSizing: 'border-box'
-      }}>
+      <div className="fixed inset-0 h-screen w-screen bg-gradient-to-br from-[#1a1a1a] to-[#2d2d2d] flex flex-col text-white overflow-hidden box-border">
         {/* Back Icon */}
-        <button 
+        <button
           onClick={() => navigate(eRoutes.DEAL_DETAILS_HOME.replace(':dealId', dealId || ''))}
-          style={{
-            background: 'transparent',
-            border: 'none',
-            color: '#9ca3af',
-            fontSize: '2rem',
-            cursor: 'pointer',
-            padding: '1rem',
-            alignSelf: 'flex-start',
-            zIndex: 10
-          }}
+          className="bg-transparent border-none text-gray-400 text-2xl cursor-pointer p-4 self-start z-10"
         >
           ←
         </button>
         {/* Scrollable Content */}
-        <div style={{
-          flex: 1,
-          padding: '2rem',
-          overflow: 'auto',
-          paddingBottom: '6rem',
-          maxWidth: '500px',
-          margin: '0 auto'
-        }}>
-          <div style={{ 
-            width: '100%', 
-            maxWidth: '400px',
-            background: 'rgba(255, 255, 255, 0.05)',
-            border: '1px solid rgba(255, 255, 255, 0.1)',
-            borderRadius: '12px',
-            padding: '2rem',
-            backdropFilter: 'blur(10px)',
-            textAlign: 'center'
-          }}>
-            <h2 style={{
-              fontSize: '1.5rem',
-              fontWeight: '500',
-              color: '#FDFDFD',
-              margin: '0 0 20px 0'
-            }}>
-              Deal Not Found
-            </h2>
-            <button
-              onClick={() => navigate(eRoutes.DASHBOARD_HOME)}
-              style={{
-                background: '#00fb57',
-                color: '#1a1a1a',
-                border: 'none',
-                padding: '12px 24px',
-                fontSize: '14px',
-                fontWeight: '600',
-                borderRadius: '6px',
-                cursor: 'pointer'
-              }}
-            >
-              Back to Dashboard
-            </button>
+        <div className="flex-1 p-8 overflow-auto pb-24 max-w-[500px] mx-auto">
+          <div className="w-full max-w-[400px] bg-white/5 border border-white/10 p-8 backdrop-blur text-center mx-auto">
+        <h2 className="text-2xl font-medium text-[#FDFDFD] mb-5">
+          Deal Not Found
+        </h2>
+        <button
+          onClick={() => navigate(eRoutes.DASHBOARD_HOME)}
+          className="bg-[#00fb57] text-[#1a1a1a] border-none px-6 py-3 text-sm font-semibold cursor-pointer"
+        >
+          Back to Dashboard
+        </button>
           </div>
         </div>
       </div>
@@ -288,317 +173,158 @@ const CommitInvestment: React.FC = () => {
   }
 
   return (
-    <div style={{
-      height: '100vh',
-      width: '100vw',
-      background: 'linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)',
-      display: 'flex',
-      flexDirection: 'column',
-      color: 'white',
-      overflow: 'hidden',
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      boxSizing: 'border-box'
-    }}>
+    <div className="fixed inset-0 h-screen w-screen bg-gradient-to-br from-[#1a1a1a] to-[#2d2d2d] flex flex-col text-white overflow-hidden box-border">
       {/* Back Icon */}
-      <button 
-        onClick={() => navigate(eRoutes.DEAL_DETAILS_HOME.replace(':dealId', dealId || ''))}
-        style={{
-          background: 'transparent',
-          border: 'none',
-          color: '#9ca3af',
-          fontSize: '2rem',
-          cursor: 'pointer',
-          padding: '1rem',
-          alignSelf: 'flex-start',
-          zIndex: 10
-        }}
+      <button
+      onClick={() => navigate(eRoutes.DEAL_DETAILS_HOME.replace(':dealId', dealId || ''))}
+      className="bg-transparent border-none text-gray-400 text-2xl cursor-pointer p-4 self-start z-10"
       >
-        ←
+      ←
       </button>
       {/* Scrollable Content */}
-      <div style={{
-        flex: 1,
-        padding: '2rem',
-        overflow: 'auto',
-        paddingBottom: '6rem',
-        maxWidth: '500px',
-        margin: '0 auto'
-      }}>
-        <h1 style={{
-          color: '#fff',
-          fontSize: '1.8rem',
-          fontWeight: 'bold',
-          margin: '0 0 2rem 0'
-        }}>
-          💰 Commit Investment
-        </h1>
+      <div className="flex-1 p-8 overflow-auto pb-24 max-w-[500px] mx-auto">
+      <h1 className="text-white text-[1.8rem] font-bold mb-8">
+        💰 Commit Investment
+      </h1>
 
-        {/* Deal Info Card */}
-        <div>
-          <h2 style={{
-            color: '#00fb57',
-            fontSize: '1.2rem',
-            fontWeight: '600',
-            margin: '0 0 0.5rem 0'
-          }}>
-            {deal.title}
-          </h2>
-          <p style={{
-            color: '#ccc',
-            fontSize: '14px',
-            margin: '0 0 2rem 0',
-            lineHeight: '1.5'
-          }}>
-            {deal.description}
+      {/* Deal Info Card */}
+      <div>
+        <h2 className="text-[#00fb57] text-[1.2rem] font-semibold mb-2">
+        {deal.title}
+        </h2>
+        <p className="text-gray-300 text-sm mb-8 leading-[1.5]">
+        {deal.description}
+        </p>
+      </div>
+
+      {/* Investment Input Section */}
+      <div>
+        <h3 className="text-white text-[1.2rem] font-semibold mb-4">
+        📊 Investment Amount
+        </h3>
+        <div className="mb-4">
+        <label className="text-gray-400 text-sm mb-2 block font-semibold">
+          Enter amount in INR
+        </label>
+        <input
+          type="text"
+          value={investmentAmount}
+          onChange={(e) => handleInvestmentAmountChange(e.target.value)}
+          placeholder="0"
+          className="w-full p-[14px] text-lg bg-white/10 border border-white/30 text-white outline-none font-bold box-border"
+        />
+        <div className="flex justify-between items-center mt-2">
+          <p className="text-gray-400 text-xs m-0">
+          Minimum: {formatCurrency(deal.minimum_investment)}
           </p>
-        </div>
-
-        {/* Investment Input Section */}
-        <div>
-          <h3 style={{
-            color: '#fff',
-            fontSize: '1.2rem',
-            fontWeight: '600',
-            margin: '0 0 1rem 0'
-          }}>
-            📊 Investment Amount
-          </h3>
-          <div style={{ marginBottom: '1rem' }}>
-            <label style={{
-              color: '#9ca3af',
-              fontSize: '14px',
-              marginBottom: '8px',
-              display: 'block',
-              fontWeight: '600'
-            }}>
-              Enter amount in INR
-            </label>
-            <input
-              type="text"
-              value={investmentAmount}
-              onChange={(e) => handleInvestmentAmountChange(e.target.value)}
-              placeholder="0"
-              style={{
-                width: '100%',
-                padding: '14px',
-                fontSize: '18px',
-                backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                border: '1px solid rgba(255, 255, 255, 0.3)',
-                borderRadius: '8px',
-                color: '#fff',
-                outline: 'none',
-                fontWeight: 'bold',
-                boxSizing: 'border-box'
-              }}
-            />
-            <div style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              marginTop: '8px'
-            }}>
-              <p style={{
-                color: '#9ca3af',
-                fontSize: '12px',
-                margin: '0'
-              }}>
-                Minimum: {formatCurrency(deal.minimum_investment)}
-              </p>
-              {parsedAmount > 0 && (
-                <p style={{
-                  color: parsedAmount >= deal.minimum_investment ? '#00fb57' : '#ef4444',
-                  fontSize: '14px',
-                  margin: '0',
-                  fontWeight: '600'
-                }}>
-                  {parsedAmount >= deal.minimum_investment ? '✓ Valid Amount' : '✗ Below Minimum'}
-                </p>
-              )}
-            </div>
-          </div>
-          <button
-            onClick={handleInputChange}
-            disabled={!isInvestmentValid}
-            style={{
-              backgroundColor: isInvestmentValid ? '#00fb57' : 'rgba(255, 255, 255, 0.1)',
-              color: isInvestmentValid ? '#1a1a1a' : '#9ca3af',
-              fontSize: '16px',
-              fontWeight: 'bold',
-              padding: '14px',
-              border: isInvestmentValid ? 'none' : '1px solid rgba(255, 255, 255, 0.3)',
-              borderRadius: '8px',
-              cursor: isInvestmentValid ? 'pointer' : 'not-allowed',
-              width: '100%',
-              transition: 'all 0.3s ease'
-            }}
+          {parsedAmount > 0 && (
+          <p
+            className={`text-sm m-0 font-semibold ${
+            parsedAmount >= deal.minimum_investment
+              ? 'text-[#00fb57]'
+              : 'text-red-500'
+            }`}
           >
-            📈 Calculate Investment Summary
-          </button>
+            {parsedAmount >= deal.minimum_investment
+            ? '✓ Valid Amount'
+            : '✗ Below Minimum'}
+          </p>
+          )}
         </div>
+        </div>
+        <button
+        onClick={handleInputChange}
+        disabled={!isInvestmentValid}
+        className={`w-full font-bold text-base p-[14px] transition-all duration-300 ${
+          isInvestmentValid
+          ? 'bg-[#00fb57] text-[#1a1a1a] border-none cursor-pointer'
+          : 'bg-white/10 text-gray-400 border border-white/30 cursor-not-allowed'
+        }`}
+        >
+        📈 Calculate Investment Summary
+        </button>
+      </div>
       </div>
 
       {/* Modal */}
       {modalVisible && (
-        <div style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          backgroundColor: 'rgba(0, 0, 0, 0.8)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          zIndex: 1000,
-          padding: '20px'
-        }}>
-          <div style={{
-            backgroundColor: 'rgba(26, 26, 26, 0.95)',
-            borderRadius: '12px',
-            padding: '2rem',
-            width: '100%',
-            maxWidth: '400px',
-            border: '1px solid rgba(255, 255, 255, 0.1)',
-            backdropFilter: 'blur(10px)'
-          }}>
-            <h3 style={{
-              color: '#fff',
-              fontSize: '1.5rem',
-              fontWeight: 'bold',
-              margin: '0 0 1.5rem 0',
-              textAlign: 'center'
-            }}>
-              📊 Investment Summary
-            </h3>
+      <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-[1000] p-5">
+        <div className="bg-[#1a1a1a]/95 p-8 w-full max-w-[400px] border border-white/10 backdrop-blur">
+        <h3 className="text-white text-[1.5rem] font-bold mb-6 text-center">
+          📊 Investment Summary
+        </h3>
 
-            <div style={{ marginBottom: '1.5rem' }}>
-              <div style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                marginBottom: '10px'
-              }}>
-                <span style={{ color: '#ccc', fontSize: '14px' }}>Investment Amount:</span>
-                <span style={{ color: '#fff', fontSize: '14px', fontWeight: 'bold' }}>
-                  {formatCurrency(parsedAmount)}
-                </span>
-              </div>
-              
-              <div style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                marginBottom: '10px'
-              }}>
-                <span style={{ color: '#ccc', fontSize: '14px' }}>
-                  Management Fee ({managementFeeRate}%):
-                </span>
-                <span style={{ color: '#fff', fontSize: '14px', fontWeight: 'bold' }}>
-                  {formatCurrency(managementFee)}
-                </span>
-              </div>
-              
-              <div style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                marginBottom: '10px'
-              }}>
-                <span style={{ color: '#ccc', fontSize: '14px' }}>GST (18%):</span>
-                <span style={{ color: '#fff', fontSize: '14px', fontWeight: 'bold' }}>
-                  {formatCurrency(gst)}
-                </span>
-              </div>
-              
-              <div style={{
-                height: '1px',
-                backgroundColor: '#333',
-                margin: '15px 0'
-              }}></div>
-              
-              <div style={{
-                display: 'flex',
-                justifyContent: 'space-between'
-              }}>
-                <span style={{ color: '#00fb57', fontSize: '16px', fontWeight: 'bold' }}>
-                  Total Amount:
-                </span>
-                <span style={{ color: '#00fb57', fontSize: '16px', fontWeight: 'bold' }}>
-                  {formatCurrency(total)}
-                </span>
-              </div>
-            </div>
-
-            {/* Acknowledgment Checkbox */}
-            <div style={{
-              display: 'flex',
-              alignItems: 'flex-start',
-              marginBottom: '1.5rem',
-              gap: '10px'
-            }}>
-              <input
-                type="checkbox"
-                checked={checked}
-                onChange={toggleCheckbox}
-                style={{
-                  marginTop: '2px',
-                  cursor: 'pointer'
-                }}
-              />
-              <label
-                onClick={toggleCheckbox}
-                style={{
-                  color: '#ccc',
-                  fontSize: '12px',
-                  lineHeight: '1.4',
-                  cursor: 'pointer'
-                }}
-              >
-                I acknowledge that I have read and understood the investment terms and conditions. 
-                I confirm that the investment amount and associated fees are correct.
-              </label>
-            </div>
-
-            {/* Modal Buttons */}
-            <div style={{
-              display: 'flex',
-              gap: '10px'
-            }}>
-              <button
-                onClick={handleModalClose}
-                style={{
-                  backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                  color: '#fff',
-                  fontSize: '14px',
-                  fontWeight: '600',
-                  padding: '12px',
-                  border: '1px solid rgba(255, 255, 255, 0.3)',
-                  borderRadius: '8px',
-                  cursor: 'pointer',
-                  flex: 1
-                }}
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleContinue}
-                disabled={!checked}
-                style={{
-                  backgroundColor: checked ? '#00fb57' : 'rgba(255, 255, 255, 0.1)',
-                  color: checked ? '#1a1a1a' : '#9ca3af',
-                  fontSize: '14px',
-                  fontWeight: '600',
-                  padding: '12px',
-                  border: checked ? 'none' : '1px solid rgba(255, 255, 255, 0.3)',
-                  borderRadius: '8px',
-                  cursor: checked ? 'pointer' : 'not-allowed',
-                  flex: 1
-                }}
-              >
-                Continue
-              </button>
-            </div>
+        <div className="mb-6">
+          <div className="flex justify-between mb-2.5">
+          <span className="text-gray-300 text-sm">Investment Amount:</span>
+          <span className="text-white text-sm font-bold">
+            {formatCurrency(parsedAmount)}
+          </span>
+          </div>
+          <div className="flex justify-between mb-2.5">
+          <span className="text-gray-300 text-sm">
+            Management Fee ({managementFeeRate}%):
+          </span>
+          <span className="text-white text-sm font-bold">
+            {formatCurrency(managementFee)}
+          </span>
+          </div>
+          <div className="flex justify-between mb-2.5">
+          <span className="text-gray-300 text-sm">GST (18%):</span>
+          <span className="text-white text-sm font-bold">
+            {formatCurrency(gst)}
+          </span>
+          </div>
+          <div className="h-px bg-[#333] my-4"></div>
+          <div className="flex justify-between">
+          <span className="text-[#00fb57] text-base font-bold">
+            Total Amount:
+          </span>
+          <span className="text-[#00fb57] text-base font-bold">
+            {formatCurrency(total)}
+          </span>
           </div>
         </div>
+
+        {/* Acknowledgment Checkbox */}
+        <div className="flex items-start mb-6 gap-2.5">
+          <input
+          type="checkbox"
+          checked={checked}
+          onChange={toggleCheckbox}
+          className="mt-[2px] cursor-pointer"
+          />
+          <label
+          onClick={toggleCheckbox}
+          className="text-gray-300 text-xs leading-[1.4] cursor-pointer"
+          >
+          I acknowledge that I have read and understood the investment terms and conditions.
+          I confirm that the investment amount and associated fees are correct.
+          </label>
+        </div>
+
+        {/* Modal Buttons */}
+        <div className="flex gap-2.5">
+          <button
+          onClick={handleModalClose}
+          className="bg-white/10 text-white text-sm font-semibold p-3 border border-white/30 cursor-pointer flex-1"
+          >
+          Cancel
+          </button>
+          <button
+          onClick={handleContinue}
+          disabled={!checked}
+          className={`text-sm font-semibold p-3 flex-1 ${
+            checked
+            ? 'bg-[#00fb57] text-[#1a1a1a] border-none cursor-pointer'
+            : 'bg-white/10 text-gray-400 border border-white/30 cursor-not-allowed'
+          }`}
+          >
+          Continue
+          </button>
+        </div>
+        </div>
+      </div>
       )}
     </div>
   );
