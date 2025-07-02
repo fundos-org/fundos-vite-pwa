@@ -101,7 +101,7 @@ const AadhaarVerification = () => {
 
             {/* Aadhaar Verification Modal */}
             {aadhaarUrl && (
-                <div className="fixed inset-0 bg-gradient-to-br from-[#1a1a1a] to-[#2d2d2d] flex flex-col items-center justify-center z-[1000] h-screen w-screen text-white p-4 overflow-hidden box-border">
+                <div className="fixed inset-0 bg-black flex flex-col items-center justify-center z-[1000] h-screen w-screen text-white p-4 overflow-hidden box-border">
                     <button
                         onClick={() => setAadhaarUrl(null)}
                         className="bg-transparent border-none text-gray-400 text-2xl cursor-pointer absolute top-4 right-4 z-10"

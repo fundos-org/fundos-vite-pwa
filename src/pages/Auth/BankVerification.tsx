@@ -90,7 +90,7 @@ const BankDetails = () => {
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-gradient-to-br from-[#1a1a1a] to-[#2d2d2d] flex items-center justify-center text-white">
+            <div className="min-h-screen bg-black flex items-center justify-center text-white">
                 <div className="text-center">
                     <div className="w-10 h-10 border-4 border-[#374151] border-t-[#00fb57] rounded-full animate-spin mx-auto mb-5"></div>
                     <h2 className="text-3xl font-medium text-[#FDFDFD]">
