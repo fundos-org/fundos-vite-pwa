@@ -76,7 +76,6 @@ const AadhaarVerification = () => {
                 Complete your Aadhaar verification to finish KYC and begin investing.
             </p>
             </div>
-            <button onClick={() => navigate(eRoutes.PAN_AUTH)}>test next</button>
 
             {!showProceed && (
                 <button

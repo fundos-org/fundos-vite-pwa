@@ -101,7 +101,7 @@ const PanVerification = () => {
                     />
                 </div>
             </div>
-            <button onClick={() => navigate(eRoutes.BANK_AUTH)}>test next</button>
+            
             <button
                 onClick={handleSubmit}
                 type="submit"

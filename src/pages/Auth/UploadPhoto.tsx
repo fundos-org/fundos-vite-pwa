@@ -87,7 +87,7 @@ const UploadPhoto = () => {
                     </label>
                 )}
             </div>
-            <button onClick={() => navigate(eRoutes.FINAL_APPROVAL_AUTH)}>test next</button>
+            
             <button
                 onClick={handleUpload}
                 disabled={!selectedImage || uploading}

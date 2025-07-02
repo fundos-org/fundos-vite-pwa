@@ -202,9 +202,8 @@ const ProfessionalBackground = () => {
                 {renderDropdown('income_source', 'Income Source')}
                 {renderDropdown('annual_income', 'Annual Income')}
                 {renderDropdown('capital_commitment', 'Capital Commitment (Over 5 Years)')}
-
             </div>
-            <button onClick={()=> navigate(eRoutes.USER_DETAILS_AUTH)}>test next</button>
+
             <button
                 type="submit"
                 onClick={handleSubmit}

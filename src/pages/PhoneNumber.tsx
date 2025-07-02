@@ -89,16 +89,6 @@ const PhoneNumber: FC = () => {
                 </div>
 
                 <button
-                    type="button"
-                    onClick={() => navigate(eRoutes.VERIFY_PHONE_OTP)}
-                    className={`w-full py-4 px-8 text-base font-semibold border-none transition-all duration-300 ${phoneNumber.length === 10
-                        ? 'bg-[#00fb57] text-[#1a1a1a] cursor-pointer'
-                        : 'bg-gray-700 text-gray-500 cursor-not-allowed'
-                        }`}
-                >
-                    Test Next
-                </button>
-                <button
                     type="submit"
                     onClick={handleSubmit}
                     disabled={phoneNumber.length !== 10}

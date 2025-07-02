@@ -129,7 +129,6 @@ const ChooseInvestor = () => {
                 </div>
             </div>
 
-            <button onClick={() => navigate(eRoutes.COMPLETE_KYC_AUTH)}>test next</button>
             <button
                 disabled={!selectedType}
                 onClick={handleNext}

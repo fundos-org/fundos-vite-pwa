@@ -73,8 +73,6 @@ const ContributionAgreement = () => {
                 </div>
             </div>
 
-            <button onClick={() => navigate(eRoutes.UPLOAD_PHOTO_AUTH)}>test next</button>
-
             <div>
                 <div
                     className="flex items-center gap-3 mb-8 cursor-pointer"

@@ -25,8 +25,7 @@ const EmailInput = () => {
 
             if (data.success) {
                 localStorage.setItem('email', email);
-                window.history.pushState({}, '', '/verify-email-otp');
-                window.location.reload();
+                navigate(eRoutes.EMAIL_VERIFY_AUTH);
             } else {
                 toast.error(data.message || 'Failed to send OTP to email. Please try again.');
             }
@@ -61,7 +60,6 @@ const EmailInput = () => {
                 </div>
             </div>
 
-            <button onClick={() => navigate(eRoutes.EMAIL_VERIFY_AUTH)}>Test Next</button>
             <button
                 type="submit"
                 onClick={handleSubmit}

@@ -105,7 +105,7 @@ const VerifyPhoneOTP: FC = () => {
                     </div>
                 </div>
             </div>
-            <button onClick={() => navigate(eRoutes.EMAIL_AUTH)}>Test Next</button>
+            
             <button
                 type="submit"
                 disabled={otp.join('').length !== 4}
