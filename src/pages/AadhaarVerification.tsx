@@ -67,13 +67,15 @@ const AadhaarVerification = () => {
 
     return (
 
-        <div className="flex-1 flex flex-col justify-end p-8 max-h-full overflow-y-auto">
+        <>
+            <div>
             <h1 className="text-white text-4xl font-bold mb-2.5">
                 Aadhaar KYC Verification
             </h1>
             <p className="text-teal-300 text-sm mb-8 leading-relaxed">
                 Complete your Aadhaar verification to finish KYC and begin investing.
             </p>
+            </div>
             <button onClick={() => navigate(eRoutes.PAN_AUTH)}>test next</button>
 
             {!showProceed && (
@@ -102,7 +104,7 @@ const AadhaarVerification = () => {
                     Proceed Next
                 </button>
             )}
-        </div>
+        </>
     );
 };
 

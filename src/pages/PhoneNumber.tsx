@@ -45,7 +45,7 @@ const PhoneNumber: FC = () => {
 
     return (
         <>
-            <div className="flex-1 flex flex-col justify-between p-8 max-h-full overflow-y-auto">
+            <>
                 <div>
 
                     <h1 className="mb-4 text-4xl font-bold">
@@ -109,7 +109,7 @@ const PhoneNumber: FC = () => {
                 >
                     Proceed
                 </button>
-            </div>
+            </>
         </>
     );
 };

@@ -88,7 +88,7 @@ const ChooseInvestor = () => {
     };
 
     return (
-        <div className="flex-1 flex flex-col justify-between p-8 max-h-full w-full overflow-y-auto bg-black text-white">
+        <>
             <div>
                 <h1 className="mb-4 text-2xl font-bold">Choose Investor Type</h1>
                 <p className="text-[#00fb57] mb-8 leading-relaxed text-sm">
@@ -201,7 +201,7 @@ const ChooseInvestor = () => {
                     </div>
                 </div>
             )}
-        </div>
+        </>
     );
 };
 

@@ -42,7 +42,7 @@ const EmailInput = () => {
     };
 
     return (
-        <div className="flex-1 flex flex-col justify-between p-8 max-h-full w-full overflow-y-auto bg-black text-white">
+        <>
             <div>
                 <h1 className="mb-2 text-4xl font-bold">
                     Enter your mail ✉️
@@ -73,7 +73,7 @@ const EmailInput = () => {
             >
                 Next
             </button>
-        </div>
+        </>
     );
 };
 

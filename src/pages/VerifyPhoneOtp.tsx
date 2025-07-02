@@ -75,7 +75,7 @@ const VerifyPhoneOTP: FC = () => {
     };
 
     return (
-        <div className="flex-1 flex flex-col justify-between p-8 max-h-full overflow-y-auto bg-black text-white">
+        <>
             <div>
                 <h1 className="mb-4 text-4xl font-bold">
                     Verify your number
@@ -99,7 +99,7 @@ const VerifyPhoneOTP: FC = () => {
                                 onChange={(e) => handleOTPChange(index, e.target.value)}
                                 onKeyDown={(e) => handleKeyDown(index, e)}
                                 maxLength={1}
-                                className="w-1/4 h-15 text-center text-lg border border-gray-700 bg-gray-700 text-white outline-none"
+                                className="w-1/4 h-17 text-center text-lg border border-gray-700 bg-gray-700 text-white outline-none"
                             />
                         ))}
                     </div>
@@ -118,7 +118,7 @@ const VerifyPhoneOTP: FC = () => {
             >
                 Verify
             </button>
-        </div>
+        </>
     );
 };
 

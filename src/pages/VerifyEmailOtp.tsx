@@ -63,7 +63,7 @@ const VerifyEmailOtp = () => {
     };
 
     return (
-        <div className="flex-1 flex flex-col justify-between p-8 max-h-full w-full overflow-y-auto bg-black text-white">
+        <>
             <div>
                 <h1 className="mb-4 text-4xl font-bold">
                     Verify your Email
@@ -77,7 +77,7 @@ const VerifyEmailOtp = () => {
                     <label className="block mb-4 text-gray-200 text-sm">
                         Enter 6-digit verification code
                     </label>
-                    <div className="flex gap-2 justify-center">
+                    <div className="flex gap-2 justify-start">
                         {otp.map((digit, index) => (
                             <input
                                 key={index}
@@ -107,7 +107,7 @@ const VerifyEmailOtp = () => {
             >
                 Verify →
             </button>
-        </div>
+        </>
 
     );
 };

@@ -5,14 +5,16 @@ const KycStart = () => {
     const navigate = useNavigate();
 
     return (
-        <div className="flex flex-col items-end justify-end h-full w-full bg-black text-white p-6">
+        <>
+            <div>
             <h1 className="text-white text-4xl font-bold mb-2">
                 Secure Your Investments
             </h1>
 
             <p className="text-[#00ffcc] text-sm mb-8 leading-relaxed">
                 We verify your identity to protect your account, ensure regulatory compliance, and give you access to exclusive deals.
-            </p>
+                </p>
+                </div>
 
             <button onClick={() => navigate(eRoutes.AADHAAR_AUTH)}>test next</button>
 
@@ -22,7 +24,7 @@ const KycStart = () => {
             >
                 Complete KYC Now
             </button>
-        </div>
+        </>
     );
 };
 

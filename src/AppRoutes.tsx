@@ -2,8 +2,8 @@ import { lazy, Suspense } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { Layout } from "./Layout";
 import { eRoutes } from "./RoutesEnum";
-const PhoneNumber = lazy(() => import("./pages/PhoneNumber"));
 const GetStarted = lazy(() => import("./pages/GetStarted"));
+const PhoneNumber = lazy(() => import("./pages/PhoneNumber"));
 const VerifyPhoneOTP = lazy(() => import("./pages/VerifyPhoneOtp"));
 const EmailInput = lazy(() => import("./pages/EmailInput"));
 const VerifyEmailOtp = lazy(() => import("./pages/VerifyEmailOtp"));
@@ -11,6 +11,7 @@ const ChooseInvestor = lazy(() => import("./pages/ChooseInvestor"));
 const KycStart = lazy(() => import("./pages/KycStart"));
 const AadhaarVerification = lazy(() => import("./pages/AadhaarVerification"));
 const PanVerification = lazy(() => import("./pages/PanVerification"));
+const BankVerification = lazy(() => import("./pages/BankVerification"));
 
 const AppRoutes = () => {
     return (
@@ -76,6 +77,11 @@ const AppRoutes = () => {
                     <Route path={eRoutes.PAN_AUTH} element={
                         <Layout backRoute={eRoutes.AADHAAR_AUTH}>
                             <PanVerification />
+                        </Layout>
+                    } />
+                    <Route path={eRoutes.BANK_AUTH} element={
+                        <Layout backRoute={eRoutes.PAN_AUTH}>
+                            <BankVerification />
                         </Layout>
                     } />
                 </Route>
