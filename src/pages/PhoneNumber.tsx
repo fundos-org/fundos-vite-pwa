@@ -1,5 +1,4 @@
 import { eRoutes } from "@/RoutesEnum";
-import { CircleChevronLeft } from "lucide-react";
 import { FC, useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
@@ -37,10 +36,6 @@ const PhoneNumber: FC = () => {
         }
     };
 
-    const handleBack = () => {
-        navigate(eRoutes.GET_STARTED);
-    };
-
     const handlePhoneNumberChange = (e: string) => {
         const value = e.replace(/\D/g, '');
         if (value.length <= 10) {
@@ -50,14 +45,6 @@ const PhoneNumber: FC = () => {
 
     return (
         <>
-            <button
-                onClick={handleBack}
-                className="bg-transparent border-none text-4xl font-bold text-white cursor-pointer self-start z-10 pl-7 pt-5"
-                type="button"
-            >
-                <CircleChevronLeft size={36} strokeWidth={3} absoluteStrokeWidth />
-            </button>
-
             <div className="flex-1 flex flex-col justify-between p-8 max-h-full overflow-y-auto">
                 <div>
 
@@ -101,6 +88,16 @@ const PhoneNumber: FC = () => {
                     </div>
                 </div>
 
+                <button
+                    type="button"
+                    onClick={() => navigate(eRoutes.VERIFY_PHONE_OTP)}
+                    className={`w-full py-4 px-8 text-base font-semibold border-none transition-all duration-300 ${phoneNumber.length === 10
+                        ? 'bg-[#00fb57] text-[#1a1a1a] cursor-pointer'
+                        : 'bg-gray-700 text-gray-500 cursor-not-allowed'
+                        }`}
+                >
+                    Test Next
+                </button>
                 <button
                     type="submit"
                     onClick={handleSubmit}

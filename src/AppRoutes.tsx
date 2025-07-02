@@ -1,9 +1,10 @@
 import { lazy, Suspense } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
-import Layout from "./Layout";
+import { Layout } from "./Layout";
 import { eRoutes } from "./RoutesEnum";
 const PhoneNumber = lazy(() => import("./pages/PhoneNumber"));
 const GetStarted = lazy(() => import("./pages/GetStarted"));
+const VerifyPhoneOTP = lazy(() => import("./pages/VerifyPhoneOtp"));
 
 const AppRoutes = () => {
     return (
@@ -27,8 +28,16 @@ const AppRoutes = () => {
                 <Route
                     path={eRoutes.PHONE_NUMBER}
                     element={
-                        <Layout>
+                        <Layout backRoute={eRoutes.GET_STARTED}>
                             <PhoneNumber />
+                        </Layout>
+                    }
+                />
+                <Route
+                    path={eRoutes.VERIFY_PHONE_OTP}
+                    element={
+                        <Layout backRoute={eRoutes.PHONE_NUMBER}>
+                            <VerifyPhoneOTP />
                         </Layout>
                     }
                 />
