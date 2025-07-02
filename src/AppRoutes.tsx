@@ -10,6 +10,7 @@ const VerifyEmailOtp = lazy(() => import("./pages/VerifyEmailOtp"));
 const ChooseInvestor = lazy(() => import("./pages/ChooseInvestor"));
 const KycStart = lazy(() => import("./pages/KycStart"));
 const AadhaarVerification = lazy(() => import("./pages/AadhaarVerification"));
+const PanVerification = lazy(() => import("./pages/PanVerification"));
 
 const AppRoutes = () => {
     return (
@@ -70,6 +71,11 @@ const AppRoutes = () => {
                     <Route path={eRoutes.AADHAAR_AUTH} element={
                         <Layout backRoute={eRoutes.CHOOSE_INVESTOR_AUTH}>
                             <AadhaarVerification />
+                        </Layout>
+                    } />
+                    <Route path={eRoutes.PAN_AUTH} element={
+                        <Layout backRoute={eRoutes.AADHAAR_AUTH}>
+                            <PanVerification />
                         </Layout>
                     } />
                 </Route>
