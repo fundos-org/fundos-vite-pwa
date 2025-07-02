@@ -8,6 +8,8 @@ const VerifyPhoneOTP = lazy(() => import("./pages/VerifyPhoneOtp"));
 const EmailInput = lazy(() => import("./pages/EmailInput"));
 const VerifyEmailOtp = lazy(() => import("./pages/VerifyEmailOtp"));
 const ChooseInvestor = lazy(() => import("./pages/ChooseInvestor"));
+const KycStart = lazy(() => import("./pages/KycStart"));
+const AadhaarVerification = lazy(() => import("./pages/AadhaarVerification"));
 
 const AppRoutes = () => {
     return (
@@ -58,6 +60,16 @@ const AppRoutes = () => {
                     <Route path={eRoutes.CHOOSE_INVESTOR_AUTH} element={
                         <Layout backRoute={eRoutes.EMAIL_VERIFY_AUTH}>
                             <ChooseInvestor />
+                        </Layout>
+                    } />
+                    <Route path={eRoutes.COMPLETE_KYC_AUTH} element={
+                        <Layout backRoute={eRoutes.CHOOSE_INVESTOR_AUTH}>
+                            <KycStart />
+                        </Layout>
+                    } />
+                    <Route path={eRoutes.AADHAAR_AUTH} element={
+                        <Layout backRoute={eRoutes.CHOOSE_INVESTOR_AUTH}>
+                            <AadhaarVerification />
                         </Layout>
                     } />
                 </Route>
