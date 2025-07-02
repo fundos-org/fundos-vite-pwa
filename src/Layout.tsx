@@ -22,13 +22,13 @@ export const Layout: FC<LayoutProps> = ({ children, backRoute }) => {
             {backRoute && (
                 <button
                     onClick={handleBack}
-                    className="bg-transparent border-none text-4xl font-bold text-white cursor-pointer self-start z-10 pl-7 mt-10"
+                    className="bg-transparent border-none text-4xl font-bold text-white cursor-pointer self-start z-10 pl-10 mt-10"
                     type="button"
                 >
                     <CircleChevronLeft size={36} strokeWidth={3} absoluteStrokeWidth />
                 </button>
             )}
-            <main className="min-h-[90vh] flex-1 flex flex-col justify-between p-8 max-h-full w-full overflow-y-auto bg-black text-white">
+            <main className="min-h-[90vh] flex-1 flex flex-col justify-between p-10 max-h-full w-full overflow-y-auto bg-black text-white">
                 {children}
             </main>
         </>

@@ -13,6 +13,9 @@ const AadhaarVerification = lazy(() => import("./pages/AadhaarVerification"));
 const PanVerification = lazy(() => import("./pages/PanVerification"));
 const BankVerification = lazy(() => import("./pages/BankVerification"));
 const ProfessionalBackground = lazy(() => import("./pages/ProfessionalBackground"));
+const UserDetails = lazy(() => import("./pages/UserDetails"));
+const ContributionAgreement = lazy(() => import("./pages/ContributionAgreement"));
+const UploadPhoto = lazy(() => import("./pages/UploadPhoto"));
 
 const AppRoutes = () => {
     return (
@@ -88,6 +91,21 @@ const AppRoutes = () => {
                     <Route path={eRoutes.PROFESSIONAL_BACKGROUND_AUTH} element={
                         <Layout backRoute={eRoutes.BANK_AUTH}>
                             <ProfessionalBackground />
+                        </Layout>
+                    } />
+                    <Route path={eRoutes.USER_DETAILS_AUTH} element={
+                        <Layout backRoute={eRoutes.PROFESSIONAL_BACKGROUND_AUTH}>
+                            <UserDetails />
+                        </Layout>
+                    } />
+                    <Route path={eRoutes.CONTRIBUTION_AGREEMENT_AUTH} element={
+                        <Layout backRoute={eRoutes.USER_DETAILS_AUTH}>
+                            <ContributionAgreement />
+                        </Layout>
+                    } />
+                    <Route path={eRoutes.UPLOAD_PHOTO_AUTH} element={
+                        <Layout backRoute={eRoutes.CONTRIBUTION_AGREEMENT_AUTH}>
+                            <UploadPhoto />
                         </Layout>
                     } />
                 </Route>

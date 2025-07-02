@@ -1,184 +1,105 @@
-// const UploadPhoto: React.FC<PageProps> = ({ showNotification }) => {
-//   const [selectedImage, setSelectedImage] = useState<File | null>(null);
-//   const [uploading, setUploading] = useState(false);
-//   const [userId, setUserId] = useState('');
+import { eRoutes } from "@/RoutesEnum";
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
-//   useEffect(() => {
-//     const storedUserId = localStorage.getItem('userId');
-//     if (storedUserId) {
-//       setUserId(storedUserId);
-//     }
-//   }, []);
+const UploadPhoto = () => {
+    const navigate = useNavigate();
+    const [selectedImage, setSelectedImage] = useState<File | null>(null);
+    const [uploading, setUploading] = useState(false);
+    const [userId, setUserId] = useState('');
 
-//   const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-//     if (e.target.files && e.target.files[0]) {
-//       setSelectedImage(e.target.files[0]);
-//     }
-//   };
+    useEffect(() => {
+        const storedUserId = localStorage.getItem('userId');
+        if (storedUserId) {
+            setUserId(storedUserId);
+        }
+    }, []);
 
-//   const handleUpload = async () => {
-//     if (!selectedImage) {
-//       showNotification('Please select an image first', 'error');
-//       return;
-//     }
+    const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files[0]) {
+            setSelectedImage(e.target.files[0]);
+        }
+    };
 
-//     setUploading(true);
-//     try {
-//       const formData = new FormData();
-//       formData.append('image', selectedImage); // API expects 'image' field name
+    const handleUpload = async () => {
+        if (!selectedImage) {
+            toast.error('Please select an image first');
+            return;
+        }
 
-//       const response = await fetch(`https://api.fundos.services/api/v0/test/user/upload-photo?expiration=3600&user_id=${userId}`, {
-//         method: 'POST',
-//         body: formData,
-//       });
-//       const data = await response.json();
-      
-//       if (data.success || response.ok) {
-//         showNotification(data.message || 'Photo uploaded successfully', 'success');
-//         window.history.pushState({}, '', '/final-approval');
-//         window.location.reload();
-//       } else {
-//         showNotification(data.message || 'Failed to upload photo. Please try again.', 'error');
-//       }
-//     } catch (error) {
-//       console.error('Error:', error);
-//       showNotification('Failed to upload photo. Please try again.', 'error');
-//     } finally {
-//       setUploading(false);
-//     }
-//   };
+        setUploading(true);
+        try {
+            const formData = new FormData();
+            formData.append('image', selectedImage); // API expects 'image' field name
 
-//   const handleBack = () => {
-//     window.history.pushState({}, '', '/contribution-agreement');
-//     window.location.reload();
-//   };
+            const response = await fetch(`https://api.fundos.services/api/v0/test/user/upload-photo?expiration=3600&user_id=${userId}`, {
+                method: 'POST',
+                body: formData,
+            });
+            const data = await response.json();
 
-//   return (
-//     <div style={{
-//       height: '100vh',
-//       width: '100vw',
-//       background: 'linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)',
-//       display: 'flex',
-//       flexDirection: 'column',
-//       color: 'white',
-//       padding: '1rem',
-//       overflow: 'hidden',
-//       position: 'fixed',
-//       top: 0,
-//       left: 0,
-//       boxSizing: 'border-box'
-//     }}>
-//       <button 
-//         onClick={handleBack}
-//         style={{
-//           background: 'transparent',
-//           border: 'none',
-//           color: '#9ca3af',
-//           fontSize: '2rem',
-//           cursor: 'pointer',
-//           padding: '1rem',
-//           alignSelf: 'flex-start',
-//           zIndex: 10
-//         }}
-//       >
-//         ←
-//       </button>
-      
-//       <div style={{ 
-//         flex: 1,
-//         display: 'flex',
-//         flexDirection: 'column',
-//         justifyContent: 'center',
-//         padding: '2rem',
-//         maxHeight: '100%',
-//         overflowY: 'auto'
-//       }}>
+            if (data.success || response.ok) {
+                toast.success(data.message || 'Photo uploaded successfully');
+                navigate(eRoutes.FINAL_APPROVAL_AUTH);
+            } else {
+                toast.error(data.message || 'Failed to upload photo. Please try again.');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            toast.error('Failed to upload photo. Please try again.');
+        } finally {
+            setUploading(false);
+        }
+    };
 
-//         <h1 style={{
-//           color: '#fff',
-//           fontSize: '2.5rem',
-//           fontWeight: 'bold',
-//           marginBottom: '10px'
-//         }}>
-//           Upload Photo
-//         </h1>
-        
-//         <p style={{
-//           color: '#00ffcc',
-//           fontSize: '14px',
-//           marginBottom: '2rem',
-//           lineHeight: '1.6'
-//         }}>
-//           Please upload a clear photo of yourself for verification purposes.
-//         </p>
+    return (
+        <>
+            <div>
+                <h1 className="text-white text-4xl font-bold mb-2.5">
+                    Upload Photo
+                </h1>
 
-//         <div style={{ marginBottom: '1.5rem' }}>
-//           <input 
-//             type="file"
-//             accept="image/*"
-//             onChange={handleImageSelect}
-//             style={{
-//               width: '100%',
-//               padding: '1rem',
-//               fontSize: '1rem',
-//               borderRadius: '8px',
-//               border: '1px solid #374151',
-//               background: '#374151',
-//               color: 'white',
-//               outline: 'none'
-//             }}
-//           />
-//         </div>
+                <p className="text-teal-300 text-sm mb-8 leading-relaxed">
+                    Please upload a clear photo of yourself for verification purposes.
+                </p>
 
-//         {selectedImage && (
-//           <div style={{ 
-//             marginBottom: '1.5rem', 
-//             display: 'flex',
-//             flexDirection: 'column',
-//             alignItems: 'center',
-//             justifyContent: 'center'
-//           }}>
-//             <img 
-//               src={URL.createObjectURL(selectedImage)}
-//               alt="Selected"
-//               style={{
-//                 maxWidth: '200px',
-//                 maxHeight: '200px',
-//                 borderRadius: '8px',
-//                 border: '1px solid #374151',
-//                 display: 'block'
-//               }}
-//             />
-//             <p style={{ 
-//               color: '#9ca3af', 
-//               fontSize: '14px', 
-//               marginTop: '0.5rem',
-//               textAlign: 'center'
-//             }}>
-//               {selectedImage.name}
-//             </p>
-//           </div>
-//         )}
+                {<div className="mb-6">
+                    <input
+                        type="file"
+                        id='image-upload'
+                        accept="image/*"
+                        onChange={handleImageSelect}
+                        className={`w-full p-4 text-base border border-gray-700 bg-gray-700 text-white outline-none ${selectedImage ? 'hidden' : 'block'}`}
+                    />
+                </div>}
 
-//         <button
-//           onClick={handleUpload}
-//           disabled={!selectedImage || uploading}
-//           style={{
-//             background: (selectedImage && !uploading) ? '#00fb57' : '#374151',
-//             color: (selectedImage && !uploading) ? '#1a1a1a' : '#6b7280',
-//             border: 'none',
-//             padding: '1rem 2rem',
-//             fontSize: '1rem',
-//             fontWeight: '600',
-//             borderRadius: '8px',
-//             cursor: (selectedImage && !uploading) ? 'pointer' : 'not-allowed',
-//             width: '100%',
-//             transition: 'all 0.3s ease'
-//           }}
-//         >
-//           {uploading ? 'Uploading...' : 'Upload Photo'}
-//         </button>
-//       </div>
-//     </div>
-//   );
-// };
+                {selectedImage && (
+                    <label className="mb-6 flex flex-col items-center justify-center" htmlFor="image-upload">
+                        <img
+                            src={URL.createObjectURL(selectedImage)}
+                            alt="Selected"
+                            className="max-w-[300px] max-h-[300px] border border-gray-700 block"
+                        />
+                        <p className="text-gray-400 text-sm mt-2 text-center">
+                            {selectedImage.name}
+                        </p>
+                    </label>
+                )}
+            </div>
+            <button onClick={() => navigate(eRoutes.FINAL_APPROVAL_AUTH)}>test next</button>
+            <button
+                onClick={handleUpload}
+                disabled={!selectedImage || uploading}
+                className={`w-full border-none p-4 text-base font-semibold transition-all duration-300 ${selectedImage && !uploading
+                        ? "bg-green-400 text-gray-900 cursor-pointer"
+                        : "bg-gray-700 text-gray-400 cursor-not-allowed"
+                    }`}
+            >
+                {uploading ? "Uploading..." : "Upload Photo"}
+            </button>
+        </>
+    );
+};
+
+export default UploadPhoto;
