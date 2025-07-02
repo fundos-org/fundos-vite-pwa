@@ -1,7 +1,8 @@
 export enum eRoutes {
     ROOT = "/",
     AUTH = "/auth",
-    HOME = "/home",
+    APP = "/app",
+    DASHBOARD_APP = "/app/dashboard",
     GET_STARTED = "/get-started",
     PHONE_NUMBER = "/phone-number",
     VERIFY_PHONE_OTP = "/verify-phone-otp",

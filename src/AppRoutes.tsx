@@ -5,17 +5,18 @@ import { eRoutes } from "./RoutesEnum";
 const GetStarted = lazy(() => import("./pages/GetStarted"));
 const PhoneNumber = lazy(() => import("./pages/PhoneNumber"));
 const VerifyPhoneOTP = lazy(() => import("./pages/VerifyPhoneOtp"));
-const EmailInput = lazy(() => import("./pages/EmailInput"));
-const VerifyEmailOtp = lazy(() => import("./pages/VerifyEmailOtp"));
-const ChooseInvestor = lazy(() => import("./pages/ChooseInvestor"));
-const KycStart = lazy(() => import("./pages/KycStart"));
-const AadhaarVerification = lazy(() => import("./pages/AadhaarVerification"));
-const PanVerification = lazy(() => import("./pages/PanVerification"));
-const BankVerification = lazy(() => import("./pages/BankVerification"));
-const ProfessionalBackground = lazy(() => import("./pages/ProfessionalBackground"));
-const UserDetails = lazy(() => import("./pages/UserDetails"));
-const ContributionAgreement = lazy(() => import("./pages/ContributionAgreement"));
-const UploadPhoto = lazy(() => import("./pages/UploadPhoto"));
+const EmailInput = lazy(() => import("./pages/Auth/EmailInput"));
+const VerifyEmailOtp = lazy(() => import("./pages/Auth/VerifyEmailOtp"));
+const ChooseInvestor = lazy(() => import("./pages/Auth/ChooseInvestor"));
+const KycStart = lazy(() => import("./pages/Auth/KycStart"));
+const AadhaarVerification = lazy(() => import("./pages/Auth/AadhaarVerification"));
+const PanVerification = lazy(() => import("./pages/Auth/PanVerification"));
+const BankVerification = lazy(() => import("./pages/Auth/BankVerification"));
+const ProfessionalBackground = lazy(() => import("./pages/Auth/ProfessionalBackground"));
+const UserDetails = lazy(() => import("./pages/Auth/UserDetails"));
+const ContributionAgreement = lazy(() => import("./pages/Auth/ContributionAgreement"));
+const UploadPhoto = lazy(() => import("./pages/Auth/UploadPhoto"));
+const FinalApproval = lazy(() => import("./pages/Auth/FinalApproval"));
 
 const AppRoutes = () => {
     return (
@@ -106,6 +107,11 @@ const AppRoutes = () => {
                     <Route path={eRoutes.UPLOAD_PHOTO_AUTH} element={
                         <Layout backRoute={eRoutes.CONTRIBUTION_AGREEMENT_AUTH}>
                             <UploadPhoto />
+                        </Layout>
+                    } />
+                    <Route path={eRoutes.FINAL_APPROVAL_AUTH} element={
+                        <Layout backRoute={eRoutes.UPLOAD_PHOTO_AUTH}>
+                            <FinalApproval />
                         </Layout>
                     } />
                 </Route>
