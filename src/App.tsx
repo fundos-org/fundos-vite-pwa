@@ -1,12 +1,15 @@
 import PWABadge from './PWABadge.tsx'
 import './App.css'
-import { Button } from './components/ui/button.tsx'
+import { BrowserRouter } from 'react-router-dom'
+import AppRoutes from './AppRoutes.tsx'
 
 function App() {
 
   return (
     <>
-      <Button>Hi</Button>
+      <BrowserRouter>
+          <AppRoutes />
+        </BrowserRouter>
       <PWABadge />
     </>
   )
