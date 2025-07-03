@@ -8,7 +8,7 @@ const ChooseInvestor = () => {
     const [selectedType, setSelectedType] = useState('');
     const [showModal, setShowModal] = useState(false);
     const [isChecked, setIsChecked] = useState(false);
-    const userId = localStorage.getItem('userId') || '';
+    const userId = sessionStorage.getItem('userId') || '';
 
     const investorOptions = [
         {

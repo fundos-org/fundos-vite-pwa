@@ -30,7 +30,7 @@ const Dashboard = () => {
     if (hasLoaded) return;
 
     const fetchDeals = async () => {
-      const storedUserId = localStorage.getItem('userId');
+      const storedUserId = sessionStorage.getItem('userId');
       if (!storedUserId) {
         toast.error('User ID not found. Please login again.');
         setHasLoaded(true);

@@ -19,11 +19,11 @@ const Home: React.FC<{ investorName: string; deals: Deal[]; }> = ({ investorName
     const navigate = useNavigate();
 
     const handleLogout = () => {
-        localStorage.removeItem('userId');
-        localStorage.removeItem('phoneNumber');
-        localStorage.removeItem('email');
-        localStorage.removeItem('investorType');
-        localStorage.removeItem('panNumber');
+        sessionStorage.removeItem('userId');
+        sessionStorage.removeItem('phoneNumber');
+        sessionStorage.removeItem('email');
+        sessionStorage.removeItem('investorType');
+        sessionStorage.removeItem('panNumber');
         toast.success('Logged out successfully');
         navigate(eRoutes.PHONE_NUMBER);
     };

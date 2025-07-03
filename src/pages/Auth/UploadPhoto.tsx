@@ -10,7 +10,7 @@ const UploadPhoto = () => {
     const [userId, setUserId] = useState('');
 
     useEffect(() => {
-        const storedUserId = localStorage.getItem('userId');
+        const storedUserId = sessionStorage.getItem('userId');
         if (storedUserId) {
             setUserId(storedUserId);
         }
@@ -87,7 +87,7 @@ const UploadPhoto = () => {
                     </label>
                 )}
             </div>
-            
+
             <button
                 onClick={handleUpload}
                 disabled={!selectedImage || uploading}

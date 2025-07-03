@@ -17,7 +17,7 @@ const ProfileTab = () => {
     const fetchUserProfile = async () => {
       try {
         setLoading(true);
-        const storedUserId = localStorage.getItem('userId');
+        const storedUserId = sessionStorage.getItem('userId');
         if (!storedUserId) {
           toast.error('User ID not found. Please login again.');
           setLoading(false);

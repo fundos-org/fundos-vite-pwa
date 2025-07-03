@@ -10,7 +10,7 @@ const PanVerification = () => {
     const [userId, setUserId] = useState('');
 
     useEffect(() => {
-        const storedUserId = localStorage.getItem('userId');
+        const storedUserId = sessionStorage.getItem('userId');
         if (storedUserId) {
             setUserId(storedUserId);
         }
@@ -44,7 +44,7 @@ const PanVerification = () => {
             const data = await response.json();
 
             if (data.success) {
-                localStorage.setItem('panNumber', pan);
+                sessionStorage.setItem('panNumber', pan);
                 toast.success(data.message || 'PAN verified successfully');
                 navigate(eRoutes.BANK_AUTH);
             } else {
@@ -101,7 +101,7 @@ const PanVerification = () => {
                     />
                 </div>
             </div>
-            
+
             <button
                 onClick={handleSubmit}
                 type="submit"

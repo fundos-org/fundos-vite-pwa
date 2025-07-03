@@ -24,7 +24,7 @@ const EmailInput = () => {
             const data = await response.json();
 
             if (data.success) {
-                localStorage.setItem('email', email);
+                sessionStorage.setItem('email', email);
                 navigate(eRoutes.EMAIL_VERIFY_AUTH);
             } else {
                 toast.error(data.message || 'Failed to send OTP to email. Please try again.');

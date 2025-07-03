@@ -10,7 +10,7 @@ const AadhaarVerification = () => {
     const [userId, setUserId] = useState('');
 
     useEffect(() => {
-        const storedUserId = localStorage.getItem('userId');
+        const storedUserId = sessionStorage.getItem('userId');
         if (storedUserId) {
             setUserId(storedUserId);
         }

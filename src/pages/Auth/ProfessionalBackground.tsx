@@ -15,7 +15,7 @@ const ProfessionalBackground = () => {
     const [openDropdown, setOpenDropdown] = useState<string | null>(null);
 
     useEffect(() => {
-        const storedUserId = localStorage.getItem('userId');
+        const storedUserId = sessionStorage.getItem('userId');
         if (storedUserId) {
             setUserId(storedUserId);
         }

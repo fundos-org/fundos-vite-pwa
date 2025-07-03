@@ -11,7 +11,7 @@ const AadhaarVerification = () => {
     const [aadhaarUrl, setAadhaarUrl] = useState<string | null>(null); // For modal iframe
 
     useEffect(() => {
-        const storedUserId = localStorage.getItem('userId');
+        const storedUserId = sessionStorage.getItem('userId');
         if (storedUserId) {
             setUserId(storedUserId);
         }

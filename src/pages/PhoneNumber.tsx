@@ -21,10 +21,10 @@ const PhoneNumber: FC = () => {
             const data = await response.json();
 
             if (data.success) {
-                localStorage.setItem('phoneNumber', phoneNumber);
-                localStorage.setItem('invitationCode', invitationCode);
+                sessionStorage.setItem('phoneNumber', phoneNumber);
+                sessionStorage.setItem('invitationCode', invitationCode);
                 if (data.user_id) {
-                    localStorage.setItem('userId', data.user_id);
+                    sessionStorage.setItem('userId', data.user_id);
                 }
                 navigate(eRoutes.VERIFY_PHONE_OTP);
             } else {

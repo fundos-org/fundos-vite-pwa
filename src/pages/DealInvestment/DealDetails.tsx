@@ -58,7 +58,7 @@ const DealDetails = () => {
 
   const handleCommit = async () => {
     try {
-      const userId = localStorage.getItem('userId');
+      const userId = sessionStorage.getItem('userId');
       if (!userId) {
         toast.error('User not authenticated');
         return;
@@ -89,7 +89,7 @@ const DealDetails = () => {
 
   const handleNotInterested = async () => {
     try {
-      const userId = localStorage.getItem('userId');
+      const userId = sessionStorage.getItem('userId');
       if (!userId) {
         toast.error('User not authenticated');
         return;
