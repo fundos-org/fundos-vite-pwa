@@ -51,7 +51,7 @@ const Dashboard = () => {
                 // setHasLoaded(true);
                 return;
             }
-    }, [setLocalContextState]);
+    }, [navigate, setLocalContextState]);
 
     const handleTabChange = (tabLabel: string) => {
         setActiveTab(tabLabel);

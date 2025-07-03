@@ -115,14 +115,14 @@ const AppRoutes = () => {
                         </Layout>
                     } />
                     <Route path={eRoutes.FINAL_APPROVAL_AUTH} element={
-                        <Layout backRoute={eRoutes.UPLOAD_PHOTO_AUTH}>
+                        <Layout>
                             <FinalApproval />
                         </Layout>
                     } />
                 </Route>
                 <Route path={eRoutes.HOME}>
                     <Route path={eRoutes.DASHBOARD_HOME} element={
-                        <Layout backRoute={eRoutes.PHONE_NUMBER}>
+                        <Layout>
                             <Dashboard />
                         </Layout>
                     } />
@@ -132,17 +132,17 @@ const AppRoutes = () => {
                         </Layout>
                     } />
                     <Route path={eRoutes.COMMIT_INVESTMENT_HOME} element={
-                        <Layout backRoute={eRoutes.DEAL_DETAILS_HOME}>
+                        <Layout backRoute={eRoutes.DEAL_DETAILS_HOME} baseRoute={eRoutes.DASHBOARD_HOME}>
                             <CommitInvestment />
                         </Layout>
                     } />
                     <Route path={eRoutes.TERM_SHEET_HOME} element={
-                        <Layout backRoute={eRoutes.COMMIT_INVESTMENT_HOME}>
+                        <Layout backRoute={eRoutes.COMMIT_INVESTMENT_HOME} baseRoute={eRoutes.DASHBOARD_HOME}>
                             <TermSheet />
                         </Layout>
                     } />
                     <Route path={eRoutes.DRAW_DOWN_NOTICE_HOME} element={
-                        <Layout backRoute={eRoutes.TERM_SHEET_HOME}>
+                        <Layout backRoute={eRoutes.TERM_SHEET_HOME} baseRoute={eRoutes.DASHBOARD_HOME}>
                             <DrawDown />
                         </Layout>
                     } />

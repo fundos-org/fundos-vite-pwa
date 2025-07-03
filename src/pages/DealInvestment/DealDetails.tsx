@@ -2,19 +2,17 @@ import { eRoutes } from '@/RoutesEnum';
 import { useHomeContext } from '@/Shared/useLocalContextState';
 import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const DealDetails = () => {
-    const { dealId } = useParams<{ dealId: string }>();
     const navigate = useNavigate();
     const { localContextState, setLocalContextState } = useHomeContext();
-    const [loading, setLoading] = useState(true);
+    const dealId = localContextState.dealId;
     const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
 
     useEffect(() => {
         const fetchDealDetails = async () => {
             try {
-                setLoading(true);
                 const response = await fetch(`https://api.fundos.services/api/v1/live/deals/?deal_id=${dealId}`);
 
                 if (!response.ok) {
@@ -29,8 +27,6 @@ const DealDetails = () => {
             } catch (error) {
                 console.error('Error fetching deal details:', error);
                 toast.error('Failed to load deal details. Please try again.');
-            } finally {
-                setLoading(false);
             }
         };
 
@@ -39,7 +35,10 @@ const DealDetails = () => {
         }
     }, [dealId, setLocalContextState]);
 
-    const convertToCrores = (value: number) => {
+    const convertToCrores = (value?: number) => {
+        if (typeof value !== 'number' || isNaN(value)) {
+            return 'N/A';
+        }
         return `${(value / 10000000).toFixed(2)} Cr`;
     };
 
@@ -109,25 +108,10 @@ const DealDetails = () => {
         setIsDescriptionExpanded(!isDescriptionExpanded);
     };
 
-    if (loading) {
-        return (
-            <div className="min-h-screen bg-gradient-to-br from-[#1a1a1a] to-[#2d2d2d] flex items-center justify-center text-white p-8">
-                <div className="w-full max-w-md bg-white/5 border border-white/10 p-8 backdrop-blur text-center">
-                    <div className="w-15 h-15 border-4 border-gray-700 border-t-[#00fb57] rounded-full animate-spin mx-auto mb-5"></div>
-                    <h2 className="text-2xl font-medium text-[#FDFDFD] mb-2">
-                        Loading Deal Details
-                    </h2>
-                    <p className="text-sm text-gray-400 m-0">
-                        Please wait while we fetch the deal information...
-                    </p>
-                </div>
-            </div>
-        );
-    }
-
-    const deal = localContextState.dealDetails;
-
-    if (!deal) {
+    
+    const deal = localContextState?.dealDetails;
+    
+    if (Object.keys(deal ?? {}).length === 0) {
         return (
             <div className="min-h-screen bg-black flex items-center justify-center text-white p-8">
                 <div className="w-full max-w-md bg-white/5 border border-white/10 p-8 backdrop-blur text-center">
@@ -136,7 +120,7 @@ const DealDetails = () => {
                     </h2>
                     <button
                         onClick={() => navigate(eRoutes.DASHBOARD_HOME)}
-                        className="bg-[#00fb57] text-[#1a1a1a] border-none px-6 py-3 text-sm font-semibold rounded cursor-pointer"
+                        className="bg-[#00fb57] text-[#1a1a1a] border-none px-6 py-3 text-sm font-semibold cursor-pointer"
                     >
                         Back to Dashboard
                     </button>
@@ -150,7 +134,7 @@ const DealDetails = () => {
         <>
             <div>
                 <h1 className="text-white text-2xl font-bold mb-4">
-                    {deal.title}
+                    {deal?.title}
                 </h1>
 
                 {/* Description */}
@@ -159,9 +143,9 @@ const DealDetails = () => {
                         className={`text-gray-300 text-sm m-0 leading-relaxed ${isDescriptionExpanded ? '' : 'line-clamp-3'}`}
                         style={{ display: isDescriptionExpanded ? 'block' : '-webkit-box' }}
                     >
-                        {deal.description}
+                        {deal?.description}
                     </p>
-                    {deal.description && deal.description.length > 150 && (
+                    {deal?.description && deal?.description.length > 150 && (
                         <button
                             onClick={toggleDescription}
                             className="bg-transparent border-none text-[#00fb57] text-sm cursor-pointer p-0 mt-2"
@@ -183,7 +167,7 @@ const DealDetails = () => {
                             CURRENT VALUATION
                         </p>
                         <p className="text-white text-2xl font-bold m-0">
-                            INR {convertToCrores(deal.current_valuation)}{' '}
+                            INR {convertToCrores(deal?.current_valuation)}{' '}
                             <span className="text-gray-400 text-base font-normal">
                                 (Post)
                             </span>
@@ -197,7 +181,7 @@ const DealDetails = () => {
                                 STAGE
                             </p>
                             <p className="text-white text-sm font-bold m-0">
-                                {deal.company_stage?.toUpperCase() || 'N/A'}
+                                {deal?.company_stage?.toUpperCase() || 'N/A'}
                             </p>
                         </div>
                         <div>
@@ -205,7 +189,7 @@ const DealDetails = () => {
                                 INSTRUMENT
                             </p>
                             <p className="text-white text-sm font-bold m-0">
-                                {deal.instruments?.toUpperCase() || 'N/A'}
+                                {deal?.instruments?.toUpperCase() || 'N/A'}
                             </p>
                         </div>
                     </div>
@@ -216,7 +200,7 @@ const DealDetails = () => {
                                 ROUND SIZE
                             </p>
                             <p className="text-white text-sm font-bold m-0">
-                                INR {convertToCrores(deal.round_size)}
+                                INR {convertToCrores(deal?.round_size)}
                             </p>
                         </div>
                         <div>
@@ -224,7 +208,7 @@ const DealDetails = () => {
                                 MIN. INVESTMENT
                             </p>
                             <p className="text-white text-sm font-bold m-0">
-                                INR {convertToCrores(deal.minimum_investment)}
+                                INR {convertToCrores(deal?.minimum_investment)}
                             </p>
                         </div>
                     </div>
@@ -235,7 +219,7 @@ const DealDetails = () => {
                                 COMMITMENTS
                             </p>
                             <p className="text-white text-sm font-bold m-0">
-                                INR {convertToCrores(deal.commitment)}
+                                INR {convertToCrores(deal?.commitment)}
                             </p>
                         </div>
                         <div>
@@ -251,12 +235,12 @@ const DealDetails = () => {
                     {/* Progress Section */}
                     <div>
                         <p className="text-[#00fb57] text-sm mb-2 font-semibold">
-                            📈 {deal.fund_raised_till_now}% funds raised till now
+                            📈 {deal?.fund_raised_till_now}% funds raised till now
                         </p>
-                        <div className="h-2 bg-white/10 rounded overflow-hidden border border-white/20">
+                        <div className="h-2 bg-white/10 overflow-hidden border border-white/20">
                             <div
                                 className="h-full bg-gradient-to-r from-[#00fb57] to-[#00d647] transition-all duration-300"
-                                style={{ width: `${deal.fund_raised_till_now}%` }}
+                                style={{ width: `${deal?.fund_raised_till_now}%` }}
                             ></div>
                         </div>
                     </div>
