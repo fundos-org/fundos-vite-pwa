@@ -56,6 +56,8 @@ const VerifyPhoneOTP: FC = () => {
                 toast.success(data.message);
             }
 
+            if(!data.success) toast.error(data.message || 'Failed to verify OTP. Please try again.');
+
             if (data.success) {
                 sessionStorage.setItem('userId', data?.user_id);
                 sessionStorage.setItem('subAdminId', data?.subadmin_id);
