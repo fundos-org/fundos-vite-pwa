@@ -1,7 +1,7 @@
 
 function DrawDown() {
   return (
-    <div>Drawn Down Notice is under development. </div>
+    <div className="flex items-center justify-center">Drawn Down Notice is Sent, Please check your verified Email.</div>
   )
 }
 
