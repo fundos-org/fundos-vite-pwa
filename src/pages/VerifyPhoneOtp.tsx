@@ -6,8 +6,8 @@ import { useNavigate } from "react-router-dom";
 const VerifyPhoneOTP: FC = () => {
     const navigate = useNavigate();
     const [otp, setOTP] = useState(['', '', '', '']);
-    const phoneNumber = localStorage.getItem('phoneNumber') || '';
-    const invitationCode = localStorage.getItem('invitationCode') || '';
+    const phoneNumber = sessionStorage.getItem('phoneNumber') || '';
+    const invitationCode = sessionStorage.getItem('invitationCode') || '';
 
     const handleOTPChange = (index: number, value: string) => {
         if (value.length <= 1 && /^\d*$/.test(value)) {
@@ -57,8 +57,8 @@ const VerifyPhoneOTP: FC = () => {
             }
 
             if (data.success) {
-                localStorage.setItem('userId', data.user_id);
-                localStorage.setItem('fundManagerId', data.fund_manager_id);
+                sessionStorage.setItem('userId', data?.user_id);
+                sessionStorage.setItem('fundManagerId', data?.subadmin_id);
 
                 if (data.onboarding_status === 'Completed') {
                     toast.success('Welcome back! Redirecting to dashboard...');
@@ -105,7 +105,7 @@ const VerifyPhoneOTP: FC = () => {
                     </div>
                 </div>
             </div>
-            <button onClick={() => navigate(eRoutes.EMAIL_AUTH)}>Test Next</button>
+            
             <button
                 type="submit"
                 disabled={otp.join('').length !== 4}

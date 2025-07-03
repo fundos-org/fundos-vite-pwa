@@ -58,7 +58,7 @@ const DealDetails = () => {
 
   const handleCommit = async () => {
     try {
-      const userId = localStorage.getItem('userId');
+      const userId = sessionStorage.getItem('userId');
       if (!userId) {
         toast.error('User not authenticated');
         return;
@@ -71,16 +71,18 @@ const DealDetails = () => {
         throw new Error('Failed to check MCA status');
       }
       
-      const mcaData = await mcaResponse.json();
-    
-    if (mcaData.sent_status === 'success' && mcaData.request_status === 'completed') {
-          toast.success(mcaData.message);
+      
         navigate(eRoutes.COMMIT_INVESTMENT_HOME.replace(':dealId', dealId ?? ''));
-      } else if (mcaData.sent_status === 'success' && mcaData.request_status === 'inprogress') {
-        toast.error('Signing Docs in progress. Please contact admin.');
-      } else {
-        toast.error('Ask your fund manager to sign the docs!');
-      }
+        //temp comment
+    //   const mcaData = await mcaResponse.json();
+    // if (mcaData.sent_status === 'success' && mcaData.request_status === 'completed') {
+    //       toast.success(mcaData.message);
+    //     navigate(eRoutes.COMMIT_INVESTMENT_HOME.replace(':dealId', dealId ?? ''));
+    //   } else if (mcaData.sent_status === 'success' && mcaData.request_status === 'inprogress') {
+    //     toast.error('Signing Docs in progress. Please contact admin.');
+    //   } else {
+    //     toast.error('Ask your fund manager to sign the docs!');
+    //   }
     } catch (error) {
       console.error('Error in commit process:', error);
       toast.error('Failed to apply for declarations. Please try again.');
@@ -89,7 +91,7 @@ const DealDetails = () => {
 
   const handleNotInterested = async () => {
     try {
-      const userId = localStorage.getItem('userId');
+      const userId = sessionStorage.getItem('userId');
       if (!userId) {
         toast.error('User not authenticated');
         return;
@@ -138,7 +140,7 @@ const DealDetails = () => {
 
   if (!deal) {
     return (
-    <div className="min-h-screen bg-gradient-to-br from-[#1a1a1a] to-[#2d2d2d] flex items-center justify-center text-white p-8">
+    <div className="min-h-screen bg-black flex items-center justify-center text-white p-8">
       <div className="w-full max-w-md bg-white/5 border border-white/10 p-8 backdrop-blur text-center">
         <h2 className="text-2xl font-medium text-[#FDFDFD] mb-5">
         Deal Not Found

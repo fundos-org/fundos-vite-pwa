@@ -6,8 +6,8 @@ import { useNavigate } from "react-router-dom";
 const VerifyEmailOtp = () => {
     const navigate = useNavigate();
     const [otp, setOTP] = useState(['', '', '', '', '', '']);
-    const email = localStorage.getItem('email') || '';
-    const userId = localStorage.getItem('userId') || '';
+    const email = sessionStorage.getItem('email') || '';
+    const userId = sessionStorage.getItem('userId') || '';
 
     const handleOTPChange = (index: number, value: string) => {
         if (value.length <= 1 && /^\d*$/.test(value)) {
@@ -95,7 +95,7 @@ const VerifyEmailOtp = () => {
                     </div>
                 </div>
             </div>
-            <button onClick={() => navigate(eRoutes.CHOOSE_INVESTOR_AUTH)}>test next</button>
+
             <button
                 type="submit"
                 onClick={handleSubmit}

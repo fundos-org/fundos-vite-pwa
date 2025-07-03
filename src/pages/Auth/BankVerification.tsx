@@ -12,8 +12,8 @@ const BankDetails = () => {
     const [panNumber, setPanNumber] = useState('');
 
     useEffect(() => {
-        const storedUserId = localStorage.getItem('userId');
-        const storedPanNumber = localStorage.getItem('panNumber');
+        const storedUserId = sessionStorage.getItem('userId');
+        const storedPanNumber = sessionStorage.getItem('panNumber');
         if (storedUserId) {
             setUserId(storedUserId);
         }
@@ -133,7 +133,6 @@ const BankDetails = () => {
                     />
                 </div>
             </div>
-            <button onClick={() => navigate(eRoutes.PROFESSIONAL_BACKGROUND_AUTH)}>test next</button>
             <button
                 type="submit"
                 onClick={handleSubmit}

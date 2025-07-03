@@ -7,16 +7,14 @@ const KycStart = () => {
     return (
         <>
             <div>
-            <h1 className="text-white text-4xl font-bold mb-2">
-                Secure Your Investments
-            </h1>
+                <h1 className="text-white text-4xl font-bold mb-2">
+                    Secure Your Investments
+                </h1>
 
-            <p className="text-[#00ffcc] text-sm mb-8 leading-relaxed">
-                We verify your identity to protect your account, ensure regulatory compliance, and give you access to exclusive deals.
+                <p className="text-[#00ffcc] text-sm mb-8 leading-relaxed">
+                    We verify your identity to protect your account, ensure regulatory compliance, and give you access to exclusive deals.
                 </p>
-                </div>
-
-            <button onClick={() => navigate(eRoutes.AADHAAR_AUTH)}>test next</button>
+            </div>
 
             <button
                 onClick={() => navigate(eRoutes.COMPLETE_KYC_AUTH)}

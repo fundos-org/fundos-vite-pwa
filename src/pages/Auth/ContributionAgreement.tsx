@@ -9,7 +9,7 @@ const ContributionAgreement = () => {
     const [userId, setUserId] = useState('');
 
     useEffect(() => {
-        const storedUserId = localStorage.getItem('userId');
+        const storedUserId = sessionStorage.getItem('userId');
         if (storedUserId) {
             setUserId(storedUserId);
         }
@@ -72,8 +72,6 @@ const ContributionAgreement = () => {
                     </p>
                 </div>
             </div>
-
-            <button onClick={() => navigate(eRoutes.UPLOAD_PHOTO_AUTH)}>test next</button>
 
             <div>
                 <div

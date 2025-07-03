@@ -19,11 +19,11 @@ const Home: React.FC<{ investorName: string; deals: Deal[]; }> = ({ investorName
     const navigate = useNavigate();
 
     const handleLogout = () => {
-        localStorage.removeItem('userId');
-        localStorage.removeItem('phoneNumber');
-        localStorage.removeItem('email');
-        localStorage.removeItem('investorType');
-        localStorage.removeItem('panNumber');
+        sessionStorage.removeItem('userId');
+        sessionStorage.removeItem('phoneNumber');
+        sessionStorage.removeItem('email');
+        sessionStorage.removeItem('investorType');
+        sessionStorage.removeItem('panNumber');
         toast.success('Logged out successfully');
         navigate(eRoutes.PHONE_NUMBER);
     };
@@ -33,7 +33,7 @@ const Home: React.FC<{ investorName: string; deals: Deal[]; }> = ({ investorName
     // };
 
     return (
-        <div className="fixed inset-0 h-screen w-screen bg-gradient-to-br from-[#1a1a1a] to-[#2d2d2d] flex flex-col text-white overflow-hidden box-border">
+        <div className="fixed inset-0 h-screen w-screen bg-black flex flex-col text-white overflow-hidden box-border">
             {/* Scrollable Content */}
             <div className="flex-1 p-8 overflow-auto pb-24">
                 {/* Header */}

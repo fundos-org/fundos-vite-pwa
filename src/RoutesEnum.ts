@@ -9,6 +9,7 @@ export enum eRoutes {
     DEAL_DETAILS_HOME = "/home/deal-details/:dealId",
     COMMIT_INVESTMENT_HOME = "/home/commit/:dealId",
     TERM_SHEET_HOME = "/home/term-sheet",
+    DRAW_DOWN_NOTICE_HOME = "/home/draw-down-notice",
 
     AUTH = "/auth",
     EMAIL_AUTH = "/auth/email",

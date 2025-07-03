@@ -27,7 +27,7 @@ const UserDetails = () => {
 
     useEffect(() => {
         const fetchUserDetails = async () => {
-            const storedUserId = localStorage.getItem('userId');
+            const storedUserId = sessionStorage.getItem('userId');
             if (storedUserId) {
                 setUserId(storedUserId);
                 try {
@@ -227,7 +227,7 @@ const UserDetails = () => {
                     </div>
                 ))}
             </div>
-            <button onClick={() => navigate(eRoutes.CONTRIBUTION_AGREEMENT_AUTH)}>test next</button>
+
             <button
                 type="submit"
                 onClick={handleSubmit}

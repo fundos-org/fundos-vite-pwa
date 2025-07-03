@@ -10,7 +10,7 @@ const AadhaarVerification = () => {
     const [userId, setUserId] = useState('');
 
     useEffect(() => {
-        const storedUserId = localStorage.getItem('userId');
+        const storedUserId = sessionStorage.getItem('userId');
         if (storedUserId) {
             setUserId(storedUserId);
         }
@@ -76,7 +76,6 @@ const AadhaarVerification = () => {
                 Complete your Aadhaar verification to finish KYC and begin investing.
             </p>
             </div>
-            <button onClick={() => navigate(eRoutes.PAN_AUTH)}>test next</button>
 
             {!showProceed && (
                 <button

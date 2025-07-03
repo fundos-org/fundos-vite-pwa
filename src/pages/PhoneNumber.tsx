@@ -21,10 +21,10 @@ const PhoneNumber: FC = () => {
             const data = await response.json();
 
             if (data.success) {
-                localStorage.setItem('phoneNumber', phoneNumber);
-                localStorage.setItem('invitationCode', invitationCode);
+                sessionStorage.setItem('phoneNumber', phoneNumber);
+                sessionStorage.setItem('invitationCode', invitationCode);
                 if (data.user_id) {
-                    localStorage.setItem('userId', data.user_id);
+                    sessionStorage.setItem('userId', data.user_id);
                 }
                 navigate(eRoutes.VERIFY_PHONE_OTP);
             } else {
@@ -88,16 +88,6 @@ const PhoneNumber: FC = () => {
                     </div>
                 </div>
 
-                <button
-                    type="button"
-                    onClick={() => navigate(eRoutes.VERIFY_PHONE_OTP)}
-                    className={`w-full py-4 px-8 text-base font-semibold border-none transition-all duration-300 ${phoneNumber.length === 10
-                        ? 'bg-[#00fb57] text-[#1a1a1a] cursor-pointer'
-                        : 'bg-gray-700 text-gray-500 cursor-not-allowed'
-                        }`}
-                >
-                    Test Next
-                </button>
                 <button
                     type="submit"
                     onClick={handleSubmit}

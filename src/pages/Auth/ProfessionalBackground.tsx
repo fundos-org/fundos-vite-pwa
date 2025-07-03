@@ -15,7 +15,7 @@ const ProfessionalBackground = () => {
     const [openDropdown, setOpenDropdown] = useState<string | null>(null);
 
     useEffect(() => {
-        const storedUserId = localStorage.getItem('userId');
+        const storedUserId = sessionStorage.getItem('userId');
         if (storedUserId) {
             setUserId(storedUserId);
         }
@@ -202,9 +202,8 @@ const ProfessionalBackground = () => {
                 {renderDropdown('income_source', 'Income Source')}
                 {renderDropdown('annual_income', 'Annual Income')}
                 {renderDropdown('capital_commitment', 'Capital Commitment (Over 5 Years)')}
-
             </div>
-            <button onClick={()=> navigate(eRoutes.USER_DETAILS_AUTH)}>test next</button>
+
             <button
                 type="submit"
                 onClick={handleSubmit}
