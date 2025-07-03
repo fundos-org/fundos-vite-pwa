@@ -147,7 +147,7 @@ async function apiSendDrawDownNotice(data: {
 }) {
     try {
         const response = await fetch(
-            `http://43.205.36.168/api/v1/live/deals/send/drawdown-notice?user_id=${data.user_id}&deal_id=${data.deal_id}&investment_amount=${data.investment_amount}`,
+            `https://api.fundos.services/api/v1/live/deals/send/drawdown-notice?user_id=${data.user_id}&deal_id=${data.deal_id}&investment_amount=${data.investment_amount}`,
             {
                 method: "POST",
                 headers: {
