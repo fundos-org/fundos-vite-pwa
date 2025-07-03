@@ -24,7 +24,7 @@ const Dashboard = () => {
   const [investorName, setInvestorName] = useState('');
   const [hasLoaded, setHasLoaded] = useState(false);
   const [activeTab, setActiveTab] = useState('home');
-
+console.log(loading);
   useEffect(() => {
     // Prevent multiple API calls
     if (hasLoaded) return;
@@ -68,6 +68,7 @@ const Dashboard = () => {
         setDeals([]);
         setInvestorName('User');
         toast('Welcome to FundOS Dashboard', { icon: '🟢' });
+        setLoading(false);
       } finally {
         setLoading(false);
         setHasLoaded(true);
@@ -85,21 +86,21 @@ const Dashboard = () => {
     // }
   };
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-black flex items-center justify-center text-white p-8">
-        <div className="w-full max-w-md bg-white/5 border border-white/10 p-8 backdrop-blur text-center">
-          <div className="w-15 h-15 border-4 border-gray-700 border-t-[#00fb57] rounded-full animate-spin mx-auto mb-5"></div>
-          <h2 className="text-2xl font-medium text-[#FDFDFD] mb-2">
-            Loading Dashboard
-          </h2>
-          <p className="text-sm text-gray-400 m-0">
-            Please wait while we load your investment data...
-          </p>
-        </div>
-      </div>
-    );
-  }
+//   if (loading) {
+//     return (
+//       <div className="min-h-screen bg-black flex items-center justify-center text-white p-8">
+//         <div className="w-full max-w-md bg-white/5 border border-white/10 p-8 backdrop-blur text-center">
+//           <div className="w-15 h-15 border-4 border-gray-700 border-t-[#00fb57] rounded-full animate-spin mx-auto mb-5"></div>
+//           <h2 className="text-2xl font-medium text-[#FDFDFD] mb-2">
+//             Loading Dashboard
+//           </h2>
+//           <p className="text-sm text-gray-400 m-0">
+//             Please wait while we load your investment data...
+//           </p>
+//         </div>
+//       </div>
+//     );
+//   }
 
   const renderTabContent = () => {
     switch (activeTab) {

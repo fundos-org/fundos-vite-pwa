@@ -21,8 +21,8 @@ interface Deal {
 }
 
 const CommitInvestment: React.FC = () => {
+  const navigate = useNavigate();
   const { dealId } = useParams<{ dealId: string }>();
-      const navigate = useNavigate();
   const [deal, setDeal] = useState<Deal | null>(null);
   const [loading, setLoading] = useState(true);
   const [investmentAmount, setInvestmentAmount] = useState('');
@@ -97,6 +97,8 @@ const CommitInvestment: React.FC = () => {
     }
 
     try {
+      sessionStorage.setItem('investmentAmount', investmentAmount ?? '');
+      sessionStorage.setItem('dealId', dealId || '');
       navigate(
         `${eRoutes.TERM_SHEET_HOME}?dealId=${dealId}&investmentAmount=${parsedAmount}`
       );
