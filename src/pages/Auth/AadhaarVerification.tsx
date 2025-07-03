@@ -77,6 +77,7 @@ const AadhaarVerification = () => {
             </p>
             </div>
 
+            <div>
             {!showProceed && (
                 <button
                     onClick={handleVerifyAadhaar}
@@ -103,6 +104,7 @@ const AadhaarVerification = () => {
                     Proceed Next
                 </button>
             )}
+            </div>
         </>
     );
 };

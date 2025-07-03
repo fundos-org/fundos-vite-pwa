@@ -17,7 +17,7 @@ const KycStart = () => {
             </div>
 
             <button
-                onClick={() => navigate(eRoutes.COMPLETE_KYC_AUTH)}
+                onClick={() => navigate(eRoutes.AADHAAR_AUTH)}
                 className="bg-[#00fb57] text-[#1a1a1a] border-none py-4 px-8 text-base font-semibold cursor-pointer w-full transition-all duration-300 ease-in-out"
             >
                 Complete KYC Now
