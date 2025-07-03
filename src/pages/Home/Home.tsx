@@ -26,44 +26,44 @@ const Home = () => {
     const { localContextState, setLocalContextState } = useHomeContext();
 
     useEffect(() => {
-        if (hasLoaded) return;
-        const fetchDeals = async () => {
-            try {
-                const response = await fetch(`https://api.fundos.services/api/v1/live/deals/user-deals?user_id=${localContextState.userId}`);
+    if (hasLoaded || !localContextState.userId) return; // <-- Only run if userId exists
 
-                if (!response.ok) {
-                    throw new Error(`http error! status: ${response.status}`);
-                }
+    const fetchDeals = async () => {
+        try {
+            const response = await fetch(`https://api.fundos.services/api/v1/live/deals/user-deals?user_id=${localContextState.userId}`);
 
-                const data = await response.json();
-
-                if (data.success || data.interested_deals_data) {
-                    setDeals(data.interested_deals_data || []);
-                    setLocalContextState((prev) => ({
-                        ...prev,
-                        investorName: data.user_name || '',
-                    }));
-                    toast.success('Dashboard loaded successfully');
-                } else {
-                    // Show deals as empty but don't show error if API response is valid
-                    setDeals([]);
-                    setLocalContextState((prev) => ({
-                        ...prev,
-                        investorName: data.user_name || 'User',
-                    }));
-                }
-            } catch (error) {
-                console.error('Error fetching deals:', error);
-                setDeals([]);
-                toast('Welcome to FundOS Dashboard', { icon: '🟢' });
-                setLoading(false);
-            } finally {
-                setLoading(false);
-                setHasLoaded(true);
+            if (!response.ok) {
+                throw new Error(`http error! status: ${response.status}`);
             }
+
+            const data = await response.json();
+
+            if (data.success || data.interested_deals_data) {
+                setDeals(data.interested_deals_data || []);
+                setLocalContextState((prev) => ({
+                    ...prev,
+                    investorName: data.user_name || '',
+                }));
+                toast.success('Dashboard loaded successfully');
+            } else {
+                setDeals([]);
+                setLocalContextState((prev) => ({
+                    ...prev,
+                    investorName: data.user_name || 'User',
+                }));
+            }
+        } catch (error) {
+            console.error('Error fetching deals:', error);
+            setDeals([]);
+            toast('Welcome to FundOS Dashboard', { icon: '🟢' });
+            setLoading(false);
+        } finally {
+            setLoading(false);
+            setHasLoaded(true);
         }
-        fetchDeals();
-    }, [setLocalContextState, hasLoaded, localContextState.userId]);
+    }
+    fetchDeals();
+}, [setLocalContextState, hasLoaded, localContextState.userId]);
 
     const handleLogout = () => {
         sessionStorage.removeItem('userId');
