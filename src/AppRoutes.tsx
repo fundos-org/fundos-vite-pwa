@@ -21,6 +21,7 @@ const Dashboard = lazy(() => import("./pages/Home/Dashboard"));
 const DealDetails = lazy(() => import("./pages/DealInvestment/DealDetails"));
 const CommitInvestment = lazy(() => import("./pages/DealInvestment/CommitInvestment"));
 const TermSheet = lazy(() => import("./pages/DealInvestment/TermSheet"));
+const DrawDown = lazy(() => import("./pages/DealInvestment/DrawDown"));
 
 const AppRoutes = () => {
     return (
@@ -138,6 +139,11 @@ const AppRoutes = () => {
                     <Route path={eRoutes.TERM_SHEET_HOME} element={
                         <Layout backRoute={eRoutes.COMMIT_INVESTMENT_HOME}>
                             <TermSheet />
+                        </Layout>
+                    } />
+                    <Route path={eRoutes.DRAW_DOWN_NOTICE_HOME} element={
+                        <Layout backRoute={eRoutes.TERM_SHEET_HOME}>
+                            <DrawDown />
                         </Layout>
                     } />
                 </Route>

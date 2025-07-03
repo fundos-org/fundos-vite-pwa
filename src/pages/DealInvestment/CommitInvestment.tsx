@@ -20,13 +20,6 @@ interface Deal {
   business_model: string;
 }
 
-// interface CommitInvestmentProps {
-//   dealId: string;
-//   showNotification: (message: string, type?: 'success' | 'error' | 'info') => void;
-//   onBack: () => void;
-//   onTermSheet: (dealId: string, investmentAmount: string) => void;
-// }
-
 const CommitInvestment: React.FC = () => {
   const { dealId } = useParams<{ dealId: string }>();
       const navigate = useNavigate();
@@ -146,7 +139,7 @@ const CommitInvestment: React.FC = () => {
 
   if (!deal) {
     return (
-      <div className="fixed inset-0 h-screen w-screen bg-gradient-to-br from-[#1a1a1a] to-[#2d2d2d] flex flex-col text-white overflow-hidden box-border">
+      <div className="fixed inset-0 h-screen w-screen bg-black flex flex-col text-white overflow-hidden box-border">
         {/* Back Icon */}
         <button
           onClick={() => navigate(eRoutes.DEAL_DETAILS_HOME.replace(':dealId', dealId || ''))}
@@ -173,16 +166,8 @@ const CommitInvestment: React.FC = () => {
   }
 
   return (
-    <div className="fixed inset-0 h-screen w-screen bg-gradient-to-br from-[#1a1a1a] to-[#2d2d2d] flex flex-col text-white overflow-hidden box-border">
-      {/* Back Icon */}
-      <button
-      onClick={() => navigate(eRoutes.DEAL_DETAILS_HOME.replace(':dealId', dealId || ''))}
-      className="bg-transparent border-none text-gray-400 text-2xl cursor-pointer p-4 self-start z-10"
-      >
-      ←
-      </button>
-      {/* Scrollable Content */}
-      <div className="flex-1 p-8 overflow-auto pb-24 max-w-[500px] mx-auto">
+    <>
+      <div>
       <h1 className="text-white text-[1.8rem] font-bold mb-8">
         💰 Commit Investment
       </h1>
@@ -232,6 +217,7 @@ const CommitInvestment: React.FC = () => {
           )}
         </div>
         </div>
+        </div>
         <button
         onClick={handleInputChange}
         disabled={!isInvestmentValid}
@@ -243,14 +229,13 @@ const CommitInvestment: React.FC = () => {
         >
         📈 Calculate Investment Summary
         </button>
-      </div>
-      </div>
+      
 
       {/* Modal */}
       {modalVisible && (
       <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-[1000] p-5">
         <div className="bg-[#1a1a1a]/95 p-8 w-full max-w-[400px] border border-white/10 backdrop-blur">
-        <h3 className="text-white text-[1.5rem] font-bold mb-6 text-center">
+        <h3 className="text-white text-[1.5rem] font-bold mb-6 text-start">
           📊 Investment Summary
         </h3>
 
@@ -273,6 +258,12 @@ const CommitInvestment: React.FC = () => {
           <span className="text-gray-300 text-sm">GST (18%):</span>
           <span className="text-white text-sm font-bold">
             {formatCurrency(gst)}
+          </span>
+          </div>
+          <div className="flex justify-between mb-2.5">
+          <span className="text-gray-300 text-sm">Carry:</span>
+          <span className="text-white text-sm font-bold">
+            {deal.carry ? `${deal.carry}%` : 'N/A'}
           </span>
           </div>
           <div className="h-px bg-[#333] my-4"></div>
@@ -326,7 +317,8 @@ const CommitInvestment: React.FC = () => {
         </div>
       </div>
       )}
-    </div>
+      </div>
+      </>
   );
 };
 
