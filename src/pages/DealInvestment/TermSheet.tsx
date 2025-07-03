@@ -1,13 +1,15 @@
 import { eRoutes } from "@/RoutesEnum";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 function TermSheet() {
     const navigate = useNavigate();
-    const { dealId, investmentAmount } = useParams<{ dealId: string; investmentAmount: string }>();
+    // const { dealId, investmentAmount } = useParams<{ dealId: string; investmentAmount: string }>();
 
     const [userId, setUserId] = useState<string>("");
+    const [investAmount, setInvestAmount] = useState<string>("");
+    const [dId, setDId] = useState<string>("");
     const [sectionChecks, setSectionChecks] = useState({
         section1: false,
         section2: false,
@@ -17,7 +19,11 @@ function TermSheet() {
     useEffect(() => {
         // Replace with your actual user id fetch logic
         const storedUserId = sessionStorage.getItem("userId");
+        const storedInvestmentAmount = sessionStorage.getItem("investmentAmount");
+        const storedDealId = sessionStorage.getItem("dealId");
         if (storedUserId) setUserId(storedUserId);
+        if (storedInvestmentAmount) setInvestAmount(storedInvestmentAmount);
+        if (storedDealId) setDId(storedDealId);
     }, []);
 
     const allChecked = Object.values(sectionChecks).every(Boolean);
@@ -33,8 +39,8 @@ function TermSheet() {
         try {
             const response = await apiSendDrawDownNotice({
                 user_id: userId,
-                investment_amount: Number(investmentAmount),
-                deal_id: dealId ?? "",
+                investment_amount: Number(investAmount),
+                deal_id: dId ?? "",
             });
             if (!response) {
                 toast.error("Failed to send docs for sign. Please try again.");
@@ -73,7 +79,7 @@ function TermSheet() {
                         />
                     </div>
                     <ul className="list-disc list-inside text-gray-300 ml-4">
-                        <li>Amount to be Invested: ₹ {investmentAmount}</li>
+                        <span>Investment Amt: ₹ {investAmount} /-</span>
                     </ul>
                 </div>
 
@@ -103,19 +109,19 @@ function TermSheet() {
 
                 {/* Final Confirmation */}
                 <div
-                    className="flex items-center gap-2 mt-6 cursor-pointer"
-                    onClick={() => toggleCheckbox("finalConfirmation")}
+                    className="flex items-start gap-2 mt-6 cursor-pointer"
                 >
                     <input
                         type="checkbox"
+                        id='finalConfirmation'
                         checked={sectionChecks.finalConfirmation}
                         onChange={() => toggleCheckbox("finalConfirmation")}
-                        className="w-5 h-5 accent-[#546881]"
+                        className="w-5 mt-0.5 h-5 accent-[#546881]"
                     />
-                    <span className="text-sm">
+                    <label className="text-sm" htmlFor='finalConfirmation'>
                         I confirm that I read all the content based on the above Terms and Condition(s)
                         <span className="text-red-400">*</span>
-                    </span>
+                    </label>
             </div>
             </div>
 
@@ -127,17 +133,6 @@ function TermSheet() {
             >
                 Proceed → 
             </button>
-            {/* <button
-                disabled={!allChecked}
-                onClick={handleClick}
-                className={`left-1/2 -translate-x-1/2 w-full max-w-2xl px-8 py-3 rounded font-semibold text-base transition
-                    ${allChecked
-                        ? "bg-[#00fb57] text-[#1a1a1a] cursor-pointer"
-                        : "bg-gray-500 text-gray-300 cursor-not-allowed"
-                    }`}
-            >
-                Proceed →
-            </button> */}
     </>
     );
 }
