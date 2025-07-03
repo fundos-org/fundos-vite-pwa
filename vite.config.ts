@@ -7,7 +7,8 @@ import tailwindcss from "@tailwindcss/vite"
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss(), VitePWA({
-    registerType: 'autoUpdate',
+    disable: true, // Disable PWA in development mode by adding environment variable
+    registerType: 'prompt', // Use 'autoUpdate' for automatic updates
     injectRegister: false,
 
     pwaAssets: {
