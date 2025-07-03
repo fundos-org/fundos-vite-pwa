@@ -137,12 +137,12 @@ const AppRoutes = () => {
                         </Layout>
                     } />
                     <Route path={eRoutes.TERM_SHEET_HOME} element={
-                        <Layout backRoute={eRoutes.DASHBOARD_HOME}>
+                        <Layout backRoute={eRoutes.COMMIT_INVESTMENT_HOME}>
                             <TermSheet />
                         </Layout>
                     } />
                     <Route path={eRoutes.DRAW_DOWN_NOTICE_HOME} element={
-                        <Layout backRoute={eRoutes.DASHBOARD_HOME}>
+                        <Layout backRoute={eRoutes.TERM_SHEET_HOME}>
                             <DrawDown />
                         </Layout>
                     } />

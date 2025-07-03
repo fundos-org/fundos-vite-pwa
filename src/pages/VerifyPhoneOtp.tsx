@@ -58,7 +58,7 @@ const VerifyPhoneOTP: FC = () => {
 
             if (data.success) {
                 sessionStorage.setItem('userId', data?.user_id);
-                sessionStorage.setItem('fundManagerId', data?.subadmin_id);
+                sessionStorage.setItem('subAdminId', data?.subadmin_id);
 
                 if (data.onboarding_status === 'Completed') {
                     toast.success('Welcome back! Redirecting to dashboard...');

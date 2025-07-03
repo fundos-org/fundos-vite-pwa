@@ -1,30 +1,18 @@
 import { eRoutes } from "@/RoutesEnum";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import toast from "react-hot-toast";
+import { useHomeContext } from "@/Shared/useLocalContextState";
 
 function TermSheet() {
     const navigate = useNavigate();
-    // const { dealId, investmentAmount } = useParams<{ dealId: string; investmentAmount: string }>();
-
-    const [userId, setUserId] = useState<string>("");
-    const [investAmount, setInvestAmount] = useState<string>("");
-    const [dId, setDId] = useState<string>("");
+    const { localContextState } = useHomeContext();
+    const { dealId, investmentAmount, userId, investorName } = localContextState;
     const [sectionChecks, setSectionChecks] = useState({
         section1: false,
         section2: false,
         finalConfirmation: false,
     });
-
-    useEffect(() => {
-        // Replace with your actual user id fetch logic
-        const storedUserId = sessionStorage.getItem("userId");
-        const storedInvestmentAmount = sessionStorage.getItem("investmentAmount");
-        const storedDealId = sessionStorage.getItem("dealId");
-        if (storedUserId) setUserId(storedUserId);
-        if (storedInvestmentAmount) setInvestAmount(storedInvestmentAmount);
-        if (storedDealId) setDId(storedDealId);
-    }, []);
 
     const allChecked = Object.values(sectionChecks).every(Boolean);
 
@@ -38,9 +26,9 @@ function TermSheet() {
     const handleClick = async () => {
         try {
             const response = await apiSendDrawDownNotice({
-                user_id: userId,
-                investment_amount: Number(investAmount),
-                deal_id: dId ?? "",
+                user_id: userId ?? "",
+                investment_amount: Number(investmentAmount),
+                deal_id: dealId ?? "",
             });
             if (!response) {
                 toast.error("Failed to send docs for sign. Please try again.");
@@ -79,7 +67,7 @@ function TermSheet() {
                         />
                     </div>
                     <ul className="list-disc list-inside text-gray-300 ml-4">
-                        <span>Investment Amt: ₹ {investAmount} /-</span>
+                        <span>Investment Amt: ₹ {investmentAmount} /-</span>
                     </ul>
                 </div>
 
@@ -105,7 +93,7 @@ function TermSheet() {
                 </div>
                 </div>
 
-                {/* <p className="mt-8 text-base">Investor Name: {investorName}</p> */}
+                <p className="mt-8 text-base">Investor Name: {investorName}</p>
 
                 {/* Final Confirmation */}
                 <div
@@ -147,7 +135,7 @@ async function apiSendDrawDownNotice(data: {
 }) {
     try {
         const response = await fetch(
-            `http://43.205.36.168/api/v1/live/deals/send/drawdown-notice?user_id=${data.user_id}&deal_id=${data.deal_id}&investment_amount=${data.investment_amount}`,
+            `https://api.fundos.services/api/v1/live/deals/send/drawdown-notice?user_id=${data.user_id}&deal_id=${data.deal_id}&investment_amount=${data.investment_amount}`,
             {
                 method: "POST",
                 headers: {

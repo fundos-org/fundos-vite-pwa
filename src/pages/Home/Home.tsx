@@ -1,4 +1,6 @@
 import { eRoutes } from "@/RoutesEnum";
+import { useHomeContext } from "@/Shared/useLocalContextState";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
@@ -14,9 +16,54 @@ interface Deal {
     deal_status: 'open' | 'closed' | 'on_hold';
 }
 
-const Home: React.FC<{ investorName: string; deals: Deal[]; }> = ({ investorName, deals }) => {
+const Home = () => {
 
+    const [deals, setDeals] = useState<Deal[]>([]);
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(true);
+    const [hasLoaded, setHasLoaded] = useState(false);
+
+    const { localContextState, setLocalContextState } = useHomeContext();
+
+    useEffect(() => {
+        if (hasLoaded) return;
+        const fetchDeals = async () => {
+            try {
+                const response = await fetch(`https://api.fundos.services/api/v1/live/deals/user-deals?user_id=${localContextState.userId}`);
+
+                if (!response.ok) {
+                    throw new Error(`http error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+
+                if (data.success || data.interested_deals_data) {
+                    setDeals(data.interested_deals_data || []);
+                    setLocalContextState((prev) => ({
+                        ...prev,
+                        investorName: data.user_name || '',
+                    }));
+                    toast.success('Dashboard loaded successfully');
+                } else {
+                    // Show deals as empty but don't show error if API response is valid
+                    setDeals([]);
+                    setLocalContextState((prev) => ({
+                        ...prev,
+                        investorName: data.user_name || 'User',
+                    }));
+                }
+            } catch (error) {
+                console.error('Error fetching deals:', error);
+                setDeals([]);
+                toast('Welcome to FundOS Dashboard', { icon: '🟢' });
+                setLoading(false);
+            } finally {
+                setLoading(false);
+                setHasLoaded(true);
+            }
+        }
+        fetchDeals();
+    }, [setLocalContextState, hasLoaded, localContextState.userId]);
 
     const handleLogout = () => {
         sessionStorage.removeItem('userId');
@@ -28,9 +75,29 @@ const Home: React.FC<{ investorName: string; deals: Deal[]; }> = ({ investorName
         navigate(eRoutes.PHONE_NUMBER);
     };
 
-    // const handleViewDeal = (dealId: string) => {
-    //     navigate(`/deal-details?dealId=${dealId}`);
-    // };
+    const goInsideDeal = (dealId: string) => {
+        setLocalContextState(prev => ({
+            ...prev,
+            dealId: dealId,
+        }));
+        navigate(eRoutes.DEAL_DETAILS_HOME);
+    };
+
+    if (loading) {
+        return (
+            <div className="min-h-screen bg-black flex items-center justify-center text-white p-8">
+                <div className="w-full max-w-md bg-white/5 border border-white/10 p-8 backdrop-blur text-center">
+                    <div className="w-15 h-15 border-4 border-gray-700 border-t-[#00fb57] rounded-full animate-spin mx-auto mb-5"></div>
+                    <h2 className="text-2xl font-medium text-[#FDFDFD] mb-2">
+                        Loading Dashboard
+                    </h2>
+                    <p className="text-sm text-gray-400 m-0">
+                        Please wait while we load your investment data...
+                    </p>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="fixed inset-0 h-screen w-screen bg-black flex flex-col text-white overflow-hidden box-border">
@@ -50,7 +117,7 @@ const Home: React.FC<{ investorName: string; deals: Deal[]; }> = ({ investorName
                 {/* Greeting */}
                 <div className="mb-8">
                     <h2 className="text-[#00fb57] text-xl font-semibold mb-2 m-0">
-                        Hey {investorName}! 👋
+                        Hey {localContextState.investorName}! 👋
                     </h2>
                     <p className="text-gray-400 text-sm m-0 leading-relaxed">
                         Welcome to your investment dashboard. Your KYC is complete and you're ready to explore deals!
@@ -133,7 +200,7 @@ const Home: React.FC<{ investorName: string; deals: Deal[]; }> = ({ investorName
                                 </div> */}
 
                                     <button
-                                        onClick={() => navigate(eRoutes.DEAL_DETAILS_HOME.replace(':dealId', deal.deal_id))}
+                                        onClick={() => goInsideDeal(deal.deal_id)}
                                         className="bg-gradient-to-br from-[#00fb57] to-[#00d647] text-[#1a1a1a] border-none px-4 py-2 text-xs font-semibold cursor-pointer w-full transition-all duration-300"
                                     >
                                         📊 View Details
