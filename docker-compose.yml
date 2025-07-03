@@ -1,0 +1,11 @@
+version: "3.8"
+
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "6000:80"  # Expose container port 80 to VM's port 6000
+    restart: unless-stopped
+    container_name: fundos-frontend
