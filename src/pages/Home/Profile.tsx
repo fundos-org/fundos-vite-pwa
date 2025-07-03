@@ -1,3 +1,4 @@
+import { useHomeContext } from "@/Shared/useLocalContextState";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
@@ -11,22 +12,21 @@ interface UserProfile {
 
 const ProfileTab = () => {
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
-  const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(true);
+    const { localContextState } = useHomeContext();
 
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
         setLoading(true);
-        const storedUserId = sessionStorage.getItem('userId');
+        const storedUserId = localContextState.userId ?? sessionStorage.getItem('userId');
         if (!storedUserId) {
           toast.error('User ID not found. Please login again.');
           setLoading(false);
           return;
         }
 
-        console.log('Fetching user profile for ID:', storedUserId);
         const apiUrl = `https://api.fundos.services/api/v0/test/user/details?user_id=${storedUserId}`;
-        console.log('API URL:', apiUrl);
 
         const response = await fetch(apiUrl, {
           method: 'GET',
@@ -35,15 +35,11 @@ const ProfileTab = () => {
           },
         });
         
-        console.log('Response status:', response.status);
-        console.log('Response headers:', response.headers);
-        
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         
         const data = await response.json();
-        console.log('API Response data:', data);
         
         // More flexible data validation
         if (!data || !data.success) {

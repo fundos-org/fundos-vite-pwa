@@ -1,59 +1,18 @@
 import { eRoutes } from '@/RoutesEnum';
+import { useHomeContext } from '@/Shared/useLocalContextState';
 import React, { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
-import { useNavigate, useParams } from 'react-router-dom';
-
-interface Deal {
-  deal_id: string;
-  description: string;
-  title: string;
-  current_valuation: number;
-  round_size: number;
-  minimum_investment: number;
-  commitment: number;
-  instruments: string;
-  fund_raised_till_now: number;
-  logo_url: string;
-  management_fee: number;
-  company_stage: string;
-  carry: number;
-  business_model: string;
-}
+import { useNavigate } from 'react-router-dom';
 
 const CommitInvestment: React.FC = () => {
   const navigate = useNavigate();
-  const { dealId } = useParams<{ dealId: string }>();
-  const [deal, setDeal] = useState<Deal | null>(null);
-  const [loading, setLoading] = useState(true);
+  const { localContextState, setLocalContextState } = useHomeContext();
   const [investmentAmount, setInvestmentAmount] = useState('');
   const [parsedAmount, setParsedAmount] = useState(0);
   const [checked, setChecked] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
 
-  useEffect(() => {
-    const fetchDealDetails = async () => {
-      try {
-        setLoading(true);
-        const response = await fetch(`https://api.fundos.services/api/v1/live/deals/?deal_id=${dealId}`);
-        
-        if (!response.ok) {
-          throw new Error('Failed to fetch deal details');
-        }
-        
-        const data = await response.json();
-        setDeal(data);
-      } catch (error) {
-        console.error('Error fetching deal details:', error);
-        toast.error('Failed to load deal details. Please try again.');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (dealId) {
-      fetchDealDetails();
-    }
-  }, [dealId]);
+  const deal = localContextState.dealDetails || null;
 
   useEffect(() => {
     const cleanAmount = investmentAmount.replace(/[^0-9.]/g, '');
@@ -97,11 +56,11 @@ const CommitInvestment: React.FC = () => {
     }
 
     try {
-      sessionStorage.setItem('investmentAmount', investmentAmount ?? '');
-      sessionStorage.setItem('dealId', dealId || '');
-      navigate(
-        `${eRoutes.TERM_SHEET_HOME}?dealId=${dealId}&investmentAmount=${parsedAmount}`
-      );
+      setLocalContextState((prev) => ({
+        ...prev,
+        investmentAmount: investmentAmount ?? '',
+      }));
+      navigate(eRoutes.TERM_SHEET_HOME);
     } catch (error) {
       console.error('Navigation error:', error);
       toast.error('Navigation failed. Please try again.');
@@ -123,28 +82,12 @@ const CommitInvestment: React.FC = () => {
 
   const isInvestmentValid = parsedAmount > 0 && parsedAmount >= (deal?.minimum_investment || 0);
 
-  if (loading) {
-    return (
-    <div className="min-h-screen bg-gradient-to-br from-[#1a1a1a] to-[#2d2d2d] flex items-center justify-center text-white p-8">
-      <div className="w-full max-w-md bg-white/5 border border-white/10 p-8 backdrop-blur text-center">
-        <div className="w-15 h-15 border-4 border-gray-700 border-t-[#00fb57] rounded-full animate-spin mx-auto mb-5"></div>
-        <h2 className="text-2xl font-medium text-[#FDFDFD] mb-2">
-        Loading Deal Details
-        </h2>
-        <p className="text-sm text-gray-400 m-0">
-        Please wait while we fetch the deal information...
-        </p>
-      </div>
-    </div>
-    );
-  }
-
   if (!deal) {
     return (
       <div className="fixed inset-0 h-screen w-screen bg-black flex flex-col text-white overflow-hidden box-border">
         {/* Back Icon */}
         <button
-          onClick={() => navigate(eRoutes.DEAL_DETAILS_HOME.replace(':dealId', dealId || ''))}
+          onClick={() => navigate(eRoutes.DEAL_DETAILS_HOME)}
           className="bg-transparent border-none text-gray-400 text-2xl cursor-pointer p-4 self-start z-10"
         >
           ←
