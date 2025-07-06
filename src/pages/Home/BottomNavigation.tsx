@@ -8,7 +8,7 @@ const tabsList = [
 
 const BottomNavigation: React.FC<{ activeTab: string; handleTabChange: (tab: string) => void }> = ({ activeTab, handleTabChange }) => {
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-[rgba(26,26,26,0.95)] border-t border-white/20 p-4 backdrop-blur z-[1000]">
+    <div className="fixed bottom-0 left-0 right-0 bg-[rgba(26,26,26,0.95)] border-t border-white/20 p-4 backdrop-blur z-[100]">
         <div className="flex justify-around items-center">
             {tabsList.map((tab) => {
                 const isActive = activeTab === tab.label;
