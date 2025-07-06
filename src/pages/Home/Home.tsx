@@ -149,7 +149,7 @@ const Home = () => {
     }
 
     return (
-        <div className="fixed inset-0 h-screen w-screen bg-black flex flex-col text-white overflow-hidden box-border">
+        <div className="fixed inset-0 h-screen w-screen bg-gradient-to-br from-[#1a1a1a] to-[#2d2d2d] flex flex-col text-white overflow-hidden box-border">
             {/* Scrollable Content */}
             <div className="flex-1 p-8 overflow-auto pb-24">
                 {/* Header */}
