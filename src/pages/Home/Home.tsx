@@ -4,6 +4,49 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
+// const testDeals = [{
+//     "deal_id": "c20f1e4d-1cef-4b46-b5bd-34eee8bac28b",
+//     "description": "Car Ev maker",
+//     "title": "Tesla",
+//     "deal_status": "open",
+//     "current_valuation": 323232332,
+//     "round_size": 32323222,
+//     "commitment": 32324242,
+//     "minimum_investment": 3322323,
+//     "business_model": "sharing_economy",
+//     "company_stage": "ideal",
+//     "logo_url": "subadmin/deals/logos/c20f1e4d-1cef-4b46-b5bd-34eee8bac28b_20250628051427.svg",
+//     "created_at": "2025-06-28T05:15:38.173463"
+// },
+// {
+//     "deal_id": "c20f1e4d-1cef-4b46-b5bd-34eee8bac28b",
+//     "description": "Car Ev maker",
+//     "title": "Tesla",
+//     "deal_status": "open",
+//     "current_valuation": 323232332,
+//     "round_size": 32323222,
+//     "commitment": 32324242,
+//     "minimum_investment": 3322323,
+//     "business_model": "sharing_economy",
+//     "company_stage": "ideal",
+//     "logo_url": "subadmin/deals/logos/c20f1e4d-1cef-4b46-b5bd-34eee8bac28b_20250628051427.svg",
+//     "created_at": "2025-06-28T05:15:38.173463"
+//     },
+// {
+//     "deal_id": "c20f1e4d-1cef-4b46-b5bd-34eee8bac28b",
+//     "description": "Car Ev maker",
+//     "title": "Tesla",
+//     "deal_status": "open",
+//     "current_valuation": 323232332,
+//     "round_size": 32323222,
+//     "commitment": 32324242,
+//     "minimum_investment": 3322323,
+//     "business_model": "sharing_economy",
+//     "company_stage": "ideal",
+//     "logo_url": "subadmin/deals/logos/c20f1e4d-1cef-4b46-b5bd-34eee8bac28b_20250628051427.svg",
+//     "created_at": "2025-06-28T05:15:38.173463"
+// }]
+
 interface Deal {
     deal_id: string;
     description: string;
@@ -18,8 +61,11 @@ interface Deal {
 
 const Home = () => {
 
-    const [deals, setDeals] = useState<Deal[]>([]);
     const navigate = useNavigate();
+    const [deals, setDeals] = useState<Deal[]>([]);
+    const [notInterestedDeals, setNotInterestedDeals] = useState<Deal[]>([]);
+    const [showDeals, setShowDeals] = useState<Deal[]>([]);
+    const [tabChange,setTabChange] = useState<boolean>(true)
     const [loading, setLoading] = useState(true);
     const [hasLoaded, setHasLoaded] = useState(false);
 
@@ -38,8 +84,10 @@ const Home = () => {
 
             const data = await response.json();
 
-            if (data.success || data.interested_deals_data) {
+            if (data.not_interested_deals_data || data.interested_deals_data) {
                 setDeals(data.interested_deals_data || []);
+                setShowDeals(data.interested_deals_data || []);
+                setNotInterestedDeals(data.not_interested_deals_data || []);
                 setLocalContextState((prev) => ({
                     ...prev,
                     investorName: data.user_name || '',
@@ -47,6 +95,7 @@ const Home = () => {
                 toast.success('Dashboard loaded successfully');
             } else {
                 setDeals([]);
+                setNotInterestedDeals([]);
                 setLocalContextState((prev) => ({
                     ...prev,
                     investorName: data.user_name || 'User',
@@ -126,15 +175,38 @@ const Home = () => {
 
                 {/* Deals Section */}
                 <div className="flex-1 flex flex-col">
-                    <h3 className="text-white text-lg font-semibold mb-4 m-0">
-                        Available Deals
-                    </h3>
-                    {deals.length > 0 ? (
-                        <div className="flex-1 overflow-y-auto pb-4">
-                            {deals.map((deal) => (
+                    <div className="mb-6">
+                        <div className="w-full flex mb-4 border-b justify-around md:justify-start gap-4">
+                            <button
+                                className={`px-6 py-2 rounded-t bg-white/10 text-white font-semibold border-b-2 ${
+                                    tabChange ? 'border-[#00fb57]' : 'border-transparent'
+                                }`}
+                                onClick={() => {
+                                    setTabChange(true)
+                                    setShowDeals(deals)
+                                }}
+                            >
+                                Available Deals
+                            </button>
+                            <button
+                                className={`px-6 py-2 rounded-t bg-white/10 text-white font-semibold border-b-2 ${
+                                    !tabChange ? 'border-[#00fb57]' : 'border-transparent'
+                                }`}
+                                onClick={() => {
+                                    setTabChange(false)
+                                    setShowDeals(notInterestedDeals)
+                                }}
+                            >
+                                Not Interested
+                            </button>
+                        </div>
+                    </div>
+                    {showDeals.length > 0 ? (
+                        <div className="flex-1 md:flex  overflow-y-auto gap-4">
+                            {showDeals.map((deal) => (
                                 <div
                                     key={deal.deal_id}
-                                    className="bg-white/10 p-6 mb-4 border border-white/15 shadow-lg"
+                                    className="md:w-1/3 bg-white/10 p-6 mb-4 border border-white/15 shadow-lg"
                                 >
                                     <div className="flex justify-between items-start mb-3">
                                         <h4 className="text-white text-base font-semibold m-0 flex-1">
