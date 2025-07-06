@@ -7,7 +7,7 @@ import tailwindcss from "@tailwindcss/vite"
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss(), VitePWA({
-    disable: true, // Disable PWA in development mode by adding environment variable
+    disable: false, // in dev => disable : true , in prod => disable : false
     registerType: 'prompt', // Use 'autoUpdate' for automatic updates
     injectRegister: false,
 
@@ -17,9 +17,9 @@ export default defineConfig({
     },
 
     manifest: {
-      name: 'fundos-vite-pwa',
-      short_name: 'fundos',
-      description: 'Mobile App for Fundos Investor.',
+      name: 'Optimistic Capital',
+      short_name: 'OC',
+      description: 'Mobile App for OC Investor.',
       theme_color: '#000000',
     },
 
