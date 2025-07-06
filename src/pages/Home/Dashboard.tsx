@@ -37,7 +37,6 @@ const Dashboard = () => {
                                     color: '#fff',
                                     background: '#007bff',
                                     border: 'none',
-                                    borderRadius: '4px',
                                     padding: '4px 10px',
                                     cursor: 'pointer'
                                 }}
@@ -48,7 +47,6 @@ const Dashboard = () => {
                     ),
                     { duration: 8000 }
                 );
-                // setHasLoaded(true);
                 return;
             }
     }, [navigate, setLocalContextState]);

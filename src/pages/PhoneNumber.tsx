@@ -87,6 +87,7 @@ const PhoneNumber: FC = () => {
                         />
                     </div>
                 </div>
+                {/* <button onClick={() => navigate(eRoutes.VERIFY_PHONE_OTP)}>test next</button> */}
 
                 <button
                     type="submit"

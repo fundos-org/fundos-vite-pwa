@@ -24,8 +24,7 @@ export const Layout: FC<LayoutProps> = ({ children, backRoute, baseRoute }) => {
 
     return (
         <>
-            {/* <main className="min-h-screen h-screen w-full bg-black flex flex-col items-center p-4 text-white"> */}
-            <div className="flex items-center justify-between w-full bg-black">
+            <div className="flex items-center justify-between w-full bg-black md:w-[50vh] mx-auto">
             {backRoute && (
                 <button
                     onClick={handleBack}
@@ -45,7 +44,7 @@ export const Layout: FC<LayoutProps> = ({ children, backRoute, baseRoute }) => {
                 </button>
                 )}
                 </div>
-            <main className="min-h-[90vh] flex-1 flex flex-col justify-between p-10 max-h-full w-full overflow-y-auto bg-black text-white">
+            <main className="min-h-[90vh] flex-1 flex flex-col justify-between p-10 max-h-full w-full md:w-[50vh] md:mx-auto overflow-y-auto bg-black text-white">
                 {children}
             </main>
         </>

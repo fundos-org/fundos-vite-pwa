@@ -77,6 +77,7 @@ const AadhaarVerification = () => {
             </p>
             </div>
 
+            {/* <button onClick={() => navigate(eRoutes.PAN_AUTH)}>test next</button> */}
             <div>
             {!showProceed && (
                 <button
