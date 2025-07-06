@@ -14,10 +14,16 @@ function App() {
           <AppRoutes />
         </HomeProvider>
         <Toaster
-  position="top-center"
-  reverseOrder={false}
-/>
-        </BrowserRouter>
+          position="top-center"
+          reverseOrder={false}
+          toastOptions={{
+            duration: 2000,
+            style: {
+              borderRadius: 0,
+            },
+          }}
+        />
+      </BrowserRouter>
       <PWABadge />
     </>
   )

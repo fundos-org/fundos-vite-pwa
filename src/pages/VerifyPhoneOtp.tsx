@@ -101,13 +101,13 @@ const VerifyPhoneOTP: FC = () => {
                                 onChange={(e) => handleOTPChange(index, e.target.value)}
                                 onKeyDown={(e) => handleKeyDown(index, e)}
                                 maxLength={1}
-                                className="w-1/4 h-17 text-center text-lg border border-gray-700 bg-gray-700 text-white outline-none"
+                                className="w-1/4 md:w-17 h-17 text-center text-lg border border-gray-700 bg-gray-700 text-white outline-none"
                             />
                         ))}
                     </div>
                 </div>
             </div>
-            
+            <button onClick={() => navigate(eRoutes.EMAIL_AUTH)}>test next</button>
             <button
                 type="submit"
                 disabled={otp.join('').length !== 4}

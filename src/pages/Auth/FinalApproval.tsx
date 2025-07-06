@@ -15,7 +15,7 @@ const FinalApproval = () => {
 
     return (
         <>
-            <div className="flex flex-col items-center">
+            <div className="flex flex-col items-center mt-30">
                 <div className="text-7xl mb-4">🎉</div>
                 <h1 className="text-white text-4xl font-bold mb-4">
                     Final Approval

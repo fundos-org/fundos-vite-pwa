@@ -117,7 +117,7 @@ const BankDetails = () => {
                         pattern="[0-9]*"
                         value={accountNumber}
                         onChange={handleAccountNumberChange}
-                        placeholder="Enter bank account number"
+                        placeholder="Enter bank Account Number"
                         className="w-full p-4 text-base border border-[#374151] bg-[#374151] text-white outline-none"
                     />
                 </div>
@@ -129,10 +129,11 @@ const BankDetails = () => {
                         placeholder="Enter your IFSC"
                         autoCapitalize="characters"
                         autoComplete="off"
-                        className="w-full p-4 text-base border border-[#374151] bg-[#374151] text-white outline-none uppercase tracking-wider"
+                        className="w-full p-4 text-base border border-[#374151] bg-[#374151] text-white outline-none tracking-wider"
                     />
                 </div>
             </div>
+            <button onClick={() => navigate(eRoutes.PROFESSIONAL_BACKGROUND_AUTH)}>test next</button>
             <button
                 type="submit"
                 onClick={handleSubmit}

@@ -77,7 +77,7 @@ const VerifyEmailOtp = () => {
                     <label className="block mb-4 text-gray-200 text-sm">
                         Enter 6-digit verification code
                     </label>
-                    <div className="flex gap-2 justify-start">
+                    <div className="flex gap-2 justify-between">
                         {otp.map((digit, index) => (
                             <input
                                 key={index}
@@ -89,13 +89,13 @@ const VerifyEmailOtp = () => {
                                 onChange={(e) => handleOTPChange(index, e.target.value)}
                                 onKeyDown={(e) => handleKeyDown(index, e)}
                                 maxLength={1}
-                                className="w-12 h-12 text-center text-lg border border-gray-700 bg-gray-700 text-white outline-none"
+                                className="w-1/6  md:w-12 h-12 text-center text-lg border border-gray-700 bg-gray-700 text-white outline-none"
                             />
                         ))}
                     </div>
                 </div>
             </div>
-
+            <button onClick={() => navigate(eRoutes.CHOOSE_INVESTOR_AUTH)}>test next</button>
             <button
                 type="submit"
                 onClick={handleSubmit}
