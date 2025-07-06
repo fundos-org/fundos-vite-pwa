@@ -95,7 +95,7 @@ const VerifyEmailOtp = () => {
                     </div>
                 </div>
             </div>
-            <button onClick={() => navigate(eRoutes.CHOOSE_INVESTOR_AUTH)}>test next</button>
+            {/* <button onClick={() => navigate(eRoutes.CHOOSE_INVESTOR_AUTH)}>test next</button> */}
             <button
                 type="submit"
                 onClick={handleSubmit}

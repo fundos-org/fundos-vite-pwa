@@ -15,7 +15,7 @@ const KycStart = () => {
                     We verify your identity to protect your account, ensure regulatory compliance, and give you access to exclusive deals.
                 </p>
             </div>
-<button onClick={() => navigate(eRoutes.AADHAAR_AUTH)}>test next</button>
+{/* <button onClick={() => navigate(eRoutes.AADHAAR_AUTH)}>test next</button> */}
             <button
                 onClick={() => navigate(eRoutes.AADHAAR_AUTH)}
                 className="bg-[#00fb57] text-[#1a1a1a] border-none py-4 px-8 text-base font-semibold cursor-pointer w-full transition-all duration-300 ease-in-out"
