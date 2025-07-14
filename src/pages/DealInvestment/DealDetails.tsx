@@ -168,9 +168,9 @@ const DealDetails = () => {
                         </p>
                         <p className="text-white text-2xl font-bold m-0">
                             INR {convertToCrores(deal?.current_valuation)}{' '}
-                            <span className="text-gray-400 text-base font-normal">
+                            {/* <span className="text-gray-400 text-base font-normal">
                                 (Post)
-                            </span>
+                            </span> */}
                         </p>
                     </div>
 
@@ -222,14 +222,14 @@ const DealDetails = () => {
                                 INR {convertToCrores(deal?.commitment)}
                             </p>
                         </div>
-                        <div>
+                        {/* <div>
                             <p className="text-gray-400 text-xs mb-1 font-semibold">
                                 VALUATION
                             </p>
                             <p className="text-white text-sm font-bold m-0">
                                 INR {convertToCrores(2500000)}
                             </p>
-                        </div>
+                        </div> */}
                     </div>
 
                     {/* Progress Section */}

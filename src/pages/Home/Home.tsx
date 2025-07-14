@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 //     "deal_id": "c20f1e4d-1cef-4b46-b5bd-34eee8bac28b",
 //     "description": "Car Ev maker",
 //     "title": "Tesla",
-//     "deal_status": "open",
+//     "deal_status": "closed",
 //     "current_valuation": 323232332,
 //     "round_size": 32323222,
 //     "commitment": 32324242,
@@ -36,7 +36,7 @@ import { useNavigate } from "react-router-dom";
 //     "deal_id": "c20f1e4d-1cef-4b46-b5bd-34eee8bac28b",
 //     "description": "Car Ev maker",
 //     "title": "Tesla",
-//     "deal_status": "open",
+//     "deal_status": "on_hold",
 //     "current_valuation": 323232332,
 //     "round_size": 32323222,
 //     "commitment": 32324242,
@@ -176,7 +176,7 @@ const Home = () => {
                 {/* Deals Section */}
                 <div className="flex-1 flex flex-col">
                     <div className="mb-6">
-                        <div className="w-full flex mb-4 border-b justify-around md:justify-start gap-4">
+                        <div className="w-full flex mb-4 border-b border-[#393738] justify-around md:justify-start gap-4">
                             <button
                                 className={`px-6 py-2 rounded-t bg-white/10 text-white font-semibold border-b-2 ${
                                     tabChange ? 'border-[#00fb57]' : 'border-transparent'
@@ -203,7 +203,7 @@ const Home = () => {
                     </div>
                     {showDeals.length > 0 ? (
                         <div className="flex-1 md:flex  overflow-y-auto gap-4">
-                            {showDeals.map((deal) => (
+                            {showDeals.filter(deal => deal.deal_status !== 'closed').map((deal) => (
                                 <div
                                     key={deal.deal_id}
                                     className="md:w-1/3 bg-white/10 p-6 mb-4 border border-white/15 shadow-lg"
