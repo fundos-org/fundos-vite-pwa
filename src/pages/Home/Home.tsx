@@ -92,7 +92,6 @@ const Home = () => {
                     ...prev,
                     investorName: data.user_name || '',
                 }));
-                toast.success('Dashboard loaded successfully');
             } else {
                 setDeals([]);
                 setNotInterestedDeals([]);

@@ -1,4 +1,4 @@
-import { CircleChevronLeft, House } from "lucide-react";
+import { CircleChevronLeft, LayoutDashboard } from "lucide-react";
 import { FC, ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -28,7 +28,7 @@ export const Layout: FC<LayoutProps> = ({ children, backRoute, baseRoute }) => {
             {backRoute && (
                 <button
                     onClick={handleBack}
-                    className="bg-transparent border-none text-4xl font-bold text-white cursor-pointer self-start z-10 pl-10 mt-10"
+                    className="bg-[#383739] p-2 rounded-r-3xl border-none text-4xl font-bold text-white cursor-pointer self-start z-10 pl-6 mt-5"
                     type="button"
                 >
                     <CircleChevronLeft size={36} strokeWidth={3} absoluteStrokeWidth />
@@ -37,14 +37,14 @@ export const Layout: FC<LayoutProps> = ({ children, backRoute, baseRoute }) => {
             {baseRoute && (
                 <button
                     onClick={handleBaseRoute}
-                    className="bg-transparent border-none text-4xl font-bold text-white cursor-pointer self-start z-10 pr-10 mt-10"
+                    className="bg-[#383739] p-2 rounded-l border-none text-4xl font-bold text-white cursor-pointer self-start z-10 pr-6 mt-5"
                     type="button"
                 >
-                    <House size={36} strokeWidth={3} absoluteStrokeWidth />
+                    <LayoutDashboard size={36} strokeWidth={3} absoluteStrokeWidth />
                 </button>
                 )}
                 </div>
-            <main className="min-h-[90vh] flex-1 flex flex-col justify-between p-10 max-h-full w-full md:w-[50vh] md:mx-auto overflow-y-auto bg-black text-white">
+            <main className="min-h-[90vh] flex-1 flex-col justify-between p-7 w-full md:w-[50vh] md:mx-auto bg-black text-white">
                 {children}
             </main>
         </>

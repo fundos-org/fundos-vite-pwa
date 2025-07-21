@@ -88,9 +88,8 @@ const CommitInvestment: React.FC = () => {
         {/* Back Icon */}
         <button
           onClick={() => navigate(eRoutes.DEAL_DETAILS_HOME)}
-          className="bg-transparent border-none text-gray-400 text-2xl cursor-pointer p-4 self-start z-10"
+          className="bg-transparent border-none text-gray-400 text-2xl cursor-pointer p-4 self-start z-10 mb-20"
         >
-          ←
         </button>
         {/* Scrollable Content */}
         <div className="flex-1 p-8 overflow-auto pb-24 max-w-[500px] mx-auto">

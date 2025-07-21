@@ -38,51 +38,58 @@ function TermSheet() {
                 toast.success(response.message);
             }
             navigate(eRoutes.DRAW_DOWN_NOTICE_HOME);
-        } catch  {
+        } catch {
             // Error handled in apiSendDrawDownNotice
             toast.error("An error occurred while processing your request. Please try again.");
         }
     };
 
     return (
-        <>
-            <div className="w-full h-[70vh] flex flex-col justify-between max-w-2xl bg-white/5 border border-white/10 p-8 shadow-lg text-white">
+        <div className="flex flex-col w-full max-w-2xl justify-between h-[calc(100vh-15vh)] bg-white/5 border border-white/10 p-7 shadow-lg text-white">
+            {/* Header */}
+            <div>
                 <div>
-                <h1 className="text-3xl font-bold mb-6 text-center">Term Sheet</h1>
-                <p className="text-base mb-2">Date: {new Date().toLocaleDateString()}</p>
-                {/* <p className="text-base mb-2">Investor: {investorName}</p> */}
-                {/* <p className="text-base mb-2">Startup: [Startup Name]</p> */}
+                    <h1 className="text-3xl font-bold text-muted/50 mb-4 text-center">Term Sheet</h1>
+                    <div className="text-base flex flex-col">
+                        <span className="capitalize text-muted/40">Investor Name: </span>
+                        <span className="font-semibold">{investorName}</span>
+                        <br />
+                        <span className="text-base text-muted/40">Date:</span>
+                        <span className="font-semibold"> {new Date().toLocaleDateString()}</span>
+                    </div>
+                </div>
 
-                {/* Section 1 */}
+                {/* Section 1: Investment Terms */}
                 <div className="mt-6">
-                    <div
-                        className="flex items-center justify-between border-b border-gray-400 pb-2 mb-2 cursor-pointer">
-                        <label htmlFor="section1" className="font-semibold text-lg">1. Investment Terms</label>
+                    <div className="flex justify-between items-center border-b border-gray-400 pb-2 mb-2">
+                        <label htmlFor="section1" className="font-semibold text-lg cursor-pointer">
+                            1. Investment Terms
+                        </label>
                         <input
                             type="checkbox"
                             id="section1"
                             checked={sectionChecks.section1}
-                            onChange={() => toggleCheckbox("section1")}
-                            className="w-5 h-5 accent-[#546881]"
+                            onChange={() => toggleCheckbox('section1')}
+                            className="w-5 h-5 accent-[#546881] cursor-pointer"
                         />
                     </div>
                     <ul className="list-disc list-inside text-gray-300 ml-4">
-                        <span>Investment Amt: ₹ {investmentAmount} /-</span>
+                        <li>Investment Amt: ₹ {investmentAmount} /-</li>
                     </ul>
                 </div>
 
-                {/* Section 2 */}
+                {/* Section 2: Closing Conditions */}
                 <div className="mt-6">
-                    <div
-                        className="flex items-center justify-between border-b border-gray-400 pb-2 mb-2 cursor-pointer"
-                    >
-                        <label htmlFor="section2" className="font-semibold text-lg">2. Closing Conditions</label>
+                    <div className="flex justify-between items-center border-b border-gray-400 pb-2 mb-2">
+                        <label htmlFor="section2" className="font-semibold text-lg cursor-pointer">
+                            2. Closing Conditions
+                        </label>
                         <input
                             type="checkbox"
                             id="section2"
                             checked={sectionChecks.section2}
-                            onChange={() => toggleCheckbox("section2")}
-                            className="w-5 h-5 accent-[#546881]"
+                            onChange={() => toggleCheckbox('section2')}
+                            className="w-5 h-5 accent-[#546881] cursor-pointer"
                         />
                     </div>
                     <ul className="list-disc list-inside text-gray-300 ml-4">
@@ -91,37 +98,34 @@ function TermSheet() {
                         <li>Board approval (if applicable)</li>
                     </ul>
                 </div>
-                </div>
+            </div>
 
-                <p className="mt-8 text-base">Investor Name: {investorName}</p>
-
-                {/* Final Confirmation */}
-                <div
-                    className="flex items-start gap-2 mt-6 cursor-pointer"
-                >
+            {/* Final Confirmation */}
+            <div className="flex flex-col">
+                <div className="flex items-start gap-2 mt-6">
                     <input
                         type="checkbox"
-                        id='finalConfirmation'
+                        id="finalConfirmation"
                         checked={sectionChecks.finalConfirmation}
-                        onChange={() => toggleCheckbox("finalConfirmation")}
-                        className="w-5 mt-0.5 h-5 accent-[#546881]"
+                        onChange={() => toggleCheckbox('finalConfirmation')}
+                        className="w-5 h-5 mt-0.5 accent-[#546881] cursor-pointer"
                     />
-                    <label className="text-sm" htmlFor='finalConfirmation'>
+                    <label htmlFor="finalConfirmation" className="text-sm">
                         I confirm that I read all the content based on the above Terms and Condition(s)
                         <span className="text-red-400">*</span>
                     </label>
-            </div>
-            </div>
+                </div>
 
-            {/* Proceed Button */}
-            <button
-                onClick={handleClick}
-                disabled={!allChecked}
-                className="bg-green-400 text-gray-900 font-semibold px-8 py-4 w-full transition-all duration-300 hover:bg-green-500 focus:outline-none"
-            >
-                Proceed → 
-            </button>
-    </>
+                {/* Proceed Button */}
+                <button
+                    onClick={handleClick}
+                    disabled={!allChecked}
+                    className="mt-6 bg-green-400 text-gray-900 font-semibold px-8 py-4 w-full transition-all duration-300 hover:bg-green-500 focus:outline-none disabled:bg-gray-500 disabled:cursor-not-allowed"
+                >
+                    Proceed →
+                </button>
+            </div>
+        </div>
     );
 }
 
