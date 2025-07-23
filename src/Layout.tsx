@@ -28,7 +28,7 @@ export const Layout: FC<LayoutProps> = ({ children, backRoute, baseRoute }) => {
             {backRoute && (
                 <button
                     onClick={handleBack}
-                    className="bg-[#383739] p-2 rounded-r-3xl border-none text-4xl font-bold text-white cursor-pointer self-start z-10 pl-6 mt-5"
+                    className="bg-[#383739] p-2 rounded-r-full border-none text-4xl font-bold text-white cursor-pointer self-start z-10 pl-6 mt-5"
                     type="button"
                 >
                     <CircleChevronLeft size={36} strokeWidth={3} absoluteStrokeWidth />
