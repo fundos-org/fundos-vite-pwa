@@ -15,6 +15,7 @@ export enum eRoutes {
     EMAIL_AUTH = "/auth/email",
     EMAIL_VERIFY_AUTH = "/auth/email-verify",
     CHOOSE_INVESTOR_AUTH = "/auth/choose-investor",
+    USERNAME_PASSWORD_AUTH = "/auth/username-password",
     COMPLETE_KYC_AUTH = "/auth/complete-kyc",
     AADHAAR_AUTH = "/auth/aadhaar",
     PAN_AUTH = "/auth/pan",
@@ -24,6 +25,7 @@ export enum eRoutes {
     CONTRIBUTION_AGREEMENT_AUTH = "/auth/contribution-agreement",
     UPLOAD_PHOTO_AUTH = "/auth/upload-photo",
     FINAL_APPROVAL_AUTH = "/auth/final-approval",
+    VERIFY_DETAILS_AUTH = "/auth/verify-details",
 }
 
 // /term-sheet?dealId=${dealId}&investmentAmount=${investmentAmount}
