@@ -1,8 +1,9 @@
 import axios, {
   AxiosInstance,
-  AxiosRequestConfig,
   AxiosResponse,
   AxiosError,
+  InternalAxiosRequestConfig,
+  AxiosRequestConfig,
 } from "axios";
 
 // Define the shape of your token refresh response
@@ -57,7 +58,7 @@ const processQueue = (error: any, token: string | null = null) => {
 
 // Attach access token to every request
 api.interceptors.request.use(
-  (config: AxiosRequestConfig): AxiosRequestConfig => {
+  (config: InternalAxiosRequestConfig): InternalAxiosRequestConfig => {
     const token = localStorage.getItem("accessToken");
     if (token && config.headers) {
       config.headers["Authorization"] = `Bearer ${token}`;
