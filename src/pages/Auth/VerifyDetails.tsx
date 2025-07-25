@@ -1,12 +1,18 @@
 import api from "@/lib/axiosInstance";
 import { eRoutes } from "@/RoutesEnum";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
-const EmailInput = () => {
+const VeridyDetails = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
+
+  useEffect(() => {
+    api
+      .get("/onboarding/zoho/check-agreement")
+      .then(({ data }) => console.log(data));
+  }, []);
 
   const handleSubmit = async () => {
     if (!isValidEmail(email)) {
@@ -86,4 +92,4 @@ const EmailInput = () => {
   );
 };
 
-export default EmailInput;
+export default VeridyDetails;
