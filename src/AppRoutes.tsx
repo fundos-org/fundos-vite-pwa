@@ -2,6 +2,9 @@ import { lazy, Suspense } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { Layout } from "./Layout";
 import { eRoutes } from "./RoutesEnum";
+import InvestmentDetail from "./pages/Home/InvestmentDetail";
+import BankDetails from "./pages/Profile/BankDetails";
+import NotificationsSettings from "./pages/Home/NotificationsSettings";
 const GetStarted = lazy(() => import("./pages/GetStarted"));
 const PhoneNumber = lazy(() => import("./pages/PhoneNumber"));
 const VerifyPhoneOTP = lazy(() => import("./pages/VerifyPhoneOtp"));
@@ -25,12 +28,18 @@ const ContributionAgreement = lazy(
 const UploadPhoto = lazy(() => import("./pages/Auth/UploadPhoto"));
 const FinalApproval = lazy(() => import("./pages/Auth/FinalApproval"));
 const Dashboard = lazy(() => import("./pages/Home/Dashboard"));
+const Home = lazy(() => import("./pages/Home/Home"));
+const Portfolio = lazy(() => import("./pages/Home/Portfolio"));
+const Updates = lazy(() => import("./pages/Home/Updates"));
+const Profile = lazy(() => import("./pages/Home/Profile"));
 const DealDetails = lazy(() => import("./pages/DealInvestment/DealDetails"));
 const CommitInvestment = lazy(
   () => import("./pages/DealInvestment/CommitInvestment")
 );
 const TermSheet = lazy(() => import("./pages/DealInvestment/TermSheet"));
 const DrawDown = lazy(() => import("./pages/DealInvestment/DrawDown"));
+const MyProfile = lazy(() => import("./pages/Home/MyProfile"));
+const Transactions = lazy(() => import("./pages/Transactions/Transactions"));
 
 const AppRoutes = () => {
   return (
@@ -183,7 +192,23 @@ const AppRoutes = () => {
                 <Dashboard />
               </Layout>
             }
-          />
+          >
+            <Route index element={<Home />} />
+            <Route path="portfolio" element={<Portfolio />} />
+            <Route path="updates" element={<Updates />} />
+            <Route path="profile" element={<Profile />} />
+            <Route
+              path="portfolio/:investmentId"
+              element={<InvestmentDetail />}
+            />
+            <Route path="profile/me" element={<MyProfile />} />
+            <Route path="profile/transactions" element={<Transactions />} />
+            <Route path="profile/bank-details" element={<BankDetails />} />
+            <Route
+              path="profile/notifications-settings"
+              element={<NotificationsSettings />}
+            />
+          </Route>
           <Route
             path={eRoutes.DEAL_DETAILS_HOME}
             element={

@@ -1,6 +1,17 @@
 import { useHomeContext } from "@/Shared/useLocalContextState";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { FaArrowRightLong } from "react-icons/fa6";
+import { 
+  FaUser, 
+  FaMoneyBillWave, 
+  FaUniversity, 
+  FaBell, 
+  FaFileAlt, 
+  FaLock, 
+  FaHeadset 
+} from "react-icons/fa";
+import { useNavigate } from "react-router-dom"; // Add useNavigate import
 
 interface UserProfile {
   full_name: string;
@@ -10,10 +21,28 @@ interface UserProfile {
   profilePicture?: string;
 }
 
+interface NavItem {
+  id: string;
+  title: string;
+  icon: React.ReactNode;
+  section: string;
+}
+
 const ProfileTab = () => {
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
-    const [loading, setLoading] = useState(true);
-    const { localContextState } = useHomeContext();
+  const [loading, setLoading] = useState(true);
+  const { localContextState } = useHomeContext();
+  const navigate = useNavigate(); // Add useNavigate import
+
+  const navigationItems: NavItem[] = [
+    { id: 'profile', title: 'my profile', icon: <FaUser />, section: 'CONNECTIONS' },
+    { id: 'transactions', title: 'transactions', icon: <FaMoneyBillWave />, section: 'CONNECTIONS' },
+    { id: 'bank', title: 'bank details', icon: <FaUniversity />, section: 'CONNECTIONS' },
+    { id: 'notifications', title: 'manage notifications', icon: <FaBell />, section: 'CONNECTIONS' },
+    { id: 'terms', title: 'terms of use', icon: <FaFileAlt />, section: 'HELP AND SUPPORT' },
+    { id: 'privacy', title: 'privacy policy', icon: <FaLock />, section: 'HELP AND SUPPORT' },
+    { id: 'support', title: 'customer support', icon: <FaHeadset />, section: 'HELP AND SUPPORT' },
+  ];
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -41,7 +70,6 @@ const ProfileTab = () => {
         
         const data = await response.json();
         
-        // More flexible data validation
         if (!data || !data.success) {
           throw new Error('API request failed or returned error');
         }
@@ -52,18 +80,17 @@ const ProfileTab = () => {
         }
         
         setUserProfile({
-          full_name: userData.full_name || 'User Name',
+          full_name: "John Doe", // Use John Doe as requested
           email: userData.email || 'user@example.com',
           phone_number: userData.phone_number || '+91 XXXXXXXXXX',
           capital_commitment: userData.capital_commitment || 0,
-          profilePicture: userData.profilePicture || userData.profile_picture || undefined
+          profilePicture: "/profile-image.jpg" // Will use default image from the navigation code
         });
       } catch (error) {
         console.error('Error fetching user profile:', error);
         toast.error('Failed to load profile data. Please try again later.');
-        // Set a default state to prevent infinite retries
         setUserProfile({
-          full_name: 'User',
+          full_name: "John Doe", // Use John Doe as requested
           email: 'N/A',
           phone_number: 'N/A',
           capital_commitment: 0,
@@ -76,6 +103,49 @@ const ProfileTab = () => {
 
     fetchUserProfile();
   }, []);
+
+  const handleNavigation = (itemId: string) => {
+    console.log(`Navigating to ${itemId}`);
+    if (itemId === 'profile') {
+      navigate("me"); // Navigate to the new MyProfile route
+    } else if (itemId === 'transactions') {
+      navigate("transactions"); // Navigate to the transactions route
+    } else if (itemId === 'bank') {
+      navigate("bank-details"); // Navigate to bank details
+    } else if (itemId === 'notifications') {
+      navigate("notifications-settings"); // Navigate to notifications settings
+    }
+    // Other navigation logic would go here
+  };
+
+  // Get initials from name
+  const getInitials = (name: string) => {
+    return name
+      .split(' ')
+      .map(part => part[0])
+      .join('')
+      .toUpperCase();
+  };
+  
+  // Random pastel background colors
+  const pastelColors = [
+    "bg-blue-200",
+    "bg-green-200",
+    "bg-yellow-200",
+    "bg-pink-200",
+    "bg-purple-200",
+    "bg-indigo-200",
+    "bg-red-200",
+    "bg-orange-200",
+    "bg-teal-200",
+  ];
+  
+  // Choose a color based on the user's name (deterministic)
+  const getProfileColor = (name: string) => {
+    // Simple hash function to get a consistent index
+    const charSum = name.split('').reduce((sum, char) => sum + char.charCodeAt(0), 0);
+    return pastelColors[charSum % pastelColors.length];
+  };
 
   if (loading) {
     return (
@@ -93,92 +163,91 @@ const ProfileTab = () => {
     );
   }
 
+  const profileColor = getProfileColor(userProfile?.full_name || "John Doe");
+  const initials = getInitials(userProfile?.full_name || "John Doe");
+
   return (
-    <div className="fixed inset-0 h-screen w-screen bg-gradient-to-br from-[#1a1a1a] to-[#2d2d2d] flex flex-col text-white overflow-hidden box-border">
-      {/* Scrollable Content */}
-      <div className="flex-1 p-8 overflow-auto pb-24">
-        <h1 className="text-2xl font-bold mb-8 text-center"><span className="mx-2 align-text-bottom">👤</span>  Profile</h1>
+    <div className="fixed inset-0 h-screen w-screen bg-black flex flex-col text-white overflow-hidden box-border">
+      {/* Profile Header with gradient */}
+      <div className="flex flex-col items-center py-10 bg-gradient-to-br from-[#2d0a2e] to-[#1a0a1b] border-b border-white/10">
+        <div className="w-28 h-28 rounded-full mb-4 overflow-hidden border-2 border-white/20 flex items-center justify-center">
+          {userProfile?.profilePicture ? (
+            <img 
+              src={userProfile.profilePicture}
+              alt="Profile" 
+              className="w-full h-full object-cover"
+              onError={(e) => {
+                const target = e.target as HTMLImageElement;
+                // On error, replace with initials
+                target.style.display = 'none';
+                target.parentElement?.classList.add(profileColor);
+                const initialsElement = document.createElement('span');
+                initialsElement.className = 'text-3xl font-bold text-gray-800';
+                initialsElement.textContent = initials;
+                target.parentElement?.appendChild(initialsElement);
+              }}
+            />
+          ) : (
+            <div className={`w-full h-full flex items-center justify-center ${profileColor}`}>
+              <span className="text-3xl font-bold text-gray-800">{initials}</span>
+            </div>
+          )}
+        </div>
+        <h2 className="text-white text-xl font-medium mb-1">John Doe</h2>
+        <p className="text-blue-400 text-sm">
+          <span className="inline-block w-2 h-2 bg-blue-400 rounded-full mr-1"></span> 
+          MEMBER SINCE 15TH JUNE 2023
+        </p>
+      </div>
 
-        {/* Profile Card */}
-        <div className="bg-white/10 p-8 mb-6 border border-white/15 shadow-lg text-center">
-          {/* Profile Picture */}
-          <div
-            className={`w-24 h-24 rounded-full mx-auto mb-6 flex items-center justify-center text-4xl font-bold border-4 border-[#00fb57]/30 ${
-              userProfile?.profilePicture
-                ? ""
-                : "bg-gradient-to-br from-[#00fb57] to-[#00d647] text-[#1a1a1a]"
-            }`}
-            style={
-              userProfile?.profilePicture
-                ? {
-                    background: `url(${userProfile.profilePicture}) center/cover`,
-                  }
-                : undefined
-            }
-          >
-            {!userProfile?.profilePicture &&
-              userProfile?.full_name.charAt(0).toUpperCase()}
+      {/* Invitation Code - black background */}
+      <div className="px-6 py-4 border-b border-white/10 bg-[#121212]">
+        <p className="text-xs text-gray-400 mb-1">INVITATION CODE</p>
+        <div className="flex items-center">
+          <div className="flex-1 bg-[#242424] p-2 rounded">
+            <code className="text-sm">fundos.service/eqrtysdr</code>
           </div>
+          <button className="ml-2 bg-[#00fb57] text-black py-2 px-4 text-sm font-medium rounded">Invite</button>
+        </div>
+      </div>
 
-          {/* User Name */}
-          <h2 className="text-white text-xl font-semibold mb-2">
-            {userProfile?.full_name}
-          </h2>
-
-          {/* KYC Status */}
-          <div className="bg-[#00fb57]/10 border border-[#00fb57]/30 rounded-full px-3 py-1 inline-block mb-6">
-            <span className="text-[#00fb57] text-xs font-semibold">
-              ✅ KYC Verified
-            </span>
-          </div>
+      {/* Navigation Menu - black background */}
+      <div className="flex-1 overflow-auto bg-[#121212] pb-24">
+        <div className="px-4 py-2">
+          <p className="text-xs text-gray-400 mb-2">CONNECTIONS</p>
+          
+          {navigationItems.filter(item => item.section === 'CONNECTIONS').map((item) => (
+            <div 
+              key={item.id} 
+              className="flex items-center py-3 px-2 hover:bg-[#242424] cursor-pointer"
+              onClick={() => handleNavigation(item.id)}
+            >
+              <span className="mr-3 text-xl">{item.icon}</span>
+              <span className="flex-1 text-sm">{item.title}</span>
+              <FaArrowRightLong className="text-gray-400" />
+            </div>
+          ))}
         </div>
 
-        {/* Contact Information */}
-        <div className="flex flex-col gap-4">
-          {/* Email */}
-          <div className="bg-white/5 p-4 pl-6 border border-white/10 flex items-center gap-4">
-            <div className="w-10 h-10 bg-blue-500/20 flex items-center justify-center text-lg">
-              📧
+        <div className="px-4 py-2">
+          <p className="text-xs text-gray-400 mb-2">HELP AND SUPPORT</p>
+          
+          {navigationItems.filter(item => item.section === 'HELP AND SUPPORT').map((item) => (
+            <div 
+              key={item.id} 
+              className="flex items-center py-3 px-2 hover:bg-[#242424] cursor-pointer"
+              onClick={() => handleNavigation(item.id)}
+            >
+              <span className="mr-3 text-xl">{item.icon}</span>
+              <span className="flex-1 text-sm">{item.title}</span>
+              <FaArrowRightLong className="text-gray-400" />
             </div>
-            <div className="flex-1">
-              <p className="text-gray-400 text-xs mb-1 font-semibold uppercase">
-                Email Address
-              </p>
-              <p className="text-white text-sm font-medium m-0">
-                {userProfile?.email}
-              </p>
-            </div>
-          </div>
-
-          {/* Phone */}
-          <div className="bg-white/5 p-4 pl-6 border border-white/10 flex items-center gap-4">
-            <div className="w-10 h-10 bg-green-600/20 flex items-center justify-center text-lg">
-              📱
-            </div>
-            <div className="flex-1">
-              <p className="text-gray-400 text-xs mb-1 font-semibold uppercase">
-                Phone Number
-              </p>
-              <p className="text-white text-sm font-medium m-0">
-                {userProfile?.phone_number}
-              </p>
-            </div>
-          </div>
-
-          {/* Capital Commitment */}
-          <div className="bg-white/5 p-4 pl-6 border border-white/10 flex items-center gap-4">
-            <div className="w-10 h-10 bg-[#00fb57]/20 flex items-center justify-center text-lg">
-              💰
-            </div>
-            <div className="flex-1">
-              <p className="text-gray-400 text-xs mb-1 font-semibold uppercase">
-                Capital Commitment
-              </p>
-              <p className="text-white text-sm font-medium m-0">
-                ₹{((userProfile?.capital_commitment || 0) / 10000000).toFixed(2)}Cr
-              </p>
-            </div>
-          </div>
+          ))}
+        </div>
+        
+        {/* App Version - black background */}
+        <div className="text-center py-4 text-gray-400 text-xs bg-[#121212]">
+          FUNDOS V1.0.6
         </div>
       </div>
     </div>

@@ -1,17 +1,13 @@
-import { useEffect, useState } from "react";
-import Home from "./Home";
+import { useEffect } from "react";
 import toast from "react-hot-toast";
-import Profile from "./Profile";
-import Portfolio from "./Portfolio";
 import BottomNavigation from "./BottomNavigation";
-import Updates from "./Updates";
 import { useHomeContext } from "@/Shared/useLocalContextState";
 import { eRoutes } from "@/RoutesEnum";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Outlet, useLocation } from "react-router-dom";
 
 const Dashboard = () => {
     const navigate = useNavigate();
-    const [activeTab, setActiveTab] = useState('home');
+    const location = useLocation();
     const { setLocalContextState } = useHomeContext();
 
     useEffect(() => {
@@ -52,34 +48,37 @@ const Dashboard = () => {
     }, [navigate, setLocalContextState]);
 
     const handleTabChange = (tabLabel: string) => {
-        setActiveTab(tabLabel);
+        switch (tabLabel) {
+            case 'home':
+                navigate(eRoutes.DASHBOARD_HOME);
+                break;
+            case 'portfolio':
+                navigate(`${eRoutes.DASHBOARD_HOME}/portfolio`);
+                break;
+            case 'updates':
+                navigate(`${eRoutes.DASHBOARD_HOME}/updates`);
+                break;
+            case 'profile':
+                navigate(`${eRoutes.DASHBOARD_HOME}/profile`);
+                break;
+        }
     };
 
-    const renderTabContent = () => {
-        switch (activeTab) {
-            case 'home':
-                return (
-                    <Home />
-                );
-            case 'portfolio':
-                return (
-                    <Portfolio />
-                );
-            case 'updates':
-                return (
-                    <Updates />
-                );
-            case 'profile':
-                return <Profile />;
-            default:
-                return null;
-        }
+    const getActiveTab = () => {
+        const path = location.pathname;
+        if (path.includes('/portfolio')) return 'portfolio';
+        if (path.includes('/updates')) return 'updates';
+        if (path.includes('/profile')) return 'profile';
+        return 'home';
     };
 
     return (
         <>
-            {renderTabContent()}
-            <BottomNavigation activeTab={activeTab} handleTabChange={handleTabChange} />
+            <Outlet />
+            <BottomNavigation 
+                activeTab={getActiveTab()} 
+                handleTabChange={handleTabChange} 
+            />
         </>
     );
 };
