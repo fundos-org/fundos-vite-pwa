@@ -11,7 +11,8 @@ import {
   FaLock, 
   FaHeadset 
 } from "react-icons/fa";
-import { useNavigate } from "react-router-dom"; // Add useNavigate import
+import { useNavigate } from "react-router-dom";
+import api from "@/lib/axiosInstance";
 
 interface UserProfile {
   full_name: string;
@@ -19,6 +20,30 @@ interface UserProfile {
   phone_number: string;
   capital_commitment: number;
   profilePicture?: string;
+}
+
+interface InvestorResponse {
+  investor_id: string;
+  personal_details: {
+    first_name: string;
+    last_name: string;
+    email: string;
+    phone_number: string;
+    pan_number: string;
+    aadhaar_number: string;
+  };
+  bank_details: {
+    bank_account_number: string;
+    bank_ifsc: string;
+    account_holder_name: string;
+  };
+  professional_background: {
+    occupation: string;
+    income_source: string;
+    annual_income: number;
+    capital_commitment: number;
+  };
+  success: boolean;
 }
 
 interface NavItem {
@@ -31,8 +56,9 @@ interface NavItem {
 const ProfileTab = () => {
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
+  const [apiCalled, setApiCalled] = useState(false);
   const { localContextState } = useHomeContext();
-  const navigate = useNavigate(); // Add useNavigate import
+  const navigate = useNavigate();
 
   const navigationItems: NavItem[] = [
     { id: 'profile', title: 'my profile', icon: <FaUser />, section: 'CONNECTIONS' },
@@ -46,6 +72,9 @@ const ProfileTab = () => {
 
   useEffect(() => {
     const fetchUserProfile = async () => {
+      // Return early if the API has already been called
+      if (apiCalled) return;
+      
       try {
         setLoading(true);
         const storedUserId = localContextState.userId ?? sessionStorage.getItem('userId');
@@ -55,42 +84,37 @@ const ProfileTab = () => {
           return;
         }
 
-        const apiUrl = `https://api.fundos.services/api/v0/test/user/details?user_id=${storedUserId}`;
+        setApiCalled(true); // Mark API as called to prevent duplicate requests
+        const apiUrl = `/subadmin/investors/about_info`;
 
-        const response = await fetch(apiUrl, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
+        const response = await api.get(apiUrl, {
+          params: { investor_id: storedUserId },
         });
         
-        if (!response.ok) {
+        if (response.status !== 200) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         
-        const data = await response.json();
+        const data: InvestorResponse = await response.data;
         
         if (!data || !data.success) {
           throw new Error('API request failed or returned error');
         }
         
-        const userData = data.data;
-        if (!userData) {
-          throw new Error('No user data received from API');
-        }
+        const fullName = `${data.personal_details.first_name} ${data.personal_details.last_name}`;
         
         setUserProfile({
-          full_name: "John Doe", // Use John Doe as requested
-          email: userData.email || 'user@example.com',
-          phone_number: userData.phone_number || '+91 XXXXXXXXXX',
-          capital_commitment: userData.capital_commitment || 0,
-          profilePicture: "/profile-image.jpg" // Will use default image from the navigation code
+          full_name: fullName,
+          email: data.personal_details.email,
+          phone_number: data.personal_details.phone_number,
+          capital_commitment: data.professional_background.capital_commitment,
+          profilePicture: "/profile-image.jpg" // Default image
         });
       } catch (error) {
         console.error('Error fetching user profile:', error);
         toast.error('Failed to load profile data. Please try again later.');
         setUserProfile({
-          full_name: "John Doe", // Use John Doe as requested
+          full_name: "John Doe", // Fallback
           email: 'N/A',
           phone_number: 'N/A',
           capital_commitment: 0,
@@ -102,7 +126,7 @@ const ProfileTab = () => {
     };
 
     fetchUserProfile();
-  }, []);
+  }, []); // Empty dependency array to ensure the effect runs only once
 
   const handleNavigation = (itemId: string) => {
     console.log(`Navigating to ${itemId}`);
@@ -193,7 +217,7 @@ const ProfileTab = () => {
             </div>
           )}
         </div>
-        <h2 className="text-white text-xl font-medium mb-1">John Doe</h2>
+        <h2 className="text-white text-xl font-medium mb-1">{userProfile?.full_name || "John Doe"}</h2>
         <p className="text-blue-400 text-sm">
           <span className="inline-block w-2 h-2 bg-blue-400 rounded-full mr-1"></span> 
           MEMBER SINCE 15TH JUNE 2023
