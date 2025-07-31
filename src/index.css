@@ -1,6 +1,35 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+@import url('https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Test+Martina+Plantijn:ital,wght@500;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Test+Martina+Plantijn:wght@500&display=swap');
+
+@font-face {
+  font-family: 'gilroy-regular';
+  src: url('./fonts/gilroy-regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'ivyora';
+  src: url('./fonts/ivyora-display-regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'presto';
+  src: url('./fonts/ivy-presto-headline.otf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'presto-regular';
+  src: url('./fonts/ivy-presto-display.otf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
 @custom-variant dark (&:is(.dark *));
 
 :root {
@@ -221,4 +250,8 @@
 
   }
 
+}
+
+* {
+  font-family: 'gilroy-regular', 'ivyora', 'presto', 'presto-regular', 'Funnel Display', 'Playfair Display', 'Test Martina Plantijn', sans-serif;
 }

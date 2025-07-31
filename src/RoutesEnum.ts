@@ -6,6 +6,9 @@ export enum eRoutes {
 
     HOME = "/home",
     DASHBOARD_HOME = "/home/dashboard",
+    DASHBOARD_PORTFOLIO = "/home/dashboard/portfolio",
+    DASHBOARD_UPDATES = "/home/dashboard/updates",
+    DASHBOARD_PROFILE = "/home/dashboard/profile",
     DEAL_DETAILS_HOME = "/home/deal-details",
     COMMIT_INVESTMENT_HOME = "/home/commit-investment",
     TERM_SHEET_HOME = "/home/term-sheet",
@@ -26,6 +29,11 @@ export enum eRoutes {
     UPLOAD_PHOTO_AUTH = "/auth/upload-photo",
     FINAL_APPROVAL_AUTH = "/auth/final-approval",
     VERIFY_DETAILS_AUTH = "/auth/verify-details",
+    PORTFOLIO = "/portfolio",
+    PORTFOLIO_DETAIL = "/portfolio/:investmentId",
+    MY_PROFILE = "/profile/me",
+    TRANSACTIONS = "/profile/transactions",
+    BANK_DETAILS = "/profile/bank-details"
 }
 
 // /term-sheet?dealId=${dealId}&investmentAmount=${investmentAmount}
