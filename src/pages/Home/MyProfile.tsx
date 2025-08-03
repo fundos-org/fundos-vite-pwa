@@ -250,7 +250,7 @@ const MyProfile: React.FC = () => {
   }
 
   return (
-    <div className="fixed inset-0 h-screen w-screen bg-black flex flex-col text-white">
+    <div className="inset-0 bg-black flex flex-col text-white">
       {/* Header */}
       <div className="p-3 flex items-center border-b border-white/10">
         <button
@@ -364,7 +364,7 @@ const MyProfile: React.FC = () => {
             </label>
             <input
               type="text"
-              value={profileData.aadharNumber}
+              value={`****  ****  ****  ${profileData.aadharNumber}`}
               readOnly
               className="w-full p-3 bg-[#1E1D1F] border border-gray-700 text-white rounded-none"
             />

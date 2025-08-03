@@ -5,6 +5,7 @@ import axios, {
   InternalAxiosRequestConfig,
   AxiosRequestConfig,
 } from "axios";
+import toast from "react-hot-toast";
 
 // Define the shape of your token refresh response
 interface RefreshTokenResponse {
@@ -25,8 +26,9 @@ const handleLogout = () => {
   sessionStorage.removeItem("email");
   sessionStorage.removeItem("invitationCode");
   sessionStorage.removeItem("subAdminId");
+  toast.error("You have been logged out due to session expiration.");
   // Redirect to login or home page if needed
-  window.location.href = "/";
+  window.location.href = "/phone-number";
 
   axios
     .post("https://api.fundos.services/staging/v1/auth/logout")

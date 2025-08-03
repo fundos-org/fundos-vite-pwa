@@ -15,7 +15,7 @@ const BottomNavigation: React.FC<{
   handleTabChange: (tab: string) => void;
 }> = ({ activeTab, handleTabChange }) => {
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-black border-t border-white/10 p-2 z-[100]">
+    <div className="fixed bottom-0 left-0 right-0 bg-black border-t border-white/10 p-2 z-[100] md:max-w-[360px] mx-auto">
       <div className="flex justify-around items-center">
         {tabsList.map((tab) => {
           const isActive = activeTab === tab.label;

@@ -179,8 +179,8 @@ function DrawDown() {
   }, [navigate]);
 
   return (
-    <>
-      <h1 className="text-white text-[1.8rem] font-bold mb-8">
+    <div className="flex flex-col w-full max-w-4xl justify-between h-[calc(100vh)] bg-white/5 border border-white/10 p-7 shadow-lg">
+      <h1 className="text-white text-[1.8rem] font-bold mb-4">
         Drawdown notice
       </h1>
 
@@ -192,10 +192,10 @@ function DrawDown() {
           </p>
         </div>
       ) : presignedUrl ? (
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col flex-grow overflow-auto">
           <div
-            className="w-full bg-gray-800 rounded-lg overflow-hidden"
-            style={{ height: "70vh" }}
+            className="w-full bg-gray-800 rounded-lg overflow-hidden mb-4"
+            style={{ height: "60vh" }}
           >
             <iframe
               ref={iframeRef}
@@ -212,7 +212,7 @@ function DrawDown() {
               id="confirmDrawdown"
               checked={confirmed}
               onChange={(e) => setConfirmed(e.target.checked)}
-              className="w-5 h-5 accent-green-400"
+              className="w-5 h-5 accent-white"
             />
             <label htmlFor="confirmDrawdown" className="text-white">
               I confirm that I have read and understood all the terms and
@@ -223,7 +223,7 @@ function DrawDown() {
           {paymentProcessing && (
             <div className="bg-gray-800 p-4 rounded-lg mb-4">
               <div className="flex items-center gap-3 mb-3">
-                <div className="w-6 h-6 border-2 border-green-400 border-t-transparent rounded-full animate-spin"></div>
+                <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                 <span className="text-white">Payment in progress...</span>
               </div>
               <p className="text-gray-300 text-sm">
@@ -231,24 +231,26 @@ function DrawDown() {
               </p>
               <button
                 onClick={handleRetryPayment}
-                className="mt-3 text-green-400 underline hover:text-green-300 text-sm"
+                className="mt-3 text-white underline hover:text-gray-300 text-sm"
               >
                 Open payment window again
               </button>
             </div>
           )}
 
-          <button
-            disabled={!confirmed || paymentProcessing}
-            onClick={handleGeneratePaymentLink}
-            className={`text-gray-900 font-semibold px-8 py-4 w-full transition-all duration-300 focus:outline-none ${
-              confirmed && !paymentProcessing
-                ? "bg-green-400 hover:bg-green-500"
-                : "bg-gray-500 cursor-not-allowed"
-            }`}
-          >
-            {paymentProcessing ? "Processing..." : "Proceed to Payment"}
-          </button>
+          <div className="flex flex-col mt-auto pt-4">
+            <button
+              disabled={!confirmed || paymentProcessing}
+              onClick={handleGeneratePaymentLink}
+              className={`text-black font-semibold px-8 py-4 w-full transition-all duration-300 focus:outline-none ${
+                confirmed && !paymentProcessing
+                  ? "bg-white hover:bg-gray-100"
+                  : "bg-gray-500 cursor-not-allowed"
+              }`}
+            >
+              {paymentProcessing ? "Processing..." : "Proceed to Payment"}
+            </button>
+          </div>
         </div>
       ) : (
         <div className="p-8 bg-gray-800 rounded-lg">
@@ -257,7 +259,7 @@ function DrawDown() {
           </p>
         </div>
       )}
-    </>
+    </div>
   );
 }
 

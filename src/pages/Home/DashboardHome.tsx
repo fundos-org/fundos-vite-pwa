@@ -19,10 +19,7 @@ const DashboardHome = () => {
 
   useEffect(() => {
     // Get user data from sessionStorage instead of API
-    const userName =
-      sessionStorage.getItem("username") ||
-      localContextState.investorName ||
-      "Investor";
+    const userName = localStorage.getItem("name") || "User";
 
     setPortfolioData({
       totalInvestment: "18.25Cr", // Default value since we don't have an API
@@ -86,7 +83,7 @@ const DashboardHome = () => {
             <h1 className="text-5xl font-bold">
               ₹{portfolioData.totalInvestment}
             </h1>
-            <button 
+            <button
               className="text-white/70"
               onClick={() => navigate(eRoutes.DASHBOARD_PORTFOLIO)}
             >

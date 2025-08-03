@@ -53,9 +53,6 @@ const InvestmentDetail: React.FC = () => {
           <span className={`${investment.textColor} font-bold`}>
             {getInitials(investment.name)}
           </span>
-          <span className={`text-xs ${investment.textColor} block`}>
-            Startup
-          </span>
         </div>
         <div className="text-left">
           <h1 className="text-3xl font-bold">{investment.name}</h1>

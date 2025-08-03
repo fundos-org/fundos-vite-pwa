@@ -44,7 +44,7 @@ export const Layout: FC<LayoutProps> = ({ children, backRoute, baseRoute }) => {
           </button>
         )}
       </div>
-      <main className="min-h-[90vh] flex-1 flex-col justify-between w-full max-w-[480px] bg-black text-white box-border overflow-auto mx-auto">
+      <main className="min-h-[90vh] flex-1 flex-col justify-between w-full md:max-w-[360px] bg-black text-white box-border overflow-auto mx-auto">
         {children}
       </main>
     </>

@@ -56,10 +56,14 @@ const VerifyPhoneOTP: FC = () => {
           if (data.onboarding_status === "KYC_INITIATED") {
             toast.success("Welcome back! Redirecting to dashboard...");
             navigate(eRoutes.DASHBOARD_HOME);
+            localStorage.setItem("accessToken", data.access_token);
+            localStorage.setItem("refreshToken", data.refresh_token || "");
+            localStorage.setItem("userId", data.user_id);
+            localStorage.setItem("name", data.user_name)
           } else {
             toast.error("Please complete your email verification to continue");
             navigate(eRoutes.USERNAME_PASSWORD_AUTH);
-          }
+          } 
         } else {
           toast.error(
             data.message || "Failed to verify OTP. Please try again."

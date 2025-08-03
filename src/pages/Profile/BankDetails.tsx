@@ -157,7 +157,7 @@ const BankDetails = () => {
   }, []); // Empty dependency array to ensure the effect runs only once
 
   return (
-    <div className="fixed inset-0 h-screen w-screen bg-black flex flex-col text-white overflow-hidden box-border">
+    <div className="inset-0 bg-black flex flex-col text-white overflow-hidden box-border">
       {/* Header */}
       <div className="flex items-center p-4 border-b border-white/10">
         <button onClick={() => navigate(-1)} className="p-2 mr-4">

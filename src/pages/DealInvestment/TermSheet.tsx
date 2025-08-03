@@ -51,9 +51,9 @@ function TermSheet() {
   };
 
   return (
-    <div className="flex flex-col w-full max-w-2xl justify-between h-[calc(100vh-15vh)] bg-white/5 border border-white/10 p-7 shadow-lg text-white">
+    <div className="flex flex-col w-full max-w-2xl justify-between h-[calc(100vh)] bg-white/5 border border-white/10 p-7 shadow-lg text-white">
       {/* Header */}
-      <div>
+      <div className="flex flex-col flex-grow overflow-auto">
         <div>
           <h1 className="text-3xl font-bold text-muted/50 mb-4 text-center">
             Term Sheet
@@ -120,9 +120,9 @@ function TermSheet() {
         </div>
       </div>
 
-      {/* Final Confirmation */}
-      <div className="flex flex-col">
-        <div className="flex items-start gap-2 mt-6">
+      {/* Final Confirmation - Pushed to bottom */}
+      <div className="flex flex-col mt-auto pt-4">
+        <div className="flex items-start gap-2">
           <input
             type="checkbox"
             id="finalConfirmation"
@@ -141,7 +141,7 @@ function TermSheet() {
         <button
           onClick={handleClick}
           disabled={!allChecked}
-          className="mt-6 bg-green-400 text-gray-900 font-semibold px-8 py-4 w-full transition-all duration-300 hover:bg-green-500 focus:outline-none disabled:bg-gray-500 disabled:cursor-not-allowed"
+          className="mt-6 bg-white text-gray-900 font-semibold px-8 py-4 w-full transition-all duration-300 hover:bg-white focus:outline-none disabled:bg-gray-500 disabled:cursor-not-allowed"
         >
           Proceed →
         </button>

@@ -1,18 +1,143 @@
-import React from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { dummyInvestments, getInitials } from "@/data/dummyInvestments";
+import { getInitials } from "@/data/dummyInvestments";
+import api from "@/lib/axiosInstance";
+
+// Define interfaces for API response
+interface Deal {
+  company_name: string;
+  about_company: string;
+  industry: string;
+  company_stage: string;
+  logo_url: string;
+  status: string;
+  created_at: string;
+  deal_capital_commitment: number;
+  equity: number;
+  term_sheet: string;
+  id?: number; // Adding id for navigation purposes
+}
+
+interface Pagination {
+  page: number;
+  per_page: number;
+  total_records: number;
+  total_pages: number;
+  has_next: boolean;
+  has_prev: boolean;
+}
+
+interface InvestmentsResponse {
+  investor_id: string;
+  deals: Deal[];
+  pagination: Pagination;
+  success: boolean;
+}
 
 const Portfolio: React.FC = () => {
   const navigate = useNavigate();
-  const totalInvestment = "18.25Cr";
-  const dealsCount = dummyInvestments.length;
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const [investments, setInvestments] = useState<Deal[]>([]);
+  const [pagination, setPagination] = useState<Pagination | null>(null);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [totalInvestment, setTotalInvestment] = useState<string>("0");
+  const [hasMore, setHasMore] = useState<boolean>(true);
+  const observer = useRef<IntersectionObserver | null>(null);
+  const lastInvestmentElementRef = useCallback(
+    (node: HTMLDivElement | null) => {
+      if (isLoading) return;
+      if (observer.current) observer.current.disconnect();
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && hasMore) {
+          setCurrentPage((prevPage) => prevPage + 1);
+        }
+      });
+      if (node) observer.current.observe(node);
+    },
+    [isLoading, hasMore]
+  );
+
+  const fetchInvestments = async (page: number = 1, perPage: number = 10) => {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const userId = sessionStorage.getItem("userId");
+      if (!userId) {
+        throw new Error("User ID not found");
+      }
+
+      const response = await api.get<InvestmentsResponse>(
+        "/subadmin/investors/investments_info",
+        {
+          params: {
+            page,
+            per_page: perPage,
+            investor_id: userId,
+          },
+        }
+      );
+
+      if (response.data.success) {
+        const newDeals = response.data.deals.map((deal, index) => ({
+          ...deal,
+          id: investments.length + index + 1, // Ensure unique IDs across pages
+        }));
+
+        if (page === 1) {
+          setInvestments(newDeals);
+        } else {
+          setInvestments((prevInvestments) => [...prevInvestments, ...newDeals]);
+        }
+        
+        setPagination(response.data.pagination);
+        setHasMore(response.data.pagination.has_next);
+
+        // Calculate total investment amount
+        // Use the pagination total to calculate entire portfolio value, not just current page
+        if (page === 1) {
+          const totalAmount = response.data.deals.reduce(
+            (sum, deal) => sum + deal.deal_capital_commitment,
+            0
+          );
+          
+          // Format total investment
+          setTotalInvestment(
+            totalAmount >= 10000000
+              ? `${(totalAmount / 10000000).toFixed(2)}Cr`
+              : `${(totalAmount / 100000).toFixed(2)}L`
+          );
+        }
+      }
+    } catch (err: any) {
+      setError(err.message || "Failed to fetch investments");
+      console.error("Error fetching investments:", err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchInvestments(currentPage);
+  }, [currentPage]);
 
   const handleInvestmentClick = (investmentId: number) => {
     navigate(`${investmentId}`);
   };
 
+  // Helper function to format date
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+  };
+
   return (
-    <div className="h-screen w-screen flex flex-col text-white overflow-hidden m-0 p-0 box-border mb-24">
+    <div className="flex flex-col text-white overflow-hidden m-0 p-0 box-border mb-24">
       <div className="flex-1 px-6 py-4 overflow-auto">
         <h1 className="text-white text-3xl font-bold mb-6 text-left">
           Portfolio
@@ -25,7 +150,7 @@ const Portfolio: React.FC = () => {
             ₹{totalInvestment}
           </h2>
           <p className="text-sm text-center text-gray-400">
-            You have invested in {dealsCount} deals
+            You have invested in {pagination?.total_records || 0} deals
           </p>
         </div>
 
@@ -35,50 +160,75 @@ const Portfolio: React.FC = () => {
           </button>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {dummyInvestments.map((investment) => (
-            <div
-              key={investment.id}
-              onClick={() => handleInvestmentClick(investment.id)}
-              className="bg-[#242424] p-4 rounded-xs flex flex-col border border-white/10 cursor-pointer h-full"
-            >
-              <div className="flex items-center mb-3">
+        <div className="grid grid-cols-1 gap-6">
+          {investments.length === 0 && !isLoading ? (
+            <div className="bg-[#242424] p-6 rounded-xs text-center">
+              <p className="text-gray-400">No investments found</p>
+            </div>
+          ) : (
+            investments.map((investment, index) => {
+              const isLastElement = investments.length === index + 1;
+              return (
                 <div
-                  className={`w-12 h-12 flex flex-col items-center justify-center ${investment.bgColor} rounded-xs mr-4`}
+                  key={investment.id}
+                  ref={isLastElement ? lastInvestmentElementRef : null}
+                  onClick={() => handleInvestmentClick(investment.id!)}
+                  className="bg-[#242424] p-4 rounded-xs flex flex-col border border-white/10 cursor-pointer"
                 >
-                  <span className={`${investment.textColor} font-bold`}>
-                    {getInitials(investment.name)}
-                  </span>
-                  <span className={`text-xs ${investment.textColor} block`}>
-                    Startup
-                  </span>
-                </div>
-                <div className="flex-1 text-left">
-                  <h3 className="font-medium">{investment.name}</h3>
-                  <div className="flex space-x-2 mt-1">
-                    <span className="text-xs px-2 py-0.5 bg-gray-700 rounded-xs">
-                      {investment.category}
-                    </span>
-                    <span className="text-xs px-2 py-0.5 bg-gray-700 rounded-xs">
-                      {investment.round}
-                    </span>
+                  <div className="flex items-start mb-3">
+                    <div
+                      className={`w-12 h-12 flex flex-col items-center justify-center ${investment.bgColor || 'bg-blue-500/20'} rounded-xs mr-3 flex-shrink-0`}
+                    >
+                      <span className={`${investment.textColor || 'text-blue-400'} font-bold`}>
+                        {getInitials(investment.company_name)}
+                      </span>
+                    </div>
+                    <div className="flex-1 overflow-hidden">
+                      <h3 className="font-medium truncate">{investment.company_name}</h3>
+                      <div className="flex flex-wrap gap-2 mt-1">
+                        <span className="inline-block text-xs px-2 py-0.5 bg-gray-700 rounded-xs">
+                          {investment.industry}
+                        </span>
+                        <span className="inline-block text-xs px-2 py-0.5 bg-gray-700 rounded-xs">
+                          {investment.company_stage}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="border-t border-white/10 my-2"></div>
+
+                  <div className="flex justify-between items-center pt-1 text-sm">
+                    <p className="text-xs text-gray-400">
+                      Invested on {formatDate(investment.created_at)}
+                    </p>
+                    <p className="font-medium text-right">
+                      ₹{investment.deal_capital_commitment.toLocaleString()}
+                    </p>
                   </div>
                 </div>
-              </div>
-
-              <div className="border-t border-white/10 my-2"></div>
-
-              <div className="flex justify-between items-center pt-1 text-sm mt-auto">
-                <p className="text-xs text-gray-400">
-                  Invested on {investment.investedOn}
-                </p>
-                <p className="font-medium text-right">
-                  ₹{investment.amount}
-                </p>
-              </div>
-            </div>
-          ))}
+              );
+            })
+          )}
         </div>
+
+        {error && (
+          <div className="bg-red-500/20 p-4 rounded-xs text-center mt-4">
+            <p className="text-red-300">{error}</p>
+            <button 
+              onClick={() => fetchInvestments(currentPage)}
+              className="mt-2 px-4 py-2 bg-red-500/30 hover:bg-red-500/40 rounded-xs text-sm"
+            >
+              Try Again
+            </button>
+          </div>
+        )}
+        
+        {isLoading && (
+          <div className="flex justify-center items-center py-6">
+            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-white"></div>
+          </div>
+        )}
       </div>
     </div>
   );

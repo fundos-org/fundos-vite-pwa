@@ -191,7 +191,7 @@ const ProfileTab = () => {
   const initials = getInitials(userProfile?.full_name || "John Doe");
 
   return (
-    <div className="fixed inset-0 h-screen w-screen bg-black flex flex-col text-white overflow-hidden box-border">
+    <div className="bg-black flex flex-col text-white overflow-hidden box-border">
       {/* Profile Header with gradient */}
       <div className="flex flex-col items-center py-10 bg-gradient-to-br from-[#2d0a2e] to-[#1a0a1b] border-b border-white/10">
         <div className="w-28 h-28 rounded-full mb-4 overflow-hidden border-2 border-white/20 flex items-center justify-center">

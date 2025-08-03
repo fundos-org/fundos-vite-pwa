@@ -76,13 +76,13 @@ const Dashboard = () => {
   };
 
   return (
-    <>
+    <div className="min-h-[100vh] flex-1 flex-col justify-between w-full md:max-w-[360px] box-border mx-auto">
       <Outlet />
       <BottomNavigation
         activeTab={getActiveTab()}
         handleTabChange={handleTabChange}
       />
-    </>
+    </div>
   );
 };
 
