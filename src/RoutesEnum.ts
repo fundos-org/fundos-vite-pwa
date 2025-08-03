@@ -9,7 +9,8 @@ export enum eRoutes {
     DASHBOARD_PORTFOLIO = "/home/dashboard/portfolio",
     DASHBOARD_UPDATES = "/home/dashboard/updates",
     DASHBOARD_PROFILE = "/home/dashboard/profile",
-    DEAL_DETAILS_HOME = "/home/deal-details",
+    DASHBOARD_DEALS = "/home/dashboard/deals",
+    DEAL_DETAILS_HOME = "/home/deal-details/:dealId", // Update this to include :dealId parameter
     COMMIT_INVESTMENT_HOME = "/home/commit-investment",
     TERM_SHEET_HOME = "/home/term-sheet",
     DRAW_DOWN_NOTICE_HOME = "/home/draw-down-notice",

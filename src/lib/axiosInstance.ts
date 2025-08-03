@@ -26,7 +26,7 @@ const handleLogout = () => {
   sessionStorage.removeItem("invitationCode");
   sessionStorage.removeItem("subAdminId");
   // Redirect to login or home page if needed
-  window.location.href = "/login"; // Adjust the path as needed
+  window.location.href = "/";
 
   axios
     .post("https://api.fundos.services/staging/v1/auth/logout")
@@ -68,7 +68,7 @@ api.interceptors.request.use(
   (error: AxiosError): Promise<AxiosError> => Promise.reject(error)
 );
 
-// Handle 401 responses and try refresh token flow
+// Handle 401 and 403 responses and try refresh token flow
 api.interceptors.response.use(
   (response: AxiosResponse): AxiosResponse => response,
   async (error: AxiosError): Promise<any> => {
@@ -76,7 +76,8 @@ api.interceptors.response.use(
       _retry?: boolean;
     };
 
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    // Handle both 401 and 403 errors for authentication issues
+    if ((error.response?.status === 401 || error.response?.status === 403) && !originalRequest._retry) {
       originalRequest._retry = true;
 
       if (isRefreshing) {
@@ -97,7 +98,6 @@ api.interceptors.response.use(
 
       if (!refreshToken) {
         handleLogout();
-
         return Promise.reject(error);
       }
 

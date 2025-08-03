@@ -53,7 +53,7 @@ const EmailInput = () => {
   };
 
   return (
-    <>
+    <div className="flex flex-col items-center justify-center h-full w-full p-4">
       <div>
         <h1 className="mb-2 text-4xl font-bold">Enter your mail ✉️</h1>
         <p className="text-[#00ffcc] mb-8 leading-relaxed text-sm">
@@ -82,7 +82,7 @@ const EmailInput = () => {
       >
         Next
       </button>
-    </>
+    </div>
   );
 };
 

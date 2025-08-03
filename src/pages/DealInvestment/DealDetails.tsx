@@ -3,44 +3,116 @@ import { eRoutes } from "@/RoutesEnum";
 import { useHomeContext } from "@/Shared/useLocalContextState";
 import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const DealDetails = () => {
   const navigate = useNavigate();
-  const { localContextState, setLocalContextState } = useHomeContext();
-  const dealId = localContextState.dealId;
+  const { dealId } = useParams(); // Get dealId from URL params
+  const { setLocalContextState } = useHomeContext();
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
+  const [deal, setDeal] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchDealDetails = async () => {
-      api
-        .get("/deal/", { params: { deal_id: dealId } })
-        .then((response) => {
-          if (response.data) {
-            setLocalContextState((prev) => ({
-              ...prev,
-              dealDetails: response.data,
-            }));
-          } else {
-            toast.error("Deal details not found");
-          }
-        })
-        .catch((error) => {
-          console.error("Error fetching deal details:", error);
-          toast.error("Failed to load deal details. Please try again.");
+      if (!dealId) {
+        toast.error("Deal ID is missing");
+        navigate(eRoutes.DASHBOARD_HOME);
+        return;
+      }
+
+      setLoading(true);
+      try {
+        const response = await api.get("/deal/", {
+          params: { deal_id: dealId },
         });
+
+        if (response.data) {
+          setDeal(response.data);
+          setLocalContextState((prev) => ({
+            ...prev,
+            dealDetails: response.data,
+          }));
+        } else {
+          toast.error("Deal details not found");
+          navigate(eRoutes.DASHBOARD_HOME);
+        }
+      } catch (error) {
+        console.error("Error fetching deal details:", error);
+        toast.error("Failed to load deal details. Please try again.");
+        navigate(eRoutes.DASHBOARD_HOME);
+      } finally {
+        setLoading(false);
+      }
     };
 
-    if (dealId) {
-      fetchDealDetails();
-    }
-  }, [dealId, setLocalContextState]);
+    fetchDealDetails();
+  }, [dealId, setLocalContextState, navigate]);
 
   const convertToCrores = (value?: number) => {
     if (typeof value !== "number" || isNaN(value)) {
       return "N/A";
     }
-    return `${(value / 10000000).toFixed(2)} Cr`;
+    return `${(value / 10000000).toFixed(2)}Cr`;
+  };
+
+  // Helper function to format currency in Indian format
+  const formatIndianCurrency = (amount?: number): string => {
+    if (!amount || amount === 0) return "₹0";
+
+    // Convert to crores
+    const inCrores = amount / 10000000;
+    if (inCrores >= 1) {
+      return `₹${inCrores.toFixed(2)}Cr`;
+    }
+
+    // Convert to lakhs
+    const inLakhs = amount / 100000;
+    if (inLakhs >= 1) {
+      return `₹${inLakhs.toFixed(1)}L`;
+    }
+
+    return `₹${amount.toFixed(0)}`;
+  };
+
+  // Helper function to get initials from company name
+  const getInitials = (name?: string): string => {
+    if (!name) return "?";
+    return name
+      .split(/\s+/)
+      .map((word) => word[0])
+      .join("")
+      .substring(0, 2)
+      .toUpperCase();
+  };
+
+  // Helper function to generate a pastel color based on string
+  const getPastelColor = (
+    str?: string
+  ): { background: string; text: string } => {
+    if (!str) return { background: "#e7dff8", text: "#6138b9" };
+
+    // Generate a hash from the string
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+      hash = str.charCodeAt(i) + ((hash << 5) - hash);
+    }
+
+    // Generate pastel color based on hash
+    const h = Math.abs(hash) % 360;
+    const s = 60 + (Math.abs(hash) % 20);
+    const l = 80 + (Math.abs(hash) % 10);
+
+    // Calculate contrasting text color
+    const textColor =
+      l > 70
+        ? `hsl(${h}, ${Math.min(100, s + 20)}%, 25%)`
+        : `hsl(${h}, ${Math.min(100, s + 10)}%, 95%)`;
+
+    return {
+      background: `hsl(${h}, ${s}%, ${l}%)`,
+      text: textColor,
+    };
   };
 
   const handleCommit = async () => {
@@ -52,26 +124,15 @@ const DealDetails = () => {
       }
 
       // Check MCA status first
-      const mcaResponse = await api.get(
-        "/deal/mca/status",
-        { params: { deal_id: dealId, user_id: userId } }
-      );
+      const mcaResponse = await api.get("/deal/mca/status", {
+        params: { deal_id: dealId, user_id: userId },
+      });
 
       if (mcaResponse.status !== 200) {
         throw new Error("Failed to check MCA status");
       }
 
       navigate(eRoutes.COMMIT_INVESTMENT_HOME.replace(":dealId", dealId ?? ""));
-      //temp comment
-      //   const mcaData = await mcaResponse.json();
-      // if (mcaData.sent_status === 'success' && mcaData.request_status === 'completed') {
-      //       toast.success(mcaData.message);
-      //     navigate(eRoutes.COMMIT_INVESTMENT_HOME.replace(':dealId', dealId ?? ''));
-      //   } else if (mcaData.sent_status === 'success' && mcaData.request_status === 'inprogress') {
-      //     toast.error('Signing Docs in progress. Please contact admin.');
-      //   } else {
-      //     toast.error('Ask your fund manager to sign the docs!');
-      //   }
     } catch (error) {
       console.error("Error in commit process:", error);
       toast.error("Failed to apply for declarations. Please try again.");
@@ -114,9 +175,23 @@ const DealDetails = () => {
     setIsDescriptionExpanded(!isDescriptionExpanded);
   };
 
-  const deal = localContextState?.dealDetails;
+  const initials = getInitials(deal?.title);
+  const colors = getPastelColor(deal?.title);
 
-  if (Object.keys(deal ?? {}).length === 0) {
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-black flex items-center justify-center text-white">
+        <div className="text-center">
+          <div className="w-12 h-12 border-4 border-gray-700 border-t-white rounded-full animate-spin mx-auto mb-4"></div>
+          <h2 className="text-xl font-medium text-white">
+            Loading deal details...
+          </h2>
+        </div>
+      </div>
+    );
+  }
+
+  if (!deal) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center text-white p-8">
         <div className="w-full max-w-md bg-white/5 border border-white/10 p-8 backdrop-blur text-center">
@@ -125,7 +200,7 @@ const DealDetails = () => {
           </h2>
           <button
             onClick={() => navigate(eRoutes.DASHBOARD_HOME)}
-            className="bg-[#00fb57] text-[#1a1a1a] border-none px-6 py-3 text-sm font-semibold cursor-pointer"
+            className="bg-white text-black border-none px-6 py-3 text-sm font-semibold cursor-pointer"
           >
             Back to Dashboard
           </button>
@@ -135,136 +210,119 @@ const DealDetails = () => {
   }
 
   return (
-    <>
-      <div>
-        <h1 className="text-white text-2xl font-bold mb-4">{deal?.title}</h1>
-
-        {/* Description */}
-        <div className="mb-8">
-          <p
-            className={`text-gray-300 text-sm m-0 leading-relaxed ${
-              isDescriptionExpanded ? "" : "line-clamp-3"
-            }`}
-            style={{ display: isDescriptionExpanded ? "block" : "-webkit-box" }}
+    <div className="min-h-screen bg-black text-white pb-4">
+      {/* Header section with company logo */}
+      <div className="p-4 bg-gradient-to-b from-purple-900/50 to-black">
+        <div
+          className="h-16 w-16 flex items-center justify-center mb-3"
+          style={{
+            backgroundColor: colors.background,
+          }}
+        >
+          <span
+            className="font-semibold text-lg"
+            style={{ color: colors.text }}
           >
-            {deal?.description}
+            {initials}
+          </span>
+        </div>
+
+        {/* Company name and description */}
+        <h1 className="text-white text-3xl font-bold mb-2">{deal.title}</h1>
+        <p
+          className={`text-gray-300 text-sm mb-1 ${
+            !isDescriptionExpanded && "line-clamp-2"
+          }`}
+        >
+          {deal.description ||
+            "We are a Ed-tech company building CRM for local institutes"}
+        </p>
+        {deal.description && (
+          <button
+            onClick={toggleDescription}
+            className="bg-transparent border-none text-white text-sm cursor-pointer p-0 underline"
+          >
+            {isDescriptionExpanded ? "See less" : "See more"}
+          </button>
+        )}
+      </div>
+
+      {/* Deal details section */}
+      <div className="p-4">
+        <h2 className="text-gray-400 text-sm uppercase mb-3">DEAL DETAILS</h2>
+
+        {/* Current valuation */}
+        <div className="mb-4">
+          <p className="text-gray-400 text-xs mb-1">Current valuation</p>
+          <p className="text-white text-3xl font-bold">
+            ₹{formatIndianCurrency(deal.current_valuation).replace("₹", "")}{" "}
           </p>
-          {deal?.description && deal?.description.length > 150 && (
-            <button
-              onClick={toggleDescription}
-              className="bg-transparent border-none text-[#00fb57] text-sm cursor-pointer p-0 mt-2"
-            >
-              {isDescriptionExpanded ? "See Less" : "See More"}
-            </button>
-          )}
         </div>
 
-        {/* Deal Details Card */}
-        <div className="mb-8">
-          <h2 className="text-white text-lg font-semibold mb-4">
-            📊 Deal Information
-          </h2>
+        {/* Round */}
+        <div className="mb-4">
+          <p className="text-gray-400 text-xs mb-1">Round</p>
+          <p className="text-white text-xl font-bold">{deal.company_stage}</p>
+        </div>
 
-          {/* Current Valuation - Featured */}
-          <div className="mb-6 p-4 bg-[#00fb571a] border border-[#00fb574d]">
-            <p className="text-[#00fb57] text-xs mb-1 font-semibold">
-              CURRENT VALUATION
-            </p>
-            <p className="text-white text-2xl font-bold m-0">
-              INR {convertToCrores(deal?.current_valuation)}{" "}
-              {/* <span className="text-gray-400 text-base font-normal">
-                                (Post)
-                            </span> */}
-            </p>
-          </div>
-
-          {/* Two Column Layout */}
-          <div className="grid grid-cols-2 gap-4 mb-4">
-            <div>
-              <p className="text-gray-400 text-xs mb-1 font-semibold">STAGE</p>
-              <p className="text-white text-sm font-bold m-0">
-                {deal?.company_stage?.toUpperCase() || "N/A"}
-              </p>
-            </div>
-            <div>
-              <p className="text-gray-400 text-xs mb-1 font-semibold">
-                INSTRUMENT
-              </p>
-              <p className="text-white text-sm font-bold m-0">
-                {deal?.instruments?.toUpperCase() || "N/A"}
-              </p>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-4 mb-4">
-            <div>
-              <p className="text-gray-400 text-xs mb-1 font-semibold">
-                ROUND SIZE
-              </p>
-              <p className="text-white text-sm font-bold m-0">
-                INR {convertToCrores(deal?.round_size)}
-              </p>
-            </div>
-            <div>
-              <p className="text-gray-400 text-xs mb-1 font-semibold">
-                MIN. INVESTMENT
-              </p>
-              <p className="text-white text-sm font-bold m-0">
-                INR {convertToCrores(deal?.minimum_investment)}
-              </p>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-4 mb-6">
-            <div>
-              <p className="text-gray-400 text-xs mb-1 font-semibold">
-                COMMITMENTS
-              </p>
-              <p className="text-white text-sm font-bold m-0">
-                INR {convertToCrores(deal?.commitment)}
-              </p>
-            </div>
-            {/* <div>
-                            <p className="text-gray-400 text-xs mb-1 font-semibold">
-                                VALUATION
-                            </p>
-                            <p className="text-white text-sm font-bold m-0">
-                                INR {convertToCrores(2500000)}
-                            </p>
-                        </div> */}
-          </div>
-
-          {/* Progress Section */}
+        {/* Round size and minimum investment */}
+        <div className="grid grid-cols-2 gap-4 mb-4">
           <div>
-            <p className="text-[#00fb57] text-sm mb-2 font-semibold">
-              📈 {deal?.fund_raised_till_now}% funds raised till now
+            <p className="text-gray-400 text-xs mb-1">Round size</p>
+            <p className="text-white text-xl font-bold">
+              ₹{formatIndianCurrency(deal.round_size).replace("₹", "")}
             </p>
-            <div className="h-2 bg-white/10 overflow-hidden border border-white/20">
-              <div
-                className="h-full bg-gradient-to-r from-[#00fb57] to-[#00d647] transition-all duration-300"
-                style={{ width: `${deal?.fund_raised_till_now}%` }}
-              ></div>
-            </div>
+          </div>
+          <div>
+            <p className="text-gray-400 text-xs mb-1">Minimum investment</p>
+            <p className="text-white text-xl font-bold">
+              ₹{formatIndianCurrency(deal.minimum_investment).replace("₹", "")}
+            </p>
           </div>
         </div>
-      </div>
 
-      {/* Action Buttons */}
-      <div className="flex flex-col gap-3">
-        <button
-          onClick={handleCommit}
-          className="bg-[#00fb57] text-[#1a1a1a] text-base font-bold py-3 border-none cursor-pointer w-full transition-all duration-300"
-        >
-          💰 Commit Investment
-        </button>
-        <button
-          onClick={handleNotInterested}
-          className="bg-white/10 text-white text-sm font-semibold py-3 border border-white/30 cursor-pointer w-full transition-all duration-300"
-        >
-          Not Interested
-        </button>
+        {/* Valuation type and instruments */}
+        <div className="grid grid-cols-2 gap-4 mb-4">
+          <div>
+            <p className="text-gray-400 text-xs mb-1">Valuation type</p>
+            <p className="text-white text-xl font-bold">Priced</p>
+          </div>
+          <div>
+            <p className="text-gray-400 text-xs mb-1">Instruments</p>
+            <p className="text-white text-xl font-bold">{deal.instruments}</p>
+          </div>
+        </div>
+
+        {/* Progress bar */}
+        <div className="mb-6">
+          <p className="text-gray-400 text-xs mb-1">
+            {deal.fund_raised_till_now ?? 68}% funds raised
+          </p>
+          <div className="h-1 bg-gray-700 w-full">
+            <div
+              className="h-full bg-white"
+              style={{ width: `${deal.fund_raised_till_now ?? 68}%` }}
+            ></div>
+          </div>
+        </div>
+
+        {/* Buttons */}
+        <div className="mt-4">
+          <button
+            onClick={handleCommit}
+            className="bg-white text-black w-full py-3 font-bold mb-3 text-center"
+          >
+            Commit →
+          </button>
+          <button
+            onClick={handleNotInterested}
+            className="bg-transparent border border-gray-600 text-white w-full py-3 mb-2 text-center"
+          >
+            Not Interested
+          </button>
+        </div>
       </div>
-    </>
+    </div>
   );
 };
 

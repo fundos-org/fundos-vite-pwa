@@ -29,6 +29,7 @@ const UploadPhoto = lazy(() => import("./pages/Auth/UploadPhoto"));
 const FinalApproval = lazy(() => import("./pages/Auth/FinalApproval"));
 const Dashboard = lazy(() => import("./pages/Home/Dashboard"));
 const Home = lazy(() => import("./pages/Home/Home"));
+const DashboardHome = lazy(() => import("./pages/Home/DashboardHome"));
 const Portfolio = lazy(() => import("./pages/Home/Portfolio"));
 const Updates = lazy(() => import("./pages/Home/Updates"));
 const Profile = lazy(() => import("./pages/Home/Profile"));
@@ -193,8 +194,9 @@ const AppRoutes = () => {
               </Layout>
             }
           >
-            <Route index element={<Home />} />
+            <Route index element={<DashboardHome />} />
             <Route path="portfolio" element={<Portfolio />} />
+            <Route path="deals" element={<Home />} />
             <Route path="updates" element={<Updates />} />
             <Route path="profile" element={<Profile />} />
             <Route
@@ -210,23 +212,12 @@ const AppRoutes = () => {
             />
           </Route>
           <Route
-            path={eRoutes.DEAL_DETAILS_HOME}
-            element={
-              <Layout backRoute={eRoutes.DASHBOARD_HOME}>
-                <DealDetails />
-              </Layout>
-            }
+            path={eRoutes.DEAL_DETAILS_HOME} // This now contains the :dealId parameter
+            element={<DealDetails />}
           />
           <Route
             path={eRoutes.COMMIT_INVESTMENT_HOME}
-            element={
-              <Layout
-                backRoute={eRoutes.DEAL_DETAILS_HOME}
-                baseRoute={eRoutes.DASHBOARD_HOME}
-              >
-                <CommitInvestment />
-              </Layout>
-            }
+            element={<CommitInvestment />}
           />
           <Route
             path={eRoutes.TERM_SHEET_HOME}

@@ -113,7 +113,7 @@ const UsernamePassword = () => {
   const handleCheckboxToggle = () => setShowPassword((prev) => !prev);
 
   return (
-    <>
+    <div className="flex flex-col items-center justify-center h-full w-full p-4">
       <div className="flex flex-col gap-4">
         <h1 className="mb-2 text-4xl font-bold">
           Enter desired username and password
@@ -162,7 +162,7 @@ const UsernamePassword = () => {
       >
         Next
       </button>
-    </>
+    </div>
   );
 };
 

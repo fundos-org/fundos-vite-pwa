@@ -53,7 +53,7 @@ const VerifyPhoneOTP: FC = () => {
           sessionStorage.setItem("userId", data.user_id);
           sessionStorage.setItem("subAdminId", data.subadmin_id);
 
-          if (data.onboarding_status === "Completed") {
+          if (data.onboarding_status === "KYC_INITIATED") {
             toast.success("Welcome back! Redirecting to dashboard...");
             navigate(eRoutes.DASHBOARD_HOME);
           } else {
@@ -75,7 +75,7 @@ const VerifyPhoneOTP: FC = () => {
   };
 
   return (
-    <>
+    <div className="flex flex-col items-center justify-center h-full w-full p-4">
       <div>
         <h1 className="mb-4 text-4xl font-bold">Verify your number</h1>
         <p className="text-[#00ffcc] mb-8 leading-relaxed text-sm">
@@ -121,7 +121,7 @@ const VerifyPhoneOTP: FC = () => {
       >
         Verify
       </button>
-    </>
+    </div>
   );
 };
 
