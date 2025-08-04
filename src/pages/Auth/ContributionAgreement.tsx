@@ -7,6 +7,9 @@ import { useNavigate } from "react-router-dom";
 const ContributionAgreement = () => {
   const navigate = useNavigate();
   const [checked, setChecked] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const email = sessionStorage.getItem("email") || "";
 
   const handleContinue = async () => {
     if (!checked) {
@@ -15,6 +18,8 @@ const ContributionAgreement = () => {
       );
       return;
     }
+
+    setLoading(true);
 
     api
       .post(
@@ -29,7 +34,7 @@ const ContributionAgreement = () => {
       .then(({ data }) => {
         if (data.success) {
           sessionStorage.setItem("agreementSigned", "true");
-          toast.success("Agreement signed successfully!");
+          toast.success(`Agreement sent successfully to ${email} !`);
           navigate(eRoutes.UPLOAD_PHOTO_AUTH);
         } else {
           toast.error(
@@ -40,6 +45,9 @@ const ContributionAgreement = () => {
       .catch((error) => {
         console.error("Error signing agreement:", error);
         toast.error("Failed to sign agreement. Please try again.");
+      })
+      .finally(() => {
+        setLoading(false);
       });
   };
 
@@ -97,15 +105,15 @@ const ContributionAgreement = () => {
 
         <button
           onClick={handleContinue}
-          disabled={!checked}
+          disabled={!checked || loading}
           className={`w-full py-4 px-8 text-base font-semibold transition-all duration-300
         ${
-          checked
+          checked && !loading
             ? "bg-[#00fb57] text-[#1a1a1a] cursor-pointer"
             : "bg-gray-700 text-gray-400 cursor-not-allowed"
         }`}
         >
-          Agree and Continue
+          {loading ? "Sending contribution agreement" : "Agree and Continue"}
         </button>
       </div>
     </div>

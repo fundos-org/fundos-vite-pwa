@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { RiFileChartLine } from "react-icons/ri";
+import { FaArrowLeft } from "react-icons/fa";
 
 interface Deal {
   deal_id: string;
@@ -35,27 +36,27 @@ const Home = () => {
   // Helper function to format currency in Indian format
   const formatIndianCurrency = (amount: number): string => {
     if (amount === 0) return "₹0";
-    
+
     // Convert to crores
     const inCrores = amount / 10000000;
     if (inCrores >= 1) {
       // For amounts ≥ 1 crore, show up to 1 decimal place
       return `₹${inCrores.toFixed(inCrores < 10 ? 1 : 0)}Cr`;
     }
-    
+
     // Convert to lakhs
     const inLakhs = amount / 100000;
     if (inLakhs >= 1) {
       // For amounts ≥ 1 lakh, show up to 1 decimal place
       return `₹${inLakhs.toFixed(inLakhs < 10 ? 1 : 0)}L`;
     }
-    
+
     // For smaller amounts, show in thousands
     const inThousands = amount / 1000;
     if (inThousands >= 1) {
       return `₹${inThousands.toFixed(1)}K`;
     }
-    
+
     // For very small amounts
     return `₹${amount.toFixed(0)}`;
   };
@@ -65,34 +66,38 @@ const Home = () => {
     if (!name) return "?";
     return name
       .split(/\s+/)
-      .map(word => word[0])
-      .join('')
+      .map((word) => word[0])
+      .join("")
       .substring(0, 2)
       .toUpperCase();
   };
 
   // Helper function to generate a pastel color based on string
-  const getPastelColor = (str: string): { background: string, text: string } => {
+  const getPastelColor = (
+    str: string
+  ): { background: string; text: string } => {
     if (!str) return { background: "#e7dff8", text: "#6138b9" };
-    
+
     // Generate a hash from the string
     let hash = 0;
     for (let i = 0; i < str.length; i++) {
       hash = str.charCodeAt(i) + ((hash << 5) - hash);
     }
-    
+
     // Generate pastel color based on hash
     const h = Math.abs(hash) % 360;
-    const s = 60 + Math.abs(hash) % 20; // Higher saturation for pastel
-    const l = 80 + Math.abs(hash) % 10; // Higher lightness for pastel
-    
+    const s = 60 + (Math.abs(hash) % 20); // Higher saturation for pastel
+    const l = 80 + (Math.abs(hash) % 10); // Higher lightness for pastel
+
     // Calculate contrasting text color (dark for light backgrounds)
-    const textColor = l > 70 ? `hsl(${h}, ${Math.min(100, s + 20)}%, 25%)` : 
-                              `hsl(${h}, ${Math.min(100, s + 10)}%, 95%)`;
-    
+    const textColor =
+      l > 70
+        ? `hsl(${h}, ${Math.min(100, s + 20)}%, 25%)`
+        : `hsl(${h}, ${Math.min(100, s + 10)}%, 95%)`;
+
     return {
       background: `hsl(${h}, ${s}%, ${l}%)`,
-      text: textColor
+      text: textColor,
     };
   };
 
@@ -162,7 +167,7 @@ const Home = () => {
       dealId: dealId,
     }));
     // Use direct route replacement to properly navigate to the deal details page
-    navigate(`/home/deal-details/${dealId}`);
+    navigate(`/home/dashboard/deals/${dealId}`);
   };
 
   if (loading) {
@@ -182,7 +187,15 @@ const Home = () => {
   }
 
   return (
-    <div className="fixed inset-0 h-screen w-screen bg-black flex flex-col text-white overflow-hidden box-border">
+    <div className="bg-black flex flex-col text-white overflow-hidden box-border">
+      <div className="flex gap-2 px-3 py-4">
+        <FaArrowLeft
+          size={16}
+          className="cursor-pointer"
+          onClick={() => navigate("/home/dashboard", { replace: true })}
+        />
+        Deals
+      </div>
       {/* Scrollable Content */}
       <div className="flex-1 p-4 overflow-auto pb-24">
         {/* Tabs Section */}
@@ -228,81 +241,86 @@ const Home = () => {
                 const initials = getInitials(deal.title);
                 const colors = getPastelColor(deal.title);
                 return (
-                <div
-                  key={deal.deal_id}
-                  className="bg-[#171717] border border-[#333333] rounded-none overflow-hidden"
-                >
-                  <div className="p-4">
-                    {/* Company Logo & Stage */}
-                    <div className="flex mb-2 justify-between">
-                      <div 
-                        className="h-16 w-16 flex items-center justify-center rounded-xs" 
-                        style={{
-                          backgroundColor: colors.background
-                        }}
-                      >
-                        <span 
-                          className="font-semibold text-4xl"
-                          style={{color: colors.text}}
+                  <div
+                    key={deal.deal_id}
+                    className="bg-[#171717] border border-[#333333] rounded-none overflow-hidden"
+                  >
+                    <div className="p-4">
+                      {/* Company Logo & Stage */}
+                      <div className="flex mb-2 justify-between">
+                        <div
+                          className="h-16 w-16 flex items-center justify-center rounded-xs"
+                          style={{
+                            backgroundColor: colors.background,
+                          }}
                         >
-                          {initials}
-                        </span>
+                          <span
+                            className="font-semibold text-4xl"
+                            style={{ color: colors.text }}
+                          >
+                            {initials}
+                          </span>
+                        </div>
+                        <div className="flex gap-1">
+                          <span className="bg-[#333333] text-white text-[10px] px-2 py-1 font-medium max-h-fit">
+                            {deal.business_model}
+                          </span>
+                          <span className="bg-[#333333] text-white text-[10px] px-2 py-1 font-medium max-h-fit">
+                            {deal.company_stage}
+                          </span>
+                        </div>
                       </div>
-                      <div className="flex gap-1">
-                        <span className="bg-[#333333] text-white text-[10px] px-2 py-1 font-medium max-h-fit">
-                          {deal.business_model}
-                        </span>
-                        <span className="bg-[#333333] text-white text-[10px] px-2 py-1 font-medium max-h-fit">
-                          {deal.company_stage}
-                        </span>
-                      </div>
-                    </div>
 
-                    {/* Company Name & Description */}
-                    <h3 className="text-white text-lg font-bold mb-1">
-                      {deal.title}
-                    </h3>
-                    <p className="text-gray-400 text-xs mb-4">
-                      {deal.description && deal.description.length > 60
-                        ? `${deal.description.substring(0, 60)}...`
-                        : deal.description ||
-                          "We are a Ed-Tech company building CRM for local institutes"}
-                    </p>
+                      {/* Company Name & Description */}
+                      <h3 className="text-white text-lg font-bold mb-1">
+                        {deal.title}
+                      </h3>
+                      <p className="text-gray-400 text-xs mb-4">
+                        {deal.description && deal.description.length > 60
+                          ? `${deal.description.substring(0, 60)}...`
+                          : deal.description ||
+                            "We are a Ed-Tech company building CRM for local institutes"}
+                      </p>
 
-                    {/* Deal Metrics */}
-                    <div className="grid grid-cols-3 gap-4 mb-4">
-                      <div>
-                        <p className="text-gray-400 text-xs m-0">Round size</p>
-                        <p className="text-white text-sm font-medium">
-                          {formatIndianCurrency(deal.round_size)}
-                        </p>
+                      {/* Deal Metrics */}
+                      <div className="grid grid-cols-3 gap-4 mb-4">
+                        <div>
+                          <p className="text-gray-400 text-xs m-0">
+                            Round size
+                          </p>
+                          <p className="text-white text-sm font-medium">
+                            {formatIndianCurrency(deal.round_size)}
+                          </p>
+                        </div>
+                        <div>
+                          <p className="text-gray-400 text-xs m-0">
+                            Commitments
+                          </p>
+                          <p className="text-white text-sm font-medium">
+                            {formatIndianCurrency(deal.commitment)}
+                          </p>
+                        </div>
+                        <div>
+                          <p className="text-gray-400 text-xs m-0">Valuation</p>
+                          <p className="text-white text-sm font-medium">
+                            {formatIndianCurrency(deal.current_valuation)}
+                          </p>
+                        </div>
                       </div>
-                      <div>
-                        <p className="text-gray-400 text-xs m-0">Commitments</p>
-                        <p className="text-white text-sm font-medium">
-                          {formatIndianCurrency(deal.commitment)}
-                        </p>
-                      </div>
-                      <div>
-                        <p className="text-gray-400 text-xs m-0">Valuation</p>
-                        <p className="text-white text-sm font-medium">
-                          {formatIndianCurrency(deal.current_valuation)}
-                        </p>
-                      </div>
-                    </div>
 
-                    {/* Posted By & View Button */}
-                    <div className="flex justify-end items-center">
-                      <button
-                        onClick={() => goInsideDeal(deal.deal_id)}
-                        className="bg-white text-black text-xs px-4 py-2 font-medium flex items-center"
-                      >
-                        View deal <span className="ml-1">→</span>
-                      </button>
+                      {/* Posted By & View Button */}
+                      <div className="flex justify-end items-center">
+                        <button
+                          onClick={() => goInsideDeal(deal.deal_id)}
+                          className="bg-white text-black text-xs px-4 py-2 font-medium flex items-center"
+                        >
+                          View deal <span className="ml-1">→</span>
+                        </button>
+                      </div>
                     </div>
                   </div>
-                </div>
-              )})}
+                );
+              })}
           </div>
         ) : (
           <div className="bg-[#171717] p-6 text-center border border-[#333333]">

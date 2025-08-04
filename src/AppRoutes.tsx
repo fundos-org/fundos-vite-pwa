@@ -198,7 +198,12 @@ const AppRoutes = () => {
             <Route path="portfolio" element={<Portfolio />} />
             <Route path="deals" element={<Home />} />
             <Route path="updates" element={<Updates />} />
-            <Route path="profile" element={ <Profile />} />
+            <Route path="profile" element={<Profile />} />
+            <Route
+              path="deals/:dealId" // This now contains the :dealId parameter
+              element={<DealDetails />}
+            />
+            <Route path="deals/:dealId/commit" element={<CommitInvestment />} />
             <Route
               path="portfolio/:investmentId"
               element={<InvestmentDetail />}
@@ -211,18 +216,10 @@ const AppRoutes = () => {
               element={<NotificationsSettings />}
             />
           </Route>
-          <Route
-            path={eRoutes.DEAL_DETAILS_HOME} // This now contains the :dealId parameter
-            element={<DealDetails />}
-          />
-          <Route
-            path={eRoutes.COMMIT_INVESTMENT_HOME}
-            element={<CommitInvestment />}
-          />
           <Route path={eRoutes.TERM_SHEET_HOME} element={<TermSheet />} />
           <Route path={eRoutes.DRAW_DOWN_NOTICE_HOME} element={<DrawDown />} />
         </Route>
-        <Route path="*" element={<Navigate to="/" />} />
+        <Route path="*" element={<Navigate to="/home/dashboard" />} />
       </Routes>
     </Suspense>
   );

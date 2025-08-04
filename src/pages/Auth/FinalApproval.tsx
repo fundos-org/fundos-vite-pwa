@@ -23,8 +23,7 @@ const FinalApproval = () => {
           approval. You will be notified once it's approved.
         </p>
         <p className="text-gray-400 text-sm mb-8 leading-relaxed text-center">
-          Our team will review your application and get back to you within 2-3
-          business days.
+          Our team will review your application and get back to you within the next 30 minutes.
         </p>
       </div>
 

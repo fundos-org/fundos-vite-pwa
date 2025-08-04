@@ -132,7 +132,7 @@ const DealDetails = () => {
         throw new Error("Failed to check MCA status");
       }
 
-      navigate(eRoutes.COMMIT_INVESTMENT_HOME.replace(":dealId", dealId ?? ""));
+      navigate("commit");
     } catch (error) {
       console.error("Error in commit process:", error);
       toast.error("Failed to apply for declarations. Please try again.");

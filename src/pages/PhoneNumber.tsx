@@ -70,7 +70,7 @@ const PhoneNumber: FC = () => {
                 type="tel"
                 value={phoneNumber}
                 onChange={(e) => handlePhoneNumberChange(e.target.value)}
-                placeholder="Enter 10-digit number"
+                placeholder="Enter 10-digit number linked to PAN"
                 maxLength={10}
                 className="flex-1 px-4 py-4 text-base border-none bg-transparent text-white outline-none"
               />

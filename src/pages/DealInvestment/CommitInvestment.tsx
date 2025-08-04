@@ -2,19 +2,57 @@ import { eRoutes } from "@/RoutesEnum";
 import { useHomeContext } from "@/Shared/useLocalContextState";
 import React, { useState, useEffect } from "react";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { IoArrowBack } from "react-icons/io5";
+import api from "@/lib/axiosInstance";
 
 const CommitInvestment: React.FC = () => {
   const navigate = useNavigate();
+  const { dealId } = useParams(); // Get dealId from URL params
   const { localContextState, setLocalContextState } = useHomeContext();
   const [investmentAmount, setInvestmentAmount] = useState("");
   const [parsedAmount, setParsedAmount] = useState(0);
   const [checked, setChecked] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [showSummary, setShowSummary] = useState(false);
+  const [deal, setDeal] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
 
-  const deal = localContextState.dealDetails || null;
+  useEffect(() => {
+    const fetchDealDetails = async () => {
+      if (!dealId) {
+        toast.error("Deal ID is missing");
+        navigate(eRoutes.DASHBOARD_HOME);
+        return;
+      }
+
+      setLoading(true);
+      try {
+        const response = await api.get("/deal/", {
+          params: { deal_id: dealId },
+        });
+
+        if (response.data) {
+          setDeal(response.data);
+          setLocalContextState((prev) => ({
+            ...prev,
+            dealDetails: response.data,
+          }));
+        } else {
+          toast.error("Deal details not found");
+          navigate(eRoutes.DASHBOARD_HOME);
+        }
+      } catch (error) {
+        console.error("Error fetching deal details:", error);
+        toast.error("Failed to load deal details. Please try again.");
+        navigate(eRoutes.DASHBOARD_HOME);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDealDetails();
+  }, [dealId, setLocalContextState, navigate]);
 
   useEffect(() => {
     const cleanAmount = investmentAmount.replace(/[^0-9.]/g, "");
@@ -85,25 +123,40 @@ const CommitInvestment: React.FC = () => {
   };
 
   // Calculate using the deal's management fee and carry
-  const managementFeeRate = deal?.management_fee || 0;
+  const managementFeeRate = (deal?.management_fee || 0) * 100;
   const managementFee = parsedAmount * (managementFeeRate / 100);
-  const gst = managementFee * 0.18; // 18% GST on management fee
+  const gst = managementFee * 0.18;
 
-  const carryPercentage = deal?.carry || 0;
+  const carryPercentage = (deal?.carry || 0) * 100;
   const carryAmount = parsedAmount * (carryPercentage / 100);
   const total = parsedAmount + managementFee + gst + carryAmount;
 
   const isInvestmentValid =
     parsedAmount > 0 && parsedAmount >= (deal?.minimum_investment || 0);
 
+  if (loading) {
+    return (
+      <div className="bg-[#1a1a1a] min-h-screen flex flex-col items-center justify-center text-white">
+        <div className="text-center">
+          <div className="w-12 h-12 border-4 border-gray-700 border-t-white rounded-full animate-spin mx-auto mb-4"></div>
+          <h2 className="text-xl font-medium text-white">
+            Loading deal details...
+          </h2>
+        </div>
+      </div>
+    );
+  }
+
   if (!deal) {
     return (
-      <div className="fixed inset-0 h-screen w-screen bg-black flex flex-col text-white overflow-hidden box-border">
+      <div className="bg-black flex flex-col text-white overflow-hidden box-border">
         {/* Back Icon */}
         <button
           onClick={() => navigate(eRoutes.DEAL_DETAILS_HOME)}
           className="bg-transparent border-none text-gray-400 text-2xl cursor-pointer p-4 self-start z-10 mb-20"
-        ></button>
+        >
+          <IoArrowBack />
+        </button>
         {/* Scrollable Content */}
         <div className="flex-1 p-8 overflow-auto pb-24 max-w-[500px] mx-auto">
           <div className="w-full max-w-[400px] bg-white/5 border border-white/10 p-8 backdrop-blur text-center mx-auto">
@@ -154,7 +207,7 @@ const CommitInvestment: React.FC = () => {
       </div>
 
       {/* Investment Amount Section */}
-      <div className="flex-1 flex flex-col">
+      <div className="flex flex-col">
         <p className="text-gray-400 text-sm mb-2">
           How much you want to invest?
         </p>
@@ -218,9 +271,6 @@ const CommitInvestment: React.FC = () => {
           </div>
         )}
 
-        {/* Spacer to push button to bottom */}
-        <div className="flex-1"></div>
-
         <div className="flex items-start mb-6 gap-2.5">
           <input
             type="checkbox"
@@ -238,11 +288,11 @@ const CommitInvestment: React.FC = () => {
           </label>
         </div>
 
-        {/* Proceed Button at the bottom */}
+        {/* Proceed Button */}
         <button
           onClick={handleInputChange}
           disabled={!isInvestmentValid || !checked}
-          className={`w-full font-semibold text-base p-3 transition-all duration-300 flex justify-center items-center mt-auto ${
+          className={`w-full font-semibold text-base p-3 transition-all duration-300 flex justify-center items-center ${
             isInvestmentValid && checked
               ? "bg-white text-black cursor-pointer"
               : "bg-gray-700 text-gray-400 cursor-not-allowed"
@@ -254,7 +304,7 @@ const CommitInvestment: React.FC = () => {
 
       {/* Modal */}
       {modalVisible && (
-        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-[1000] p-5">
+        <div className="bg-black/80 flex items-center justify-center z-[1000] p-5">
           <div className="bg-[#1a1a1a]/95 p-8 w-full max-w-[400px] border border-white/10 backdrop-blur">
             <h3 className="text-white text-[1.5rem] font-bold mb-6 text-start">
               📊 Investment Summary
@@ -299,8 +349,6 @@ const CommitInvestment: React.FC = () => {
                 </span>
               </div>
             </div>
-
-            {/* Acknowledgment Checkbox */}
 
             {/* Modal Buttons */}
             <div className="flex gap-2.5">

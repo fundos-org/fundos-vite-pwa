@@ -53,7 +53,7 @@ const VerifyPhoneOTP: FC = () => {
           sessionStorage.setItem("userId", data.user_id);
           sessionStorage.setItem("subAdminId", data.subadmin_id);
 
-          if (data.onboarding_status === "KYC_INITIATED") {
+          if (data.onboarding_status === "KYC_INITIATEDx") {
             toast.success("Welcome back! Redirecting to dashboard...");
             navigate(eRoutes.DASHBOARD_HOME);
             localStorage.setItem("accessToken", data.access_token);

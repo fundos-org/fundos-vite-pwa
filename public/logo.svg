@@ -1,0 +1,20 @@
+<!-- filepath: /Users/pallavpatra/Desktop/FundOS/fundos-logo.svg -->
+<svg width="360" height="120" viewBox="0 0 360 120" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <linearGradient id="osGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#7b88d1" />
+            <stop offset="100%" stop-color="#f07979" />
+        </linearGradient>
+    </defs>
+
+    <!-- Main logo text -->
+    <text x="50" y="80" font-family="Arial, sans-serif" font-weight="700" font-size="80"
+        fill="white"> Fund<tspan fill="url(#osGradient)">OS</tspan>
+    </text>
+
+    <!-- Tagline -->
+    <text x="160" y="110" font-family="Arial, sans-serif" font-weight="300" font-size="24"
+        fill="white" text-anchor="middle">
+        Click. Sign. Raise.
+    </text>
+</svg>
