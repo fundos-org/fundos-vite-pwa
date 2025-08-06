@@ -233,7 +233,7 @@ const DealDetails = () => {
                     </div>
 
                     {/* Progress Section */}
-                    <div>
+                    {/* <div>
                         <p className="text-[#00fb57] text-sm mb-2 font-semibold">
                             📈 {deal?.fund_raised_till_now}% funds raised till now
                         </p>
@@ -243,7 +243,7 @@ const DealDetails = () => {
                                 style={{ width: `${deal?.fund_raised_till_now}%` }}
                             ></div>
                         </div>
-                    </div>
+                    </div> */}
                 </div>
             </div>
 
