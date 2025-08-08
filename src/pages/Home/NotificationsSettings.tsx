@@ -15,7 +15,7 @@ const NotificationsSettings: React.FC = () => {
   };
 
   return (
-    <div className="fixed inset-0 h-screen w-screen bg-black flex flex-col text-white overflow-hidden">
+    <div className="bg-black flex flex-col text-white overflow-hidden">
       {/* Header */}
       <div className="p-3 flex items-center border-b border-white/10">
         <button 

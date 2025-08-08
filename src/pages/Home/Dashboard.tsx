@@ -53,13 +53,16 @@ const Dashboard = () => {
         navigate(eRoutes.DASHBOARD_HOME);
         break;
       case "portfolio":
-        navigate(`${eRoutes.DASHBOARD_HOME}/portfolio`);
+        navigate(eRoutes.DASHBOARD_PORTFOLIO);
         break;
       case "updates":
-        navigate(`${eRoutes.DASHBOARD_HOME}/updates`);
+        navigate(eRoutes.DASHBOARD_UPDATES);
         break;
       case "profile":
-        navigate(`${eRoutes.DASHBOARD_HOME}/profile`);
+        navigate(eRoutes.DASHBOARD_PROFILE);
+        break;
+      case "deals":
+        navigate(eRoutes.DASHBOARD_DEALS);
         break;
     }
   };
@@ -69,17 +72,17 @@ const Dashboard = () => {
     if (path.includes("/portfolio")) return "portfolio";
     if (path.includes("/updates")) return "updates";
     if (path.includes("/profile")) return "profile";
-    return "home";
+        return "home";
   };
 
   return (
-    <>
+    <div className="min-h-[100vh] flex-1 flex-col justify-between w-full md:max-w-[360px] box-border mx-auto">
       <Outlet />
       <BottomNavigation
         activeTab={getActiveTab()}
         handleTabChange={handleTabChange}
       />
-    </>
+    </div>
   );
 };
 

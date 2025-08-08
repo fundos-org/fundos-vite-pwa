@@ -42,7 +42,7 @@ const UploadPhoto = () => {
   };
 
   return (
-    <>
+    <div className="flex flex-col items-center justify-center h-full w-full p-4">
       <div>
         <h1 className="text-white text-4xl font-bold mb-2.5">Upload Photo</h1>
 
@@ -92,7 +92,7 @@ const UploadPhoto = () => {
       >
         {uploading ? "Uploading..." : "Upload Photo"}
       </button>
-    </>
+    </div>
   );
 };
 

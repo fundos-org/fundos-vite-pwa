@@ -53,22 +53,18 @@ const EmailInput = () => {
   };
 
   return (
-    <>
-      <div>
-        <h1 className="mb-2 text-4xl font-bold">Enter your mail ✉️</h1>
-        <p className="text-[#00ffcc] mb-8 leading-relaxed text-sm">
-          Make sure it's one you check regularly.
-        </p>
-        <div>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Enter your email"
-            className="w-full p-4 text-base border border-gray-700 bg-gray-700 text-white"
-          />
-        </div>
-      </div>
+    <div className="flex flex-col h-full w-full p-4">
+      <h1 className="mb-2 text-4xl font-bold">Enter your e-mail address.</h1>
+      <p className="text-[#00ffcc] mb-8 leading-relaxed text-sm">
+        Make sure it's the one you check regularly.
+      </p>
+      <input
+        type="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        placeholder="Enter your email"
+        className="w-full p-4 text-base border border-gray-700 bg-gray-700 text-white"
+      />
       {/* <button onClick={() => navigate(eRoutes.EMAIL_VERIFY_AUTH)}>test next</button> */}
       <button
         type="submit"
@@ -82,7 +78,7 @@ const EmailInput = () => {
       >
         Next
       </button>
-    </>
+    </div>
   );
 };
 

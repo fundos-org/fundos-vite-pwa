@@ -53,13 +53,17 @@ const VerifyPhoneOTP: FC = () => {
           sessionStorage.setItem("userId", data.user_id);
           sessionStorage.setItem("subAdminId", data.subadmin_id);
 
-          if (data.onboarding_status === "Completed") {
+          if (data.onboarding_status === "KYC_INITIATEDx") {
             toast.success("Welcome back! Redirecting to dashboard...");
             navigate(eRoutes.DASHBOARD_HOME);
+            localStorage.setItem("accessToken", data.access_token);
+            localStorage.setItem("refreshToken", data.refresh_token || "");
+            localStorage.setItem("userId", data.user_id);
+            localStorage.setItem("name", data.user_name)
           } else {
             toast.error("Please complete your email verification to continue");
             navigate(eRoutes.USERNAME_PASSWORD_AUTH);
-          }
+          } 
         } else {
           toast.error(
             data.message || "Failed to verify OTP. Please try again."
@@ -75,7 +79,7 @@ const VerifyPhoneOTP: FC = () => {
   };
 
   return (
-    <>
+    <div className="flex flex-col items-center justify-center h-full w-full p-4">
       <div>
         <h1 className="mb-4 text-4xl font-bold">Verify your number</h1>
         <p className="text-[#00ffcc] mb-8 leading-relaxed text-sm">
@@ -121,7 +125,7 @@ const VerifyPhoneOTP: FC = () => {
       >
         Verify
       </button>
-    </>
+    </div>
   );
 };
 

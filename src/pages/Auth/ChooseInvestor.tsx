@@ -85,7 +85,7 @@ const ChooseInvestor = () => {
   };
 
   return (
-    <>
+    <div className="flex flex-col items-center justify-center h-full w-full p-4">
       <div>
         <h1 className="mb-4 text-2xl font-bold">Choose Investor Type</h1>
         <p className="text-[#00fb57] mb-8 leading-relaxed text-sm">
@@ -147,7 +147,7 @@ const ChooseInvestor = () => {
 
       {/* Modal for Declaration */}
       {showModal && (
-        <div className="fixed inset-0 bg-black flex flex-col items-center justify-center z-[1000] h-screen w-screen text-white p-4 overflow-hidden box-border">
+        <div className="fixed inset-0 bg-black flex flex-col items-center justify-center z-[1000] h-screen w-screen text-white overflow-hidden box-border">
           <button
             onClick={() => setShowModal(false)}
             className="bg-transparent border-none text-gray-400 text-2xl cursor-pointer absolute top-4 right-4 z-10"
@@ -164,7 +164,7 @@ const ChooseInvestor = () => {
               and:
             </p>
 
-            <div className="mb-8">
+            <div className="mb-8 flex flex-col gap-2">
               <p className="text-gray-200 my-2">
                 1. Have Early-Stage Investment Experience, or
               </p>
@@ -191,7 +191,7 @@ const ChooseInvestor = () => {
                 {isChecked && <span className="text-[#1a1a1a] text-xs">✓</span>}
               </div>
               <div>
-                <span className="text-gray-200 leading-snug">
+                <span className="text-gray-200 leading-snug text-sm">
                   I Confirm That I Qualify As An Angel Investor Based On The
                   Above Condition(s)
                   <span className="text-red-500">*</span>
@@ -214,7 +214,7 @@ const ChooseInvestor = () => {
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 };
 

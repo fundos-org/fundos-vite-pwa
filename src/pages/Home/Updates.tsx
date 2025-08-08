@@ -43,14 +43,10 @@ const Updates: React.FC = () => {
       time: '2m'
     }
   ];
-  
-  // Toggle notifications state for demo purposes
-  const toggleNotifications = () => {
-    setHasNotifications(!hasNotifications);
-  };
+
 
   return (
-    <div className="fixed inset-0 h-screen w-screen bg-black flex flex-col text-white overflow-hidden box-border">
+    <div className="inset-0 bg-black flex flex-col text-white overflow-hidden box-border">
       {/* Header with gradient */}
       <div className="bg-gradient-to-r from-[#62b3ff] via-[#ff8c9f] to-[#FF0066]" 
            style={{ 
@@ -96,15 +92,6 @@ const Updates: React.FC = () => {
         )}
       </div>
       
-      {/* Demo toggle button (you can remove this in production) */}
-      <div className="fixed bottom-4 right-4">
-        <button 
-          onClick={toggleNotifications} 
-          className="bg-white/10 p-2 rounded-xs border border-white/20 text-xs"
-        >
-          Toggle Demo
-        </button>
-      </div>
     </div>
   );
 };

@@ -50,8 +50,7 @@ const PhoneNumber: FC = () => {
   };
 
   return (
-    <>
-      <>
+      <div className="flex flex-col items-center justify-center h-full w-full p-4">
         <div>
           <h1 className="mb-4 text-4xl font-bold">Enter phone number</h1>
 
@@ -71,7 +70,7 @@ const PhoneNumber: FC = () => {
                 type="tel"
                 value={phoneNumber}
                 onChange={(e) => handlePhoneNumberChange(e.target.value)}
-                placeholder="Enter 10-digit number"
+                placeholder="Enter 10-digit number linked to PAN"
                 maxLength={10}
                 className="flex-1 px-4 py-4 text-base border-none bg-transparent text-white outline-none"
               />
@@ -105,8 +104,7 @@ const PhoneNumber: FC = () => {
         >
           Proceed
         </button>
-      </>
-    </>
+      </div>
   );
 };
 

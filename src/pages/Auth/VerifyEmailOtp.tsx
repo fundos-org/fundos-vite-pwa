@@ -68,7 +68,7 @@ const VerifyEmailOtp = () => {
   };
 
   return (
-    <>
+    <div className="flex flex-col items-center justify-center h-full w-full p-4">
       <div>
         <h1 className="mb-4 text-4xl font-bold">Verify your Email</h1>
 
@@ -111,7 +111,7 @@ const VerifyEmailOtp = () => {
       >
         Verify →
       </button>
-    </>
+    </div>
   );
 };
 

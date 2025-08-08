@@ -50,10 +50,10 @@ const ProfessionalBackground = () => {
       { label: ">5Cr", value: "50000000" },
     ],
     capital_commitment: [
-      { label: "25L - 50L", value: "2500000" },
-      { label: "50L - 1Cr", value: "5000000" },
-      { label: "1Cr - 5Cr", value: "10000000" },
-      { label: ">5Cr", value: "50000000" },
+      { label: "25L", value: "2500000" },
+      { label: "50L", value: "5000000" },
+      { label: "75L", value: "7500000" },
+      { label: "1Cr", value: "10000000" },
     ],
   };
 
@@ -188,7 +188,7 @@ const ProfessionalBackground = () => {
   };
 
   return (
-    <>
+    <div className="flex flex-col items-center justify-center h-full w-full p-4">
       <div>
         <h1 className="text-white text-4xl font-bold mb-2.5">
           Professional Background
@@ -230,7 +230,7 @@ const ProfessionalBackground = () => {
       >
         Next
       </button>
-    </>
+    </div>
   );
 };
 

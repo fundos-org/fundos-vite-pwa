@@ -14,7 +14,7 @@ const FinalApproval = () => {
   };
 
   return (
-    <>
+    <div className="flex flex-col items-center justify-center h-full w-full p-4">
       <div className="flex flex-col items-center mt-30">
         <div className="text-7xl mb-4">🎉</div>
         <h1 className="text-white text-4xl font-bold mb-4">Final Approval</h1>
@@ -23,8 +23,7 @@ const FinalApproval = () => {
           approval. You will be notified once it's approved.
         </p>
         <p className="text-gray-400 text-sm mb-8 leading-relaxed text-center">
-          Our team will review your application and get back to you within 2-3
-          business days.
+          Our team will review your application and get back to you within the next 30 minutes.
         </p>
       </div>
 
@@ -34,7 +33,7 @@ const FinalApproval = () => {
       >
         Go to Dashboard
       </button>
-    </>
+    </div>
   );
 };
 
