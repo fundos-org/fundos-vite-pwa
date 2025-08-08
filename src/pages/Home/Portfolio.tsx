@@ -16,6 +16,8 @@ interface Deal {
   equity: number;
   term_sheet: string;
   id?: number; // Adding id for navigation purposes
+  bgColor?: string; // Optional for custom background color
+  textColor?: string; // Optional for custom text color
 }
 
 interface Pagination {

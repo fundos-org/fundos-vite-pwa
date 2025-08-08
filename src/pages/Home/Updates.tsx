@@ -8,7 +8,7 @@ interface Notification {
 }
 
 const Updates: React.FC = () => {
-  const [hasNotifications, setHasNotifications] = useState<boolean>(true);
+  const [hasNotifications] = useState<boolean>(true);
   
   // Dummy data based on the notifications in the image
   const notifications: Notification[] = [
