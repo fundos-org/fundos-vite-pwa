@@ -9,7 +9,7 @@ import api from "@/lib/axiosInstance";
 const CommitInvestment: React.FC = () => {
   const navigate = useNavigate();
   const { dealId } = useParams(); // Get dealId from URL params
-  const { localContextState, setLocalContextState } = useHomeContext();
+  const { setLocalContextState } = useHomeContext();
   const [investmentAmount, setInvestmentAmount] = useState("");
   const [parsedAmount, setParsedAmount] = useState(0);
   const [checked, setChecked] = useState(false);
@@ -189,7 +189,7 @@ const CommitInvestment: React.FC = () => {
             {deal.title
               ? deal.title
                   .split(" ")
-                  .map((word) => word[0])
+                  .map((word: string) => word[0])
                   .join("")
                   .toUpperCase()
               : "N/A"}

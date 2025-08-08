@@ -49,13 +49,6 @@ const DealDetails = () => {
     fetchDealDetails();
   }, [dealId, setLocalContextState, navigate]);
 
-  const convertToCrores = (value?: number) => {
-    if (typeof value !== "number" || isNaN(value)) {
-      return "N/A";
-    }
-    return `${(value / 10000000).toFixed(2)}Cr`;
-  };
-
   // Helper function to format currency in Indian format
   const formatIndianCurrency = (amount?: number): string => {
     if (!amount || amount === 0) return "₹0";

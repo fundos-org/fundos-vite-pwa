@@ -47,21 +47,6 @@ const Transactions = () => {
     has_prev: false
   });
 
-  // Function to map API status to display status
-  const getStatusDisplay = (status: string) => {
-    const statusLower = status.toLowerCase();
-    if (statusLower === 'waiting' || statusLower === 'pending') {
-      return 'pending';
-    }
-    if (statusLower === 'approved') {
-      return 'approved';
-    }
-    if (statusLower === 'failed') {
-      return 'failed';
-    }
-    return statusLower;
-  };
-
   const fetchTransactions = async (isLoadingMore = false) => {
     try {
       if (isLoadingMore) {
@@ -155,13 +140,6 @@ const Transactions = () => {
     const isLoadingMore = pagination.page > 1;
     fetchTransactions(isLoadingMore);
   }, [pagination.page, activeTab]);
-
-  // Function to handle page change
-  const handlePageChange = (newPage: number) => {
-    if (newPage >= 1 && newPage <= pagination.total_pages) {
-      setPagination(prev => ({ ...prev, page: newPage }));
-    }
-  };
 
   // Format amount with currency
   const formatAmount = (amount: number, currency: string) => {
