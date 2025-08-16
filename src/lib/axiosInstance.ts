@@ -14,11 +14,12 @@ interface RefreshTokenResponse {
 }
 
 // Create Axios instance
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || "https://api.fundos.services/staging/v1";
 const api: AxiosInstance = axios.create({
-  baseURL: "https://api.fundos.services/staging/v1",
+  baseURL: BASE_URL,
 });
 
-const handleLogout = () => {
+export const handleLogout = () => {
   localStorage.removeItem("accessToken");
   localStorage.removeItem("refreshToken");
   sessionStorage.removeItem("userId");
@@ -28,10 +29,11 @@ const handleLogout = () => {
   sessionStorage.removeItem("subAdminId");
   toast.error("You have been logged out due to session expiration.");
   // Redirect to login or home page if needed
-  window.location.href = "/phone-number";
+  const appName = sessionStorage.getItem("appName") || "Fundos";
+  window.location.href = `/?appName=${appName}`;
 
   axios
-    .post("https://api.fundos.services/staging/v1/auth/logout")
+    .post(`${BASE_URL}/auth/logout`)
     .then(() => {
       console.log("Logged out successfully");
     })
@@ -105,7 +107,7 @@ api.interceptors.response.use(
 
       try {
         const refreshResponse = await axios.post<RefreshTokenResponse>(
-          "https://api.fundos.services/staging/v1/auth/refresh",
+          `${BASE_URL}/auth/refresh`,
           { refresh_token: refreshToken }
         );
 

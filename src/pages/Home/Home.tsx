@@ -186,7 +186,7 @@ const Home = () => {
 
   return (
     <div className="bg-black flex flex-col text-white overflow-hidden box-border">
-      <div className="flex gap-2 px-3 py-4">
+      <div className="flex gap-2 px-3 py-4 items-center">
         <FaArrowLeft
           size={16}
           className="cursor-pointer"

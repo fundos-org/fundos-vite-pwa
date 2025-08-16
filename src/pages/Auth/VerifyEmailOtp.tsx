@@ -52,6 +52,8 @@ const VerifyEmailOtp = () => {
       .then(({ data }) => {
         if (data.success) {
           toast.success("Email verified successfully!");
+          localStorage.setItem("accessToken", data.tokens?.access_token);
+          localStorage.setItem("refreshToken", data.tokens?.refresh_token || "");
           navigate(eRoutes.CHOOSE_INVESTOR_AUTH);
         } else {
           toast.error(

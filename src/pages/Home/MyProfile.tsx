@@ -226,10 +226,18 @@ const MyProfile: React.FC = () => {
     // Clear session/local storage
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
-    sessionStorage.clear();
+
+    const appName = sessionStorage.getItem("appName") || "Fundos";
+
+    navigate("/?appName=" + appName);
+    sessionStorage.removeItem("userId");
+    sessionStorage.removeItem("phoneNumber");
+    sessionStorage.removeItem("email");
+    sessionStorage.removeItem("invitationCode");
+    sessionStorage.removeItem("subAdminId");
+    sessionStorage.removeItem("s3_key");
 
     // Navigate to login or root
-    navigate("/");
     toast.success("Logged out successfully");
   };
 
