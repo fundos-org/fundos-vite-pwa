@@ -28,7 +28,8 @@ export const handleLogout = () => {
   sessionStorage.removeItem("subAdminId");
   toast.error("You have been logged out due to session expiration.");
   // Redirect to login or home page if needed
-  window.location.href = "/";
+  const appName = sessionStorage.getItem("appName") || "Fundos";
+  window.location.href = `/?appName=${appName}`;
 
   axios
     .post("https://api.fundos.services/staging/v1/auth/logout")

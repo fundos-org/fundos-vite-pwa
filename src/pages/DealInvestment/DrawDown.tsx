@@ -184,6 +184,14 @@ function DrawDown() {
         Drawdown notice
       </h1>
 
+      <button
+        type="button"
+        onClick={() => navigate("/home/dashboard")}
+        className="self-start mb-4 text-white border border-white/30 hover:border-white px-4 py-2 rounded"
+      >
+        Go back to home
+      </button>
+
       {loading ? (
         <div className="flex flex-col items-center justify-center p-8 bg-gray-800 rounded-lg">
           <div className="w-12 h-12 border-4 border-green-400 border-t-transparent rounded-full animate-spin mb-4"></div>
