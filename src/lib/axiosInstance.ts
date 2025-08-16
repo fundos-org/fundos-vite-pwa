@@ -14,8 +14,9 @@ interface RefreshTokenResponse {
 }
 
 // Create Axios instance
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || "https://api.fundos.services/staging/v1";
 const api: AxiosInstance = axios.create({
-  baseURL: "https://api.fundos.services/staging/v1",
+  baseURL: BASE_URL,
 });
 
 export const handleLogout = () => {
@@ -32,7 +33,7 @@ export const handleLogout = () => {
   window.location.href = `/?appName=${appName}`;
 
   axios
-    .post("https://api.fundos.services/staging/v1/auth/logout")
+    .post(`${BASE_URL}/auth/logout`)
     .then(() => {
       console.log("Logged out successfully");
     })
@@ -106,7 +107,7 @@ api.interceptors.response.use(
 
       try {
         const refreshResponse = await axios.post<RefreshTokenResponse>(
-          "https://api.fundos.services/staging/v1/auth/refresh",
+          `${BASE_URL}/auth/refresh`,
           { refresh_token: refreshToken }
         );
 
