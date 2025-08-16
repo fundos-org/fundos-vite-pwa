@@ -18,7 +18,7 @@ const api: AxiosInstance = axios.create({
   baseURL: "https://api.fundos.services/staging/v1",
 });
 
-const handleLogout = () => {
+export const handleLogout = () => {
   localStorage.removeItem("accessToken");
   localStorage.removeItem("refreshToken");
   sessionStorage.removeItem("userId");
@@ -28,7 +28,7 @@ const handleLogout = () => {
   sessionStorage.removeItem("subAdminId");
   toast.error("You have been logged out due to session expiration.");
   // Redirect to login or home page if needed
-  window.location.href = "/phone-number";
+  window.location.href = "/";
 
   axios
     .post("https://api.fundos.services/staging/v1/auth/logout")

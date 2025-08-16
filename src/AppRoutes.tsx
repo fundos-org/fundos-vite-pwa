@@ -82,7 +82,7 @@ const AppRoutes = () => {
           <Route
             path={eRoutes.EMAIL_AUTH}
             element={
-              <Layout backRoute={eRoutes.USERNAME_PASSWORD_AUTH}>
+              <Layout backRoute={eRoutes.VERIFY_PHONE_OTP}>
                 <EmailInput />
               </Layout>
             }
@@ -130,7 +130,7 @@ const AppRoutes = () => {
           <Route
             path={eRoutes.PAN_AUTH}
             element={
-              <Layout backRoute={eRoutes.AADHAAR_AUTH}>
+              <Layout backRoute={eRoutes.CHOOSE_INVESTOR_AUTH}>
                 <PanVerification />
               </Layout>
             }
@@ -216,7 +216,14 @@ const AppRoutes = () => {
               element={<NotificationsSettings />}
             />
           </Route>
-          <Route path={eRoutes.TERM_SHEET_HOME} element={<TermSheet />} />
+          <Route
+            path={eRoutes.TERM_SHEET_HOME}
+            element={
+              <Layout>
+                <TermSheet />
+              </Layout>
+            }
+          />
           <Route path={eRoutes.DRAW_DOWN_NOTICE_HOME} element={<DrawDown />} />
         </Route>
         <Route path="*" element={<Navigate to="/home/dashboard" />} />

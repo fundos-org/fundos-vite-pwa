@@ -4,6 +4,7 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { useHomeContext } from "@/Shared/useLocalContextState";
 import api from "@/lib/axiosInstance";
+import { HiOutlineArrowLeft } from "react-icons/hi";
 
 function TermSheet() {
   const navigate = useNavigate();
@@ -51,22 +52,29 @@ function TermSheet() {
   };
 
   return (
-    <div className="flex flex-col w-full max-w-2xl justify-between h-[calc(100vh)] bg-white/5 border border-white/10 p-7 shadow-lg text-white">
+    <div className="flex flex-col w-full min-h-[calc(100vh)] text-white p-4">
       {/* Header */}
       <div className="flex flex-col flex-grow overflow-auto">
+        {/* Top bar with back button */}
+        <div className="flex items-center gap-3 mb-4">
+          <button
+            onClick={() => navigate(-1)}
+            aria-label="Go back"
+            className="p-2 rounded-full hover:bg-white/10 focus:outline-none"
+          >
+            <HiOutlineArrowLeft className="w-6 h-6" />
+          </button>
+          <h1 className="text-2xl font-bold text-muted/50">Term Sheet</h1>
+        </div>
+
+        {/* Details */}
         <div>
-          <h1 className="text-3xl font-bold text-muted/50 mb-4 text-center">
-            Term Sheet
-          </h1>
-          <div className="text-base flex flex-col">
+          <div className="text-sm flex flex-col">
             <span className="capitalize text-muted/40">Investor Name: </span>
             <span className="font-semibold">{investorName}</span>
             <br />
-            <span className="text-base text-muted/40">Date:</span>
-            <span className="font-semibold">
-              {" "}
-              {new Date().toLocaleDateString()}
-            </span>
+            <span className="text-sm text-muted/40">Date:</span>
+            <span className="font-semibold"> {new Date().toLocaleDateString()}</span>
           </div>
         </div>
 

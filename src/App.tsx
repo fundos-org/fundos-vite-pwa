@@ -4,12 +4,14 @@ import { BrowserRouter } from 'react-router-dom'
 import AppRoutes from './AppRoutes.tsx'
 import { Toaster } from 'react-hot-toast'
 import { HomeProvider } from './pages/Home/HomeContextProvider.tsx'
+import AppNameGuard from './Shared/AppNameGuard'
 
 function App() {
 
   return (
     <>
       <BrowserRouter>
+        <AppNameGuard />
         <HomeProvider>
           <AppRoutes />
         </HomeProvider>
