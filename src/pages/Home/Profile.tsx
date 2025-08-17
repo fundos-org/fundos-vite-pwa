@@ -138,6 +138,8 @@ const ProfileTab = () => {
       navigate("bank-details"); // Navigate to bank details
     } else if (itemId === 'notifications') {
       navigate("notifications-settings"); // Navigate to notifications settings
+    } else if (itemId === 'support') {
+      window.open('https://wa.me/7406095777', '_blank');
     }
     // Other navigation logic would go here
   };
