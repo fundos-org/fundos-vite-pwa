@@ -1,0 +1,31 @@
+==>size of fundos logo on main page
+==> get started button below 
+==> add logout button
+==> no alert for unique email id
+ PORTFOLIO OVERVIEW 18.25 CR IS INCORRECT (Dashboard page) the amount user invested
+ name is also incorrect, hi nimblepe (Dashboard page)(ishwar will send in api)
+ 
+ home 
+ 
+ dashboard>deal>select deal show carry percentage instead of absolute amount
+ 
+ total amount 
+ drawdown letter not coming
+ drawdown email total amount is wrong, 
+ created_at": "2025-07-20", date wrong
+ user can only invest in one deal only one time
+ 
+ if commited in deal show commited in deal
+ committed or invested enum in each deal under portfolio for each deal
+ remove date and add commiited on invested enum
+ add subadmin name in each deal
+ investment info data wrong
+
+fix invitation code in profile
+fix add bank details in profile
+remove terms of use and privacy policy in profile
+
+deal explore deals avialble deals add commited amount add subadmin name
+
+on draw down notice not showing, 
+amount committed in available deals for each deal
