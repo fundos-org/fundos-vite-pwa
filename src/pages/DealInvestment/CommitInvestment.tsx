@@ -123,13 +123,13 @@ const CommitInvestment: React.FC = () => {
   };
 
   // Calculate using the deal's management fee and carry
-  const managementFeeRate = (deal?.management_fee || 0) * 100;
-  const managementFee = parsedAmount * (managementFeeRate / 100);
-  const gst = managementFee * 0.18;
+  const managementFeeRate = (deal?.management_fee || 0);
+  const managementFee = parsedAmount * (managementFeeRate /100);
+  const gst = managementFee * 18/100;
 
-  const carryPercentage = (deal?.carry || 0) * 100;
-  const carryAmount = parsedAmount * (carryPercentage / 100);
-  const total = parsedAmount + managementFee + gst + carryAmount;
+  const carryPercentage = (deal?.carry || 0);
+  const carryAmount = parsedAmount * (carryPercentage)/100;
+  const total = parsedAmount + managementFee + gst;
 
   const isInvestmentValid =
     parsedAmount > 0 && parsedAmount >= (deal?.minimum_investment || 0);
@@ -255,7 +255,7 @@ const CommitInvestment: React.FC = () => {
 
             <div className="flex justify-between mb-2">
               <span className="text-gray-400 text-sm">
-                Carry ({carryPercentage}%)
+                Carry 
               </span>
               <span className="text-white text-sm">
                 {formatCurrency(carryAmount)}

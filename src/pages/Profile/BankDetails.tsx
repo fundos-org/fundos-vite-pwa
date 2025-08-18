@@ -193,12 +193,12 @@ const BankDetails = () => {
               </div>
             </div>
 
-            <button
+            {/* <button
               className="w-full bg-white text-black font-medium py-2 rounded-xs mt-56"
               onClick={() => navigate("/add-bank-account")}
             >
               Add new bank account
-            </button>
+            </button> */}
           </>
         )}
       </div>

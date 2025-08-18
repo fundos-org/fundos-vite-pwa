@@ -65,9 +65,9 @@ const ProfileTab = () => {
     { id: 'transactions', title: 'transactions', icon: <FaMoneyBillWave />, section: 'CONNECTIONS' },
     { id: 'bank', title: 'bank details', icon: <FaUniversity />, section: 'CONNECTIONS' },
     { id: 'notifications', title: 'manage notifications', icon: <FaBell />, section: 'CONNECTIONS' },
-    { id: 'terms', title: 'terms of use', icon: <FaFileAlt />, section: 'HELP AND SUPPORT' },
-    { id: 'privacy', title: 'privacy policy', icon: <FaLock />, section: 'HELP AND SUPPORT' },
     { id: 'support', title: 'customer support', icon: <FaHeadset />, section: 'HELP AND SUPPORT' },
+    // { id: 'terms', title: 'terms of use', icon: <FaFileAlt />, section: 'HELP AND SUPPORT' },
+    // { id: 'privacy', title: 'privacy policy', icon: <FaLock />, section: 'HELP AND SUPPORT' },
   ];
 
   useEffect(() => {
