@@ -228,10 +228,10 @@ const ProfileTab = () => {
           )}
         </div>
         <h2 className="text-white text-xl font-medium mb-1">{userProfile?.full_name || "John Doe"}</h2>
-        <p className="text-blue-400 text-sm">
+        {/* <p className="text-blue-400 text-sm">
           <span className="inline-block w-2 h-2 bg-blue-400 rounded-full mr-1"></span> 
           MEMBER SINCE 15TH JUNE 2023
-        </p>
+        </p> */}
       </div>
 
       {/* Invitation Code - black background */}
