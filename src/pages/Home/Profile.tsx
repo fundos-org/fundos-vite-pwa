@@ -9,10 +9,11 @@ import {
   FaBell, 
   FaFileAlt, 
   FaLock, 
-  FaHeadset 
+  FaHeadset,
+  FaSignOutAlt 
 } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import api from "@/lib/axiosInstance";
+import api, { handleLogout } from "@/lib/axiosInstance";
 
 interface UserProfile {
   full_name: string;
@@ -66,6 +67,7 @@ const ProfileTab = () => {
     { id: 'bank', title: 'bank details', icon: <FaUniversity />, section: 'CONNECTIONS' },
     { id: 'notifications', title: 'manage notifications', icon: <FaBell />, section: 'CONNECTIONS' },
     { id: 'support', title: 'customer support', icon: <FaHeadset />, section: 'HELP AND SUPPORT' },
+    { id: 'logout', title: 'logout', icon: <FaSignOutAlt />, section: 'ACCOUNT' },
     // { id: 'terms', title: 'terms of use', icon: <FaFileAlt />, section: 'HELP AND SUPPORT' },
     // { id: 'privacy', title: 'privacy policy', icon: <FaLock />, section: 'HELP AND SUPPORT' },
   ];
@@ -140,6 +142,12 @@ const ProfileTab = () => {
       navigate("notifications-settings"); // Navigate to notifications settings
     } else if (itemId === 'support') {
       window.open('https://wa.me/7406095777', '_blank');
+    } else if (itemId === 'logout') {
+      // Clear the automatic session expiration message and show a manual logout message
+      toast.success("Logged out successfully!");
+      setTimeout(() => {
+        handleLogout(); // Use the existing logout function from axiosInstance
+      }, 500); // Small delay to show the success message
     }
     // Other navigation logic would go here
   };
@@ -231,7 +239,7 @@ const ProfileTab = () => {
         <p className="text-xs text-gray-400 mb-1">INVITATION CODE</p>
         <div className="flex items-center">
           <div className="flex-1 bg-[#242424] p-2 rounded">
-            <code className="text-sm">fundos.service/eqrtysdr</code>
+            <code className="text-sm">{localStorage.getItem("invitationCode") || "No invitation code"}</code>
           </div>
           <button className="ml-2 bg-[#00fb57] text-black py-2 px-4 text-sm font-medium rounded">Invite</button>
         </div>
@@ -267,6 +275,22 @@ const ProfileTab = () => {
               <span className="mr-3 text-xl">{item.icon}</span>
               <span className="flex-1 text-sm">{item.title}</span>
               <FaArrowRightLong className="text-gray-400" />
+            </div>
+          ))}
+        </div>
+
+        <div className="px-4 py-2">
+          <p className="text-xs text-gray-400 mb-2">ACCOUNT</p>
+          
+          {navigationItems.filter(item => item.section === 'ACCOUNT').map((item) => (
+            <div 
+              key={item.id} 
+              className="flex items-center py-3 px-2 hover:bg-[#242424] cursor-pointer"
+              onClick={() => handleNavigation(item.id)}
+            >
+              <span className="mr-3 text-xl text-red-400">{item.icon}</span>
+              <span className="flex-1 text-sm text-red-400">{item.title}</span>
+              <FaArrowRightLong className="text-red-400" />
             </div>
           ))}
         </div>

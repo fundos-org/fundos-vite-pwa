@@ -469,12 +469,12 @@ const MyProfile: React.FC = () => {
           </div>
           {/* Logout button */}
           <div className="pt-2">
-            <button
+            {/* <button
               onClick={handleLogout}
               className="w-full p-3 bg-[#4C1D22] text-red-400 rounded-none"
             >
               Logout
-            </button>
+            </button> */}
           </div>
         </div>
       </div>
