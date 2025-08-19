@@ -18,7 +18,14 @@ const DashboardHome = () => {
   });
 
   useEffect(() => {
-    // Get user data from localStorage
+    // Refresh portfolio data when dashboard loads (home button navigation)
+    if (localContextState.refreshPortfolio) {
+      localContextState.refreshPortfolio();
+    }
+  }, [localContextState.refreshPortfolio]);
+
+  useEffect(() => {
+    // Get user data from localStorage and update display
     const userName = localStorage.getItem("name") || "User";
     const investmentAmount = parseFloat(localStorage.getItem("investmentAmount") || "0");
     
@@ -39,7 +46,7 @@ const DashboardHome = () => {
       totalInvestment: formatInvestmentAmount(investmentAmount),
       userName: userName,
     });
-  }, [localContextState.investorName]);
+  }, [localContextState.investorName, localContextState.investmentAmount]);
 
   // Function to get initials from name
   const getInitials = (name: string): string => {

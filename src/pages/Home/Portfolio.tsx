@@ -13,8 +13,9 @@ interface Deal {
   status: string;
   created_at: string;
   deal_capital_commitment: number;
+  investment_status: string; // New field for investment status
   equity: number;
-  term_sheet: string;
+  committed_amount: number; // New field for committed amount
   id?: number; // Adding id for navigation purposes
   bgColor?: string; // Optional for custom background color
   textColor?: string; // Optional for custom text color
@@ -82,7 +83,12 @@ const Portfolio: React.FC = () => {
       );
 
       if (response.data.success) {
-        const newDeals = response.data.deals.map((deal, index) => ({
+        // Filter deals to show only completed investments
+        const completedDeals = response.data.deals.filter(
+          (deal) => deal.investment_status === "COMPLETED"
+        );
+
+        const newDeals = completedDeals.map((deal, index) => ({
           ...deal,
           id: investments.length + index + 1, // Ensure unique IDs across pages
         }));
@@ -93,13 +99,17 @@ const Portfolio: React.FC = () => {
           setInvestments((prevInvestments) => [...prevInvestments, ...newDeals]);
         }
         
-        setPagination(response.data.pagination);
+        // Update pagination to reflect filtered results
+        const updatedPagination = {
+          ...response.data.pagination,
+          total_records: completedDeals.length
+        };
+        setPagination(updatedPagination);
         setHasMore(response.data.pagination.has_next);
 
-        // Calculate total investment amount
-        // Use the pagination total to calculate entire portfolio value, not just current page
+        // Calculate total investment amount for completed investments only
         if (page === 1) {
-          const totalAmount = response.data.deals.reduce(
+          const totalAmount = completedDeals.reduce(
             (sum, deal) => sum + deal.deal_capital_commitment,
             0
           );
@@ -128,14 +138,32 @@ const Portfolio: React.FC = () => {
     navigate(`${investmentId}`);
   };
 
-  // Helper function to format date
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    });
+  // Helper function to format currency in Indian format
+  const formatIndianCurrency = (amount: number): string => {
+    if (amount === 0) return "₹0";
+
+    // Convert to crores
+    const inCrores = amount / 10000000;
+    if (inCrores >= 1) {
+      // For amounts ≥ 1 crore, show up to 1 decimal place
+      return `₹${inCrores.toFixed(inCrores < 10 ? 1 : 0)}Cr`;
+    }
+
+    // Convert to lakhs
+    const inLakhs = amount / 100000;
+    if (inLakhs >= 1) {
+      // For amounts ≥ 1 lakh, show up to 1 decimal place
+      return `₹${inLakhs.toFixed(inLakhs < 10 ? 1 : 0)}L`;
+    }
+
+    // For smaller amounts, show in thousands
+    const inThousands = amount / 1000;
+    if (inThousands >= 1) {
+      return `₹${inThousands.toFixed(1)}K`;
+    }
+
+    // For very small amounts
+    return `₹${amount.toFixed(0)}`;
   };
 
   return (
@@ -152,7 +180,7 @@ const Portfolio: React.FC = () => {
             ₹{totalInvestment}
           </h2>
           <p className="text-sm text-center text-gray-400">
-            You have invested in {pagination?.total_records || 0} deals
+            You have completed investments in {pagination?.total_records || 0} deals
           </p>
         </div>
 
@@ -165,7 +193,7 @@ const Portfolio: React.FC = () => {
         <div className="grid grid-cols-1 gap-6">
           {investments.length === 0 && !isLoading ? (
             <div className="bg-[#242424] p-6 rounded-xs text-center">
-              <p className="text-gray-400">No investments found</p>
+              <p className="text-gray-400">No completed investments found</p>
             </div>
           ) : (
             investments.map((investment, index) => {
@@ -202,10 +230,10 @@ const Portfolio: React.FC = () => {
 
                   <div className="flex justify-between items-center pt-1 text-sm">
                     <p className="text-xs text-gray-400">
-                      Invested on {formatDate(investment.created_at)}
+                      Committed Amount
                     </p>
-                    <p className="font-medium text-right">
-                      ₹{investment.deal_capital_commitment.toLocaleString()}
+                    <p className="font-medium text-right text-green-400">
+                      {formatIndianCurrency(investment.committed_amount)}
                     </p>
                   </div>
                 </div>

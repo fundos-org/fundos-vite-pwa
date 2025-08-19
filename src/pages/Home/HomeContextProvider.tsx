@@ -2,6 +2,7 @@ import api from "@/lib/axiosInstance";
 import { HomeContext } from "@/Shared/useLocalContextState";
 import { useState, ReactNode, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
+import portfolioService from "@/lib/portfolioService";
 
 interface Deal {
   deal_id: string;
@@ -27,12 +28,35 @@ export interface LocalContextState {
     dealId?: string;
     investmentAmount?: string;
     dealDetails?: Deal;
+    refreshPortfolio?: () => Promise<void>; // Function to refresh portfolio data
 }
 
 export const HomeProvider = ({ children }: { children: ReactNode }) => {
   const [localContextState, setLocalContextState] = useState<Partial<LocalContextState>>({});
 
   const [searchParams] = useSearchParams();
+
+  // Function to refresh portfolio data
+  const refreshPortfolio = async () => {
+    await portfolioService.updatePortfolioData();
+    // Trigger re-render of components that depend on localStorage
+    const updatedData = {
+      investorName: localStorage.getItem("name") || "",
+      investmentAmount: localStorage.getItem("investmentAmount") || "",
+    };
+    setLocalContextState(prev => ({
+      ...prev,
+      ...updatedData
+    }));
+  };
+
+  // Add refresh function to context state
+  useEffect(() => {
+    setLocalContextState(prev => ({
+      ...prev,
+      refreshPortfolio
+    }));
+  }, []);
 
   useEffect(() => {
     const appNameParam = searchParams.get("appName") || "Fundos";

@@ -18,6 +18,8 @@ interface Deal {
   created_at: string;
   business_model: string;
   company_stage: string;
+  committed_amount?: number | null;
+  subadmin_name?: string;
 }
 
 const Home = () => {
@@ -118,15 +120,23 @@ const Home = () => {
           if (Array.isArray(data?.subadmins)) {
             data.subadmins.forEach((subadmin: any) => {
               if (Array.isArray(subadmin.interested_deals_data)) {
+                const dealsWithSubadmin = subadmin.interested_deals_data.map((deal: any) => ({
+                  ...deal,
+                  subadmin_name: subadmin.subadmin_name,
+                }));
                 allInterestedDeals = [
                   ...allInterestedDeals,
-                  ...subadmin.interested_deals_data,
+                  ...dealsWithSubadmin,
                 ];
               }
               if (Array.isArray(subadmin.not_interested_deals_data)) {
+                const dealsWithSubadmin = subadmin.not_interested_deals_data.map((deal: any) => ({
+                  ...deal,
+                  subadmin_name: subadmin.subadmin_name,
+                }));
                 allNotInterestedDeals = [
                   ...allNotInterestedDeals,
-                  ...subadmin.not_interested_deals_data,
+                  ...dealsWithSubadmin,
                 ];
               }
             });
@@ -244,8 +254,8 @@ const Home = () => {
                     className="bg-[#171717] border border-[#333333] rounded-none overflow-hidden"
                   >
                     <div className="p-4">
-                      {/* Company Logo & Stage */}
-                      <div className="flex mb-2 justify-between">
+                      {/* Company Logo & Stage/Tags */}
+                      <div className="flex mb-3 justify-between">
                         <div
                           className="h-16 w-16 flex items-center justify-center rounded-xs"
                           style={{
@@ -259,13 +269,21 @@ const Home = () => {
                             {initials}
                           </span>
                         </div>
-                        <div className="flex gap-1">
-                          <span className="bg-[#333333] text-white text-[10px] px-2 py-1 font-medium max-h-fit">
-                            {deal.business_model}
-                          </span>
-                          <span className="bg-[#333333] text-white text-[10px] px-2 py-1 font-medium max-h-fit">
-                            {deal.company_stage}
-                          </span>
+                        <div className="flex flex-col gap-1 items-end">
+                          <div className="flex gap-1">
+                            <span className="bg-[#333333] text-white text-[10px] px-2 py-1 font-medium max-h-fit">
+                              {deal.business_model}
+                            </span>
+                            <span className="bg-[#333333] text-white text-[10px] px-2 py-1 font-medium max-h-fit">
+                              {deal.company_stage}
+                            </span>
+                          </div>
+                          {/* SubAdmin Name */}
+                          {deal.subadmin_name && (
+                            <span className="bg-blue-600/20 text-blue-300 text-[10px] px-2 py-1 font-medium max-h-fit border border-blue-600/30">
+                              {deal.subadmin_name}
+                            </span>
+                          )}
                         </div>
                       </div>
 
@@ -279,6 +297,20 @@ const Home = () => {
                           : deal.description ||
                             "We are a Ed-Tech company building CRM for local institutes"}
                       </p>
+
+                      {/* Committed Amount Banner (if exists) */}
+                      {deal.committed_amount && deal.committed_amount > 0 && (
+                        <div className="bg-green-600/20 border border-green-600/30 p-3 rounded mb-4">
+                          <div className="flex items-center justify-between">
+                            <span className="text-green-300 text-xs font-medium">
+                              ✓ COMMITTED
+                            </span>
+                            <span className="text-green-300 text-sm font-bold">
+                              {formatIndianCurrency(deal.committed_amount)}
+                            </span>
+                          </div>
+                        </div>
+                      )}
 
                       {/* Deal Metrics */}
                       <div className="grid grid-cols-3 gap-4 mb-4">
@@ -306,11 +338,11 @@ const Home = () => {
                         </div>
                       </div>
 
-                      {/* Posted By & View Button */}
+                      {/* View Button */}
                       <div className="flex justify-end items-center">
                         <button
                           onClick={() => goInsideDeal(deal.deal_id)}
-                          className="bg-white text-black text-xs px-4 py-2 font-medium flex items-center"
+                          className="bg-white text-black text-xs px-4 py-2 font-medium flex items-center hover:bg-gray-200 transition-colors"
                         >
                           View deal <span className="ml-1">→</span>
                         </button>

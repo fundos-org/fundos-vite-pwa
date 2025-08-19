@@ -1,12 +1,17 @@
 import { eRoutes } from "@/RoutesEnum";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import portfolioService from "@/lib/portfolioService";
 
 const FinalApproval = () => {
   const navigate = useNavigate();
 
-  const handleGoToDashboard = () => {
+  const handleGoToDashboard = async () => {
     toast.success("KYC process completed successfully!");
+    
+    // Refresh portfolio data after onboarding completion
+    await portfolioService.updatePortfolioData();
+    
     // Add small delay to ensure notification shows before navigation
     setTimeout(() => {
       navigate(eRoutes.DASHBOARD_HOME);
