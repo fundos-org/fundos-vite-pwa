@@ -3,6 +3,7 @@ import { eRoutes } from "@/RoutesEnum";
 import { FC, useState } from "react";
 import { toast } from "react-hot-toast/headless";
 import { useNavigate } from "react-router-dom";
+import portfolioService from "@/lib/portfolioService";
 
 const VerifyPhoneOTP: FC = () => {
   const navigate = useNavigate();
@@ -48,7 +49,7 @@ const VerifyPhoneOTP: FC = () => {
           invite_code: invitationCode,
         },
       })
-      .then(({ data }) => {
+      .then(async ({ data }) => {
         if (data.success) {
           sessionStorage.setItem("userId", data.user_id);
           sessionStorage.setItem("subAdminId", data.subadmin_ids?.[0] || "");
@@ -79,6 +80,10 @@ const VerifyPhoneOTP: FC = () => {
           
           if (completedStatuses.includes(data.onboarding_status)) {
             toast.success("Welcome back! Redirecting to dashboard...");
+            
+            // Refresh portfolio data after successful login
+            await portfolioService.updatePortfolioData();
+            
             navigate(eRoutes.DASHBOARD_HOME);
           } else {
             toast.error("Please complete your email verification to continue");

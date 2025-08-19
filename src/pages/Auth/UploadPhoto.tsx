@@ -3,6 +3,7 @@ import { eRoutes } from "@/RoutesEnum";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import portfolioService from "@/lib/portfolioService";
 
 const UploadPhoto = () => {
   const navigate = useNavigate();
@@ -28,8 +29,12 @@ const UploadPhoto = () => {
 
     api
       .post("/onboarding/user/upload-photo", formData)
-      .then(({ data }) => {
+      .then(async ({ data }) => {
         toast.success(data.message || "Photo uploaded successfully");
+        
+        // Refresh portfolio data after successful photo upload (onboarding completion)
+        await portfolioService.updatePortfolioData();
+        
         navigate(eRoutes.FINAL_APPROVAL_AUTH);
       })
       .catch((error) => {

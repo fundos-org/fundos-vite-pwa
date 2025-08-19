@@ -4,18 +4,42 @@ import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import api from "@/lib/axiosInstance";
 import { useHomeContext } from "@/Shared/useLocalContextState";
+import portfolioService from "@/lib/portfolioService";
 
 function DrawDown() {
   const navigate = useNavigate();
-  const [loading, setLoading] = useState<boolean>(true);
-  const [presignedUrl, setPresignedUrl] = useState<string | null>(null);
   const [confirmed, setConfirmed] = useState<boolean>(false);
-  const iframeRef = useRef<HTMLIFrameElement | null>(null);
   const { localContextState } = useHomeContext();
   const [paymentProcessing, setPaymentProcessing] = useState<boolean>(false);
   const [paymentUrl, setPaymentUrl] = useState<string | null>(null);
   const paymentWindowRef = useRef<Window | null>(null);
   const paymentCheckIntervalRef = useRef<number | null>(null);
+
+  // Get current date for the drawdown notice
+  const getCurrentDate = () => {
+    const today = new Date();
+    return today.toLocaleDateString('en-GB', {
+      day: '2-digit',
+      month: '2-digit', 
+      year: 'numeric'
+    });
+  };
+
+  // Format currency for display
+  const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat('en-IN', {
+      style: 'decimal',
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    }).format(amount);
+  };
+
+  // Get user and deal information - only use real data, no fallbacks
+  const userName = localStorage.getItem("name");
+  const investmentAmount = localContextState.investmentAmount ? parseFloat(localContextState.investmentAmount) : null;
+  const dealDetails = localContextState.dealDetails;
+  const companyName = dealDetails?.title;
+  const schemeName = dealDetails?.business_model;
 
   // Function to open popup window centered on screen
   const openCenteredPopup = (url: string, title: string, w: number, h: number) => {
@@ -48,16 +72,6 @@ function DrawDown() {
     
     return popup;
   };
-
-  // Monitor payment window status
-  useEffect(() => {
-    // Cleanup function to handle component unmount
-    return () => {
-      if (paymentCheckIntervalRef.current) {
-        clearInterval(paymentCheckIntervalRef.current);
-      }
-    };
-  }, []);
 
   const handleGeneratePaymentLink = async () => {
     try {
@@ -99,7 +113,7 @@ function DrawDown() {
             clearInterval(paymentCheckIntervalRef.current);
           }
           
-          paymentCheckIntervalRef.current = window.setInterval(() => {
+          paymentCheckIntervalRef.current = window.setInterval(async () => {
             // Check if window was closed
             if (paymentWindowRef.current && paymentWindowRef.current.closed) {
               // Clean up
@@ -109,6 +123,14 @@ function DrawDown() {
               // Update UI
               setPaymentProcessing(false);
               toast.success("Payment window closed");
+              
+              // Refresh portfolio data after payment (transaction completion)
+              try {
+                await portfolioService.updatePortfolioData();
+                console.log("Portfolio data refreshed after payment completion");
+              } catch (error) {
+                console.warn("Failed to refresh portfolio data after payment:", error);
+              }
             }
           }, 1000); // Check every second
           
@@ -145,38 +167,15 @@ function DrawDown() {
     }
   };
 
+  // Monitor payment window status
   useEffect(() => {
-    const s3Key = sessionStorage.getItem("s3_key");
-
-    if (!s3Key) {
-      toast.error(
-        "No drawdown notice found. Please complete the previous step."
-      );
-      navigate(eRoutes.TERM_SHEET_HOME);
-      return;
-    }
-
-    const fetchPresignedUrl = async () => {
-      try {
-        const response = await api.get(
-          `/utils/presigned-url?s3_key=${encodeURIComponent(s3Key)}`
-        );
-
-        if (response.status === 200) {
-          setPresignedUrl(response.data);
-        } else {
-          throw new Error("Failed to fetch presigned URL");
-        }
-      } catch (error) {
-        console.error("Error fetching presigned URL:", error);
-        toast.error("Failed to load drawdown notice. Please try again later.");
-      } finally {
-        setLoading(false);
+    // Cleanup function to handle component unmount
+    return () => {
+      if (paymentCheckIntervalRef.current) {
+        clearInterval(paymentCheckIntervalRef.current);
       }
     };
-
-    fetchPresignedUrl();
-  }, [navigate]);
+  }, []);
 
   return (
     <div className="flex flex-col w-full max-w-4xl justify-between h-[calc(100vh)] bg-white/5 border border-white/10 p-7 shadow-lg">
@@ -186,87 +185,149 @@ function DrawDown() {
 
       <button
         type="button"
-        onClick={() => navigate("/home/dashboard")}
+        onClick={() => navigate(eRoutes.DASHBOARD_HOME)}
         className="self-start mb-4 text-white border border-white/30 hover:border-white px-4 py-2 rounded"
       >
         Go back to home
       </button>
 
-      {loading ? (
-        <div className="flex flex-col items-center justify-center p-8 bg-gray-800 rounded-lg">
-          <div className="w-12 h-12 border-4 border-green-400 border-t-transparent rounded-full animate-spin mb-4"></div>
-          <p className="text-white text-center">
-            Generating your drawdown notice. Please wait...
-          </p>
-        </div>
-      ) : presignedUrl ? (
-        <div className="flex flex-col flex-grow overflow-auto">
-          <div
-            className="w-full bg-gray-800 rounded-lg overflow-hidden mb-4"
-            style={{ height: "60vh" }}
-          >
-            <iframe
-              ref={iframeRef}
-              src={presignedUrl}
-              title="Drawdown Notice"
-              className="w-full h-full"
-              style={{ border: "none" }}
-            />
+      <div className="flex flex-col flex-grow overflow-auto">
+        {/* Drawdown Notice Content */}
+        <div className="bg-gray-800 text-white p-8 rounded-lg mb-6 max-h-[70vh] overflow-y-auto border border-white/10">
+          {/* Header */}
+          <div className="text-center mb-8">
+            <h3 className="text-xl font-semibold">DRAWDOWN NOTICE</h3>
           </div>
 
-          <div className="flex items-start gap-4 p-4 rounded-lg">
-            <input
-              type="checkbox"
-              id="confirmDrawdown"
-              checked={confirmed}
-              onChange={(e) => setConfirmed(e.target.checked)}
-              className="w-5 h-5 accent-white"
-            />
-            <label htmlFor="confirmDrawdown" className="text-white">
-              I confirm that I have read and understood all the terms and
-              conditions in the drawdown notice.
-            </label>
+          {/* Date and Addressee */}
+          <div className="mb-6">
+            <p className="mb-4"><strong>Date:</strong> {getCurrentDate()}</p>
+            {userName && (
+              <p className="mb-4"><strong>Dear</strong> {userName.toUpperCase()}</p>
+            )}
           </div>
 
-          {paymentProcessing && (
-            <div className="bg-gray-800 p-4 rounded-lg mb-4">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                <span className="text-white">Payment in progress...</span>
-              </div>
-              <p className="text-gray-300 text-sm">
-                A payment window has been opened. Please complete your payment in the new window.
+          {/* Main Content */}
+          <div className="mb-6 leading-relaxed">
+            {schemeName && companyName ? (
+              <p className="mb-4">
+                Your consent to invest in <u><strong>{schemeName}</strong></u> scheme has been received and accepted.
+                Under this Investment Scheme, the investment will be made in <u><strong>{companyName}</strong></u>.
               </p>
-              <button
-                onClick={handleRetryPayment}
-                className="mt-3 text-white underline hover:text-gray-300 text-sm"
-              >
-                Open payment window again
-              </button>
+            ) : (
+              <p className="mb-4">
+                Your investment consent has been received and accepted.
+              </p>
+            )}
+
+            {investmentAmount ? (
+              <p className="mb-6">
+                We are hereby issuing this Drawdown Notice for INR <strong>{formatCurrency(investmentAmount)}</strong> payable within
+                15 business days. The particulars of the Drawdown and your Commitment are as follows:
+              </p>
+            ) : (
+              <p className="mb-6">
+                We are hereby issuing this Drawdown Notice payable within 15 business days.
+              </p>
+            )}
+          </div>
+
+          {/* Particulars Table - Only show if we have investment amount */}
+          {investmentAmount && (
+            <div className="mb-8">
+              <table className="w-full border-collapse border border-white/20">
+                <thead>
+                  <tr className="bg-white/10">
+                    <th className="border border-white/20 p-3 text-left font-semibold">Particulars</th>
+                    <th className="border border-white/20 p-3 text-left font-semibold">Amount (INR)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td className="border border-white/20 p-3">Investment Amount</td>
+                    <td className="border border-white/20 p-3">{formatCurrency(investmentAmount)}</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           )}
 
-          <div className="flex flex-col mt-auto pt-4">
-            <button
-              disabled={!confirmed || paymentProcessing}
-              onClick={handleGeneratePaymentLink}
-              className={`text-black font-semibold px-8 py-4 w-full transition-all duration-300 focus:outline-none ${
-                confirmed && !paymentProcessing
-                  ? "bg-white hover:bg-gray-100"
-                  : "bg-gray-500 cursor-not-allowed"
-              }`}
-            >
-              {paymentProcessing ? "Processing..." : "Proceed to Payment"}
-            </button>
+          {/* Additional Information */}
+          <div className="mb-6 leading-relaxed">
+            <p className="mb-4">
+              Please remit your payment to the bank account details provided in the complete drawdown letter
+              sent to your registered email address. Send a confirmation (with a screenshot or reference number) 
+              of the transaction to <strong>legal@fundos.solutions</strong> no later than 7 days from remittance.
+            </p>
+
+            <p className="mb-4">
+              <strong>Note:</strong> <em>Funds should be remitted from the account registered with us.</em>
+            </p>
+
+            <p className="mb-4">
+              In your email please also identify the name of your remitting bank{schemeName && ` and the name of the Investment Scheme (${schemeName})`},
+              so that the Investment Manager can monitor the incoming funds more easily. Thank you in
+              advance for your cooperation and attention to this matter.
+            </p>
           </div>
         </div>
-      ) : (
-        <div className="p-8 bg-gray-800 rounded-lg">
+
+        {/* Email Notification Message */}
+        {/* <div className="bg-gray-800 p-4 rounded-lg mb-6">
           <p className="text-white text-center">
-            Failed to load drawdown notice.
+            📧 <strong>Full drawdown letter with complete bank details has been sent to your registered email address.</strong>
           </p>
+        </div> */}
+
+        {/* Confirmation Checkbox */}
+        <div className="flex items-start gap-4 p-4 bg-white/5 rounded-lg mb-6">
+          <input
+            type="checkbox"
+            id="confirmDrawdown"
+            checked={confirmed}
+            onChange={(e) => setConfirmed(e.target.checked)}
+            className="w-5 h-5 accent-white mt-1"
+          />
+          <label htmlFor="confirmDrawdown" className="text-white leading-relaxed">
+            I confirm that I have read and understood all the terms and conditions in the drawdown notice.
+            {/* I acknowledge that the complete drawdown letter with bank details has been sent to my registered email. */}
+          </label>
         </div>
-      )}
+
+        {/* Payment Processing Status */}
+        {paymentProcessing && (
+          <div className="bg-gray-800 p-4 rounded-lg mb-4">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+              <span className="text-white">Payment in progress...</span>
+            </div>
+            <p className="text-gray-300 text-sm">
+              A payment window has been opened. Please complete your payment in the new window.
+            </p>
+            <button
+              onClick={handleRetryPayment}
+              className="mt-3 text-white underline hover:text-gray-300 text-sm"
+            >
+              Open payment window again
+            </button>
+          </div>
+        )}
+
+        {/* Proceed Button */}
+        <div className="flex flex-col pt-4">
+          <button
+            disabled={!confirmed || paymentProcessing}
+            onClick={handleGeneratePaymentLink}
+            className={`font-semibold px-8 py-4 w-full transition-all duration-300 focus:outline-none rounded ${
+              confirmed && !paymentProcessing
+                ? "bg-white text-black hover:bg-gray-100"
+                : "bg-gray-500 text-gray-300 cursor-not-allowed"
+            }`}
+          >
+            {paymentProcessing ? "Processing..." : "Proceed to Payment"}
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
