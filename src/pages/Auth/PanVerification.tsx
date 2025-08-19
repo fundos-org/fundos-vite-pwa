@@ -40,7 +40,29 @@ const PanVerification = () => {
       })
       .catch((error) => {
         console.error("Error starting onboarding:", error);
-        toast.error("Failed to start onboarding. Please try again.");
+        
+        // Extract specific error message from API response
+        let errorMessage = "Failed to start onboarding. Please try again.";
+        
+        if (error.response?.data?.detail) {
+          const detail = error.response.data.detail;
+          
+          // Check for specific error cases
+          if (detail.includes("PAN number already attached to an investor account")) {
+            errorMessage = "PAN number is already attached to an investor account";
+          } else if (detail.includes("No record found for the given input")) {
+            errorMessage = "No record found for the PAN card provided";
+          } else {
+            // Use the full detail message if it's a different error
+            errorMessage = detail;
+          }
+        } else if (error.response?.data?.message) {
+          errorMessage = error.response.data.message;
+        } else if (error.message) {
+          errorMessage = error.message;
+        }
+        
+        toast.error(errorMessage);
       })
       .finally(() => {
         setLoading(false);

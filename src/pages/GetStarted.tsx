@@ -74,30 +74,33 @@ const GetStarted = () => {
   }, [searchParams]);
 
   return (
-    <div className="flex-1 flex flex-col h-full w-full bg-black text-white p-4 justify-between">
-      <img
-        src={appLogo}
-        alt="Get Started Illustration"
-        className="mb-25 w-2/3 self-center"
-      />
+    <div className="flex-1 flex flex-col h-full w-full bg-black text-white p-4 min-h-screen">
+      {/* Top section with logo and title */}
+      <div className="flex flex-col items-center justify-center flex-1">
+        <img
+          src={appLogo}
+          alt="Get Started Illustration"
+          className="w-2/3 self-center mb-8"
+        />
 
-      <div>
-        <h1 className="text-[2.5rem] font-bold mb-[30px] text-center font-serif">
+        <h1 className="text-[2rem] font-bold mb-[30px] text-center font-serif">
           Back Bold Ideas!
         </h1>
+      </div>
 
+      {/* Bottom section with button and powered by */}
+      <div className="flex flex-col gap-6 pb-4">
         <button
           onClick={handleGetStarted}
           className="bg-white text-black border-none py-4 text-lg font-medium cursor-pointer w-full"
         >
           Get started
         </button>
-      </div>
 
-      <div className="flex flex-col gap-1 items-center justify-center w-full mt-72">
-        <p>Powered by</p>
-
-        <img className="h-[20%] w-[20%]" src="/logo.svg" alt="" />
+        <div className="flex flex-col gap-1 items-center justify-center w-full">
+          <p>Powered by</p>
+          <img className="h-[20%] w-[20%]" src="/logo.svg" alt="" />
+        </div>
       </div>
     </div>
   );

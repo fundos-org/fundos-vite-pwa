@@ -18,11 +18,25 @@ const DashboardHome = () => {
   });
 
   useEffect(() => {
-    // Get user data from sessionStorage instead of API
+    // Get user data from localStorage
     const userName = localStorage.getItem("name") || "User";
+    const investmentAmount = parseFloat(localStorage.getItem("investmentAmount") || "0");
+    
+    // Format investment amount in Cr
+    const formatInvestmentAmount = (amount: number): string => {
+      if (amount === 0) return "0Cr";
+      
+      const inCrores = amount / 10000000; // Convert to crores
+      if (inCrores >= 1) {
+        return `${inCrores.toFixed(2)}Cr`;
+      } else {
+        // For amounts less than 1 crore, still show in Cr with more decimal places
+        return `${inCrores.toFixed(4)}Cr`;
+      }
+    };
 
     setPortfolioData({
-      totalInvestment: "18.25Cr", // Default value since we don't have an API
+      totalInvestment: formatInvestmentAmount(investmentAmount),
       userName: userName,
     });
   }, [localContextState.investorName]);

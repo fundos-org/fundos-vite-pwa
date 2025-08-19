@@ -51,15 +51,35 @@ const VerifyPhoneOTP: FC = () => {
       .then(({ data }) => {
         if (data.success) {
           sessionStorage.setItem("userId", data.user_id);
-          sessionStorage.setItem("subAdminId", data.subadmin_id);
+          sessionStorage.setItem("subAdminId", data.subadmin_ids?.[0] || "");
+          
+          // Store additional data from API response
+          localStorage.setItem("accessToken", data.access_token);
+          localStorage.setItem("refreshToken", data.refresh_token || "");
+          localStorage.setItem("userId", data.user_id);
+          localStorage.setItem("name", data.user_name);
+          localStorage.setItem("investmentAmount", data.investment_amount.toString());
+          
+          // Store invitation codes (take the first one if multiple)
+          if (data.invitation_codes && data.invitation_codes.length > 0) {
+            localStorage.setItem("invitationCode", data.invitation_codes[0]);
+          }
 
-          if (data.onboarding_status === "KYC_INITIATED") {
+          // Check if onboarding is completed - redirect to dashboard
+          const completedStatuses = [
+            "KYC_INITIATED", 
+            "CKYC_COMPLETED", 
+            "KYC_COMPLETED", 
+            "MCA_SENT", 
+            "MCA_SIGNED_USER", 
+            "MCA_SIGNED_FUNDMANAGER", 
+            "MCA_SIGNED_TRUSTEE", 
+            "ONBOARDING_COMPLETED"
+          ];
+          
+          if (completedStatuses.includes(data.onboarding_status)) {
             toast.success("Welcome back! Redirecting to dashboard...");
             navigate(eRoutes.DASHBOARD_HOME);
-            localStorage.setItem("accessToken", data.access_token);
-            localStorage.setItem("refreshToken", data.refresh_token || "");
-            localStorage.setItem("userId", data.user_id);
-            localStorage.setItem("name", data.user_name);
           } else {
             toast.error("Please complete your email verification to continue");
             navigate(eRoutes.EMAIL_AUTH);
