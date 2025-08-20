@@ -222,24 +222,24 @@ const MyProfile: React.FC = () => {
     navigate(-1); // Go back to previous page
   };
 
-  const handleLogout = () => {
-    // Clear session/local storage
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("refreshToken");
+  // const handleLogout = () => {
+  //   // Clear session/local storage
+  //   localStorage.removeItem("accessToken");
+  //   localStorage.removeItem("refreshToken");
 
-    const appName = sessionStorage.getItem("appName") || "Fundos";
+  //   const appName = sessionStorage.getItem("appName") || "Fundos";
 
-    navigate("/?appName=" + appName);
-    sessionStorage.removeItem("userId");
-    sessionStorage.removeItem("phoneNumber");
-    sessionStorage.removeItem("email");
-    sessionStorage.removeItem("invitationCode");
-    sessionStorage.removeItem("subAdminId");
-    sessionStorage.removeItem("s3_key");
+  //   navigate("/?appName=" + appName);
+  //   sessionStorage.removeItem("userId");
+  //   sessionStorage.removeItem("phoneNumber");
+  //   sessionStorage.removeItem("email");
+  //   sessionStorage.removeItem("invitationCode");
+  //   sessionStorage.removeItem("subAdminId");
+  //   sessionStorage.removeItem("s3_key");
 
-    // Navigate to login or root
-    toast.success("Logged out successfully");
-  };
+  //   // Navigate to login or root
+  //   toast.success("Logged out successfully");
+  // };
 
   if (loading) {
     return (
