@@ -128,7 +128,7 @@ const CommitInvestment: React.FC = () => {
   const gst = managementFee * 18/100;
 
   const carryPercentage = (deal?.carry || 0);
-  const carryAmount = parsedAmount * (carryPercentage)/100;
+  // const carryAmount = parsedAmount * (carryPercentage)/100;
   const total = parsedAmount + managementFee + gst;
 
   const isInvestmentValid =

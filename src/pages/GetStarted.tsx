@@ -12,7 +12,7 @@ const GetStarted = () => {
   const navigate = useNavigate();
   const handleGetStarted = () => navigate(eRoutes.PHONE_NUMBER);
 
-  const [appLogo, setAppLogo] = useState<string>("/logo.svg");
+  const [, setAppLogo] = useState<string>("/logo.svg");
   const [syndicateName, setSyndicateName] = useState<string>("");
 
   const [searchParams] = useSearchParams();
