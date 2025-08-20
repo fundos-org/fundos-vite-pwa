@@ -7,8 +7,8 @@ import {
   FaMoneyBillWave, 
   FaUniversity, 
   FaBell, 
-  FaFileAlt, 
-  FaLock, 
+  // FaFileAlt, 
+  // FaLock, 
   FaHeadset,
   FaSignOutAlt 
 } from "react-icons/fa";
