@@ -258,7 +258,7 @@ const CommitInvestment: React.FC = () => {
                 Carry 
               </span>
               <span className="text-white text-sm">
-                {formatCurrency(carryAmount)}
+                {(carryPercentage)}%
               </span>
             </div>
 
