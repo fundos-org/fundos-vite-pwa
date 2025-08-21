@@ -94,14 +94,9 @@ const GetStarted = () => {
       <div className="flex flex-col items-center justify-center flex-1">
         <div className="w-2/3 self-center mb-8 text-center">
           {syndicateName ? (
-            <>
-              <div className="text-6xl font-bold leading-none text-pink-400">
-                {syndicateName}
-              </div>
-              <div className="text-white text-xl font-medium opacity-90 -mt-2">
-                Click. Sign. Raise.
-              </div>
-            </>
+            <div className="text-6xl font-bold leading-none text-pink-400">
+              {syndicateName}
+            </div>
           ) : (
             <>
               <div className="text-6xl font-bold leading-none">
