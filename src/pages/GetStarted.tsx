@@ -93,24 +93,31 @@ const GetStarted = () => {
       {/* Top section with text and title */}
       <div className="flex flex-col items-center justify-center flex-1">
         <div className="w-2/3 self-center mb-8 text-center">
-          <div className="text-6xl font-bold leading-none">
-            <span className="text-white">Fund</span>
-            <span className="text-pink-400">OS</span>
-          </div>
-          <div className="text-white text-xl font-medium opacity-90 -mt-2">
-            Click. Sign. Raise.
-          </div>
+          {syndicateName ? (
+            <>
+              <div className="text-6xl font-bold leading-none text-pink-400">
+                {syndicateName}
+              </div>
+              <div className="text-white text-xl font-medium opacity-90 -mt-2">
+                Click. Sign. Raise.
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="text-6xl font-bold leading-none">
+                <span className="text-white">Fund</span>
+                <span className="text-pink-400">OS</span>
+              </div>
+              <div className="text-white text-xl font-medium opacity-90 -mt-2">
+                Click. Sign. Raise.
+              </div>
+            </>
+          )}
         </div>
 
         <h1 className="text-[2rem] font-bold mb-[15px] text-center font-serif">
           Back Bold Ideas!
         </h1>
-
-        {syndicateName && (
-          <div className="text-white text-lg font-medium text-center mb-[15px] opacity-90 bg-gray-800 px-4 py-2 rounded-lg">
-            {syndicateName}
-          </div>
-        )}
       </div>
 
       {/* Bottom section with button and powered by */}
