@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { getInitials } from "@/data/dummyInvestments";
 import api from "@/lib/axiosInstance";
+import { formatIndianCurrency } from "@/lib/utils";
 
 // Define interfaces for API response
 interface Deal {
@@ -138,33 +139,7 @@ const Portfolio: React.FC = () => {
     navigate(`${investmentId}`);
   };
 
-  // Helper function to format currency in Indian format
-  const formatIndianCurrency = (amount: number): string => {
-    if (amount === 0) return "₹0";
 
-    // Convert to crores
-    const inCrores = amount / 10000000;
-    if (inCrores >= 1) {
-      // For amounts ≥ 1 crore, show up to 1 decimal place
-      return `₹${inCrores.toFixed(inCrores < 10 ? 1 : 0)}Cr`;
-    }
-
-    // Convert to lakhs
-    const inLakhs = amount / 100000;
-    if (inLakhs >= 1) {
-      // For amounts ≥ 1 lakh, show up to 1 decimal place
-      return `₹${inLakhs.toFixed(inLakhs < 10 ? 1 : 0)}L`;
-    }
-
-    // For smaller amounts, show in thousands
-    const inThousands = amount / 1000;
-    if (inThousands >= 1) {
-      return `₹${inThousands.toFixed(1)}K`;
-    }
-
-    // For very small amounts
-    return `₹${amount.toFixed(0)}`;
-  };
 
   return (
     <div className="flex flex-col text-white overflow-hidden m-0 p-0 box-border mb-24">

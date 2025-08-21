@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { RiFileChartLine } from "react-icons/ri";
 import { FaArrowLeft } from "react-icons/fa";
+import { formatIndianCurrency } from "@/lib/utils";
 
 interface Deal {
   deal_id: string;
@@ -33,33 +34,7 @@ const Home = () => {
 
   const { localContextState, setLocalContextState } = useHomeContext();
 
-  // Helper function to format currency in Indian format
-  const formatIndianCurrency = (amount: number): string => {
-    if (amount === 0) return "₹0";
 
-    // Convert to crores
-    const inCrores = amount / 10000000;
-    if (inCrores >= 1) {
-      // For amounts ≥ 1 crore, show up to 1 decimal place
-      return `₹${inCrores.toFixed(inCrores < 10 ? 1 : 0)}Cr`;
-    }
-
-    // Convert to lakhs
-    const inLakhs = amount / 100000;
-    if (inLakhs >= 1) {
-      // For amounts ≥ 1 lakh, show up to 1 decimal place
-      return `₹${inLakhs.toFixed(inLakhs < 10 ? 1 : 0)}L`;
-    }
-
-    // For smaller amounts, show in thousands
-    const inThousands = amount / 1000;
-    if (inThousands >= 1) {
-      return `₹${inThousands.toFixed(1)}K`;
-    }
-
-    // For very small amounts
-    return `₹${amount.toFixed(0)}`;
-  };
 
   // Helper function to get initials from company name
   const getInitials = (name: string): string => {

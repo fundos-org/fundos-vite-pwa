@@ -4,6 +4,7 @@ import { useHomeContext } from "@/Shared/useLocalContextState";
 import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
+import { formatIndianCurrency } from "@/lib/utils";
 
 const DealDetails = () => {
   const navigate = useNavigate();
@@ -49,24 +50,7 @@ const DealDetails = () => {
     fetchDealDetails();
   }, [dealId, setLocalContextState, navigate]);
 
-  // Helper function to format currency in Indian format
-  const formatIndianCurrency = (amount?: number): string => {
-    if (!amount || amount === 0) return "₹0";
 
-    // Convert to crores
-    const inCrores = amount / 10000000;
-    if (inCrores >= 1) {
-      return `₹${inCrores.toFixed(2)}Cr`;
-    }
-
-    // Convert to lakhs
-    const inLakhs = amount / 100000;
-    if (inLakhs >= 1) {
-      return `₹${inLakhs.toFixed(1)}L`;
-    }
-
-    return `₹${amount.toFixed(0)}`;
-  };
 
   // Helper function to get initials from company name
   const getInitials = (name?: string): string => {
