@@ -25,30 +25,10 @@ function TermSheet() {
     }));
   };
 
-  const handleClick = async () => {
-    const data = {
-      user_id: userId ?? "",
-      investment_amount: Number(investmentAmount),
-      deal_id: dealId ?? "",
-    };
-
-    api
-      .post("/deal/send/drawdown-notice", {}, { params: data })
-      .then((response) => {
-        if (response.status !== 200) {
-          const errorData = response.data || {};
-          toast.error(errorData?.message || "Unexpected error took place");
-          throw new Error(errorData?.message || "Unexpected error took place");
-        }
-        
-        sessionStorage.setItem("s3_key", response.data.s3_key);
-        toast.success("Draw Down Notice sent successfully to registered email");
-        navigate(eRoutes.DRAW_DOWN_NOTICE_HOME);
-      })
-      .catch((error) => {
-        toast.error(error?.message || "An unexpected error occurred");
-        throw new Error(error?.message || "An unexpected error occurred");
-      });
+  const handleClick = () => {
+    // Navigate directly to the draw down notice page
+    // The draw down notice API will be called when user clicks either button on that page
+    navigate(eRoutes.DRAW_DOWN_NOTICE_HOME);
   };
 
   return (

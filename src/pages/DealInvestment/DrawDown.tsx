@@ -73,9 +73,44 @@ function DrawDown() {
     return popup;
   };
 
+  const handleDrawDownNotice = async () => {
+    try {
+      // Send draw down notice API call
+      const data = {
+        user_id: localContextState.userId ?? "",
+        investment_amount: Number(localContextState.investmentAmount),
+        deal_id: localContextState.dealId ?? "",
+      };
+
+      const drawDownResponse = await api.post("/deal/send/drawdown-notice", {}, { params: data });
+
+      if (drawDownResponse.status !== 200) {
+        throw new Error("Failed to send draw down notice");
+      }
+      
+      // Store the s3_key from the response if it exists
+      if (drawDownResponse.data?.s3_key) {
+        sessionStorage.setItem("s3_key", drawDownResponse.data.s3_key);
+      }
+      
+      return true;
+    } catch (error) {
+      console.error("Draw down notice failed:", error);
+      toast.error("Failed to send draw down notice. Please try again.");
+      return false;
+    }
+  };
+
   const handleGeneratePaymentLink = async () => {
     try {
       setPaymentProcessing(true);
+      
+      // First send draw down notice
+      const drawDownSuccess = await handleDrawDownNotice();
+      if (!drawDownSuccess) {
+        setPaymentProcessing(false);
+        return;
+      }
       
       // Generate a unique idempotency key for this payment request
       const idempotencyKey = crypto.randomUUID();
@@ -145,6 +180,53 @@ function DrawDown() {
     } catch (error) {
       console.error("Payment link generation failed:", error);
       toast.error("Failed to generate payment link. Please try again.");
+      setPaymentProcessing(false);
+    }
+  };
+
+  const handlePayLater = async () => {
+    try {
+      setPaymentProcessing(true);
+      
+      // First send draw down notice
+      const drawDownSuccess = await handleDrawDownNotice();
+      if (!drawDownSuccess) {
+        setPaymentProcessing(false);
+        return;
+      }
+      
+      // Generate a unique idempotency key for this deferred payment request
+      const idempotencyKey = crypto.randomUUID();
+      
+      const response = await api.post("/payment/create/deferred", {
+        deal_id: localContextState.dealId,
+        amount: Number(localContextState.investmentAmount),
+      }, {
+        headers: {
+          "Idempotency-Key": idempotencyKey,
+        }
+      });
+
+      if (response.status === 200) {
+        toast.success("Payment deferred successfully. You can pay later from your transactions.");
+        setPaymentProcessing(false);
+        
+        // Refresh portfolio data after deferred payment creation
+        try {
+          await portfolioService.updatePortfolioData();
+          console.log("Portfolio data refreshed after deferred payment creation");
+        } catch (error) {
+          console.warn("Failed to refresh portfolio data after deferred payment:", error);
+        }
+        
+        // Navigate back to dashboard
+        navigate(eRoutes.DASHBOARD_HOME);
+      } else {
+        throw new Error("Invalid response from deferred payment service");
+      }
+    } catch (error) {
+      console.error("Deferred payment creation failed:", error);
+      toast.error("Failed to create deferred payment. Please try again.");
       setPaymentProcessing(false);
     }
   };
@@ -313,8 +395,19 @@ function DrawDown() {
           </div>
         )}
 
-        {/* Proceed Button */}
-        <div className="flex flex-col pt-4">
+        {/* Action Buttons */}
+        <div className="flex gap-4 pt-4">
+          <button
+            disabled={!confirmed || paymentProcessing}
+            onClick={handlePayLater}
+            className={`font-semibold px-8 py-4 w-full transition-all duration-300 focus:outline-none rounded ${
+              confirmed && !paymentProcessing
+                ? "bg-white text-black hover:bg-gray-100"
+                : "bg-gray-500 text-gray-300 cursor-not-allowed"
+            }`}
+          >
+            {paymentProcessing ? "Processing..." : "Pay Later"}
+          </button>
           <button
             disabled={!confirmed || paymentProcessing}
             onClick={handleGeneratePaymentLink}
