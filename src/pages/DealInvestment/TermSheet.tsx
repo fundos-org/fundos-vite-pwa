@@ -1,15 +1,16 @@
 import { eRoutes } from "@/RoutesEnum";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import toast from "react-hot-toast";
+// import toast from "react-hot-toast";
 import { useHomeContext } from "@/Shared/useLocalContextState";
-import api from "@/lib/axiosInstance";
+// import api from "@/lib/axiosInstance";
 import { HiOutlineArrowLeft } from "react-icons/hi";
 
 function TermSheet() {
   const navigate = useNavigate();
   const { localContextState } = useHomeContext();
-  const { dealId, investmentAmount, userId, investorName } = localContextState;
+  const { investmentAmount, investorName } = localContextState;
+  // const { dealId, investmentAmount, userId, investorName } = localContextState;
   const [sectionChecks, setSectionChecks] = useState({
     section1: false,
     section2: false,
