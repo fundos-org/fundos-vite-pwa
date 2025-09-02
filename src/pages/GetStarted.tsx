@@ -89,7 +89,7 @@ const GetStarted = () => {
   }, [searchParams]);
 
   return (
-    <div className="flex-1 flex flex-col h-full w-full bg-black text-white p-4 min-h-screen">
+    <div className="h-full flex flex-col w-full bg-black text-white p-4">
       {/* Top section with text and title */}
       <div className="flex flex-col items-center justify-center flex-1">
         <div className="w-2/3 self-center mb-8 text-center">

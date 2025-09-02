@@ -10,23 +10,25 @@ function App() {
 
   return (
     <>
-      <BrowserRouter>
-        <AppNameGuard />
-        <HomeProvider>
-          <AppRoutes />
-        </HomeProvider>
-        <Toaster
-          position="top-center"
-          reverseOrder={false}
-          toastOptions={{
-            duration: 2000,
-            style: {
-              borderRadius: 0,
-            },
-          }}
-        />
-      </BrowserRouter>
-      <PWABadge />
+      <div className="app-border-wrapper">
+        <BrowserRouter>
+          <AppNameGuard />
+          <HomeProvider>
+            <AppRoutes />
+          </HomeProvider>
+          <Toaster
+            position="top-center"
+            reverseOrder={false}
+            toastOptions={{
+              duration: 2000,
+              style: {
+                borderRadius: 0,
+              },
+            }}
+          />
+        </BrowserRouter>
+        <PWABadge />
+      </div>
     </>
   )
 }

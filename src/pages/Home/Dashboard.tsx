@@ -76,8 +76,12 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="min-h-[100vh] flex-1 flex-col justify-between w-full md:max-w-[360px] box-border mx-auto">
-      <Outlet />
+    <div className="h-full flex flex-col w-full relative">
+      <div className="flex-1 overflow-y-auto">
+        <div className="pb-16"> {/* Padding to account for bottom nav */}
+          <Outlet />
+        </div>
+      </div>
       <BottomNavigation
         activeTab={getActiveTab()}
         handleTabChange={handleTabChange}

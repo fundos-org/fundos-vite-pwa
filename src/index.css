@@ -247,11 +247,73 @@
   }
   body {
     @apply bg-background text-foreground;
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* Prevent any scroll that might hide borders */
+    background: #111; /* Darker background to help border visibility */
 
+  }
+  
+  /* Prevent horizontal scrollbars globally */
+  * {
+    box-sizing: border-box;
+  }
+  
+  *::-webkit-scrollbar {
+    width: 0px;
+    background: transparent; /* Hide scrollbar for webkit browsers */
+  }
+  
+  #root {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100vh;
   }
 
 }
 
 * {
   font-family: 'gilroy-regular', 'ivyora', 'presto', 'presto-regular', 'Funnel Display', 'Playfair Display', 'Test Martina Plantijn', sans-serif;
+}
+
+/* App Border Wrapper - minimal border using Fund OS pink color */
+.app-border-wrapper {
+  height: 100vh;
+  width: 100vw;
+  background: #000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  
+  /* Mobile: full screen with faded, blurred borders */
+  border: 1px solid rgba(244, 114, 182, 0.5);
+  box-shadow: 
+    inset 0 0 0 1px rgba(244, 114, 182, 0.3),
+    0 0 15px rgba(244, 114, 182, 0.2);
+  backdrop-filter: blur(1px);
+  
+  /* Tablet and Desktop: centered with max width and subtle borders */
+  @media (min-width: 768px) {
+    max-width: 362px; /* 360px content + 2px border */
+    width: 362px;
+    left: 50%;
+    top: 0;
+    transform: translateX(-50%);
+    border: 1px solid rgba(244, 114, 182, 0.4);
+    box-shadow: 
+      0 0 25px rgba(244, 114, 182, 0.12),
+      inset 0 0 0 1px rgba(244, 114, 182, 0.25);
+    backdrop-filter: blur(2px);
+  }
+  
+  /* Large screens: maintain centered layout */
+  @media (min-width: 1024px) {
+    max-width: 362px;
+    width: 362px;
+  }
 }

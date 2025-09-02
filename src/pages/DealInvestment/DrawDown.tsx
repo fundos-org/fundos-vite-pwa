@@ -188,6 +188,14 @@ function DrawDown() {
     try {
       setPaymentProcessing(true);
       
+      // Log context state for debugging
+      console.log("Local context state:", {
+        userId: localContextState.userId,
+        dealId: localContextState.dealId,
+        investmentAmount: localContextState.investmentAmount,
+        dealDetails: localContextState.dealDetails
+      });
+      
       // First send draw down notice
       const drawDownSuccess = await handleDrawDownNotice();
       if (!drawDownSuccess) {
@@ -224,9 +232,8 @@ function DrawDown() {
       } else {
         throw new Error("Invalid response from deferred payment service");
       }
-    } catch (error) {
-      console.error("Deferred payment creation failed:", error);
-      toast.error("Failed to create deferred payment. Please try again.");
+    } catch (error: any) {
+      console.error("Overall error in handlePayLater:", error);
       setPaymentProcessing(false);
     }
   };
