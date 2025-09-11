@@ -7,7 +7,7 @@ interface KYCStep1Props {
   onBack: () => void;
 }
 
-const KYCStep1 = ({ onNext, onBack }: KYCStep1Props) => {
+const KYCStep1 = ({ onNext, onBack: _onBack }: KYCStep1Props) => {
   const [formData, setFormData] = useState({
     email: "",
     panNumber: "",
