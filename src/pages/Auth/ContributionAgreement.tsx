@@ -9,7 +9,7 @@ interface ContributionAgreementProps {
   onBack: () => void;
 }
 
-const ContributionAgreement = ({ onNext, onBack }: ContributionAgreementProps) => {
+const ContributionAgreement = ({ onNext: _onNext, onBack }: ContributionAgreementProps) => {
   const navigate = useNavigate();
   const [checked, setChecked] = useState(false);
   const [loading, setLoading] = useState(false);
