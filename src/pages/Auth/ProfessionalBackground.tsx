@@ -1,6 +1,6 @@
 import api from "@/lib/axiosInstance";
 import { eRoutes } from "@/RoutesEnum";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
@@ -12,29 +12,12 @@ const ProfessionalBackground = () => {
     annual_income: "",
     capital_commitment: "",
   });
-  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
-
-  // Close dropdown when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as HTMLElement;
-      // Don't close if clicking on dropdown button or option
-      if (openDropdown && !target.closest("[data-dropdown]")) {
-        setOpenDropdown(null);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [openDropdown]);
 
   const options = {
     occupation: [
       { label: "Founder", value: "founder" },
       { label: "Employee", value: "employee" },
-      { label: "Self-employed", value: "self_employed" },
+      { label: "Self Employed", value: "self_employed" },
       { label: "Other", value: "other" },
     ],
     income_source: [
@@ -50,11 +33,15 @@ const ProfessionalBackground = () => {
       { label: ">5Cr", value: "50000000" },
     ],
     capital_commitment: [
-      { label: "25L", value: "2500000" },
-      { label: "50L", value: "5000000" },
-      { label: "75L", value: "7500000" },
-      { label: "1Cr", value: "10000000" },
+      { label: "25L - 50L", value: "2500000" },
+      { label: "50L - 1Cr", value: "5000000" },
+      { label: "1Cr - 5Cr", value: "10000000" },
+      { label: ">5Cr", value: "50000000" },
     ],
+  };
+
+  const handleOptionSelect = (field: keyof typeof formData, value: string) => {
+    setFormData({ ...formData, [field]: value });
   };
 
   const handleSubmit = async () => {
@@ -68,168 +55,157 @@ const ProfessionalBackground = () => {
       return;
     }
 
-    api
-      .post("/onboarding/onboarding/professional-background", {
+    try {
+      const { data } = await api.post("/onboarding/onboarding/professional-background", {
         occupation: formData.occupation,
         income_source: formData.income_source,
         annual_income: parseInt(formData.annual_income),
         capital_commitment: parseInt(formData.capital_commitment),
-      })
-      .then(({ data }) => {
-        sessionStorage.setItem(
-          "professionalBackground",
-          JSON.stringify(formData)
-        );
-        toast.success(
-          data.message || "Professional background submitted successfully!"
-        );
-        navigate(eRoutes.USER_DETAILS_AUTH);
-      })
-      .catch((error) => {
-        console.error("Error submitting professional background:", error);
-        toast.error(
-          error.response?.data?.message ||
-            "Failed to submit professional background. Please try again."
-        );
       });
+
+      sessionStorage.setItem(
+        "professionalBackground",
+        JSON.stringify(formData)
+      );
+      toast.success(
+        data.message || "Professional background submitted successfully!"
+      );
+      navigate(eRoutes.KYC_AUTH);
+    } catch (error: any) {
+      console.error("Error submitting professional background:", error);
+      toast.error(
+        error.response?.data?.message ||
+          "Failed to submit professional background. Please try again."
+      );
+    }
   };
 
-  const renderDropdown = (name: keyof typeof options, label: string) => {
-    const isOpen = openDropdown === name;
-    const selectedOption = options[name].find(
-      (opt) => opt.value === formData[name]
-    );
-
-    const handleOptionSelect = (value: string) => {
-      setFormData({ ...formData, [name]: value });
-      setOpenDropdown(null);
-    };
-
-    const handleKeyDown = (event: React.KeyboardEvent) => {
-      if (event.key === "Enter" || event.key === " ") {
-        event.preventDefault();
-        setOpenDropdown(isOpen ? null : name);
-      } else if (event.key === "Escape") {
-        setOpenDropdown(null);
-      }
-    };
-
+  const renderOptionGrid = (field: keyof typeof formData, label: string) => {
     return (
-      <div className="mb-6 relative" data-dropdown>
-        <label className="block text-gray-400 mb-2 text-sm">{label}</label>
-        <div className="relative" data-dropdown>
-          {/* Custom Dropdown Button */}
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              setOpenDropdown(isOpen ? null : name);
-            }}
-            onKeyDown={handleKeyDown}
-            tabIndex={0}
-            className={`
-          w-full py-4 px-6 text-base border border-gray-700 bg-gray-700
-          ${selectedOption ? "text-white" : "text-gray-400"}
-          outline-none cursor-pointer text-left flex items-center justify-between
-        `}
-          >
-            <span>{selectedOption ? selectedOption.label : `${label}`}</span>
-            <span
-              className={`
-            text-gray-400 text-base transition-transform duration-200
-            ${isOpen ? "rotate-180" : ""}
-          `}
+      <div className="mb-8">
+        <label className="block text-black font-medium mb-4 text-base">
+          {label}
+        </label>
+        <div className="grid grid-cols-2 gap-3">
+          {options[field].map((option) => (
+            <button
+              key={option.value}
+              type="button"
+              onClick={() => handleOptionSelect(field, option.value)}
+              className={`py-3 px-4 text-sm font-medium rounded-lg border transition-all duration-200 ${
+                formData[field] === option.value
+                  ? "border-blue-500 bg-blue-50 text-blue-700"
+                  : "border-gray-300 bg-white text-gray-700 hover:border-gray-400"
+              }`}
             >
-              ▼
-            </span>
-          </button>
-
-          {/* Custom Dropdown Options */}
-          {isOpen && (
-            <div
-              className="
-            absolute top-full left-0 right-0 z-50 bg-gray-700 border border-gray-600 mt-1 max-h-52 overflow-y-auto shadow-lg
-          "
-              data-dropdown
-            >
-              {options[name].map((option) => (
-                <button
-                  key={option.value}
-                  type="button"
-                  tabIndex={0}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleOptionSelect(option.value);
-                  }}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" || e.key === " ") {
-                      e.preventDefault();
-                      handleOptionSelect(option.value);
-                    }
-                  }}
-                  className={`
-              w-full py-3 px-4 text-base text-left border-none cursor-pointer
-              transition-colors duration-200
-              ${
-                formData[name] === option.value
-                  ? "bg-gray-600 text-white"
-                  : "bg-transparent text-white hover:bg-gray-600"
-              }
-            `}
-                >
-                  {option.label}
-                </button>
-              ))}
-            </div>
-          )}
+              {option.label}
+            </button>
+          ))}
         </div>
       </div>
     );
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-full w-full p-4">
-      <div>
-        <h1 className="text-white text-4xl font-bold mb-2.5">
-          Professional Background
-        </h1>
+    <div className="flex flex-col h-full w-full min-h-screen">
+      {/* Header section with blue background */}
+      <div className="relative bg-[#4285F4] text-white px-6 py-8">
+        {/* Background pattern */}
+        <div className="absolute inset-0 opacity-20">
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundImage: `
+                linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)
+              `,
+              backgroundSize: "20px 20px",
+            }}
+          ></div>
+          {/* Scattered dots */}
+          <div className="absolute inset-0">
+            {Array.from({ length: 15 }).map((_, i) => (
+              <div
+                key={i}
+                className="absolute w-1 h-1 bg-white rounded-full opacity-60"
+                style={{
+                  left: `${Math.random() * 100}%`,
+                  top: `${Math.random() * 100}%`,
+                }}
+              />
+            ))}
+          </div>
+        </div>
 
-        <p className="text-gray-400 text-sm mb-8 leading-relaxed">
-          Share your occupation details to help us better understand your
-          background
-        </p>
+        {/* Header content */}
+        <div className="relative z-10">
+          {/* Back arrow and logo */}
+          <div className="flex items-center justify-between mb-6">
+            <button
+              onClick={() => navigate(eRoutes.CHOOSE_INVESTOR_AUTH)}
+              className="text-white text-2xl"
+            >
+              ←
+            </button>
+            <div className="text-2xl font-bold">
+              <span className="text-white">Fund</span>
+              <span className="text-orange-400">OS</span>
+            </div>
+            <div className="w-6"></div> {/* Spacer for centering */}
+          </div>
 
-        {renderDropdown("occupation", "Occupation")}
-        {renderDropdown("income_source", "Income Source")}
-        {renderDropdown("annual_income", "Annual Income")}
-        {renderDropdown(
-          "capital_commitment",
-          "Capital Commitment (Over 5 Years)"
-        )}
+          {/* Progress indicator */}
+          <div className="text-center mb-4">
+            <p className="text-white text-sm mb-2">Step 3 of 6</p>
+            <div className="w-full bg-white bg-opacity-30 rounded-full h-2">
+              <div
+                className="bg-[#FF9635] h-2 rounded-full transition-all duration-300"
+                style={{ width: "50%" }} // 3/6 = 50%
+              ></div>
+            </div>
+          </div>
+        </div>
       </div>
-      {/* <button onClick={() => navigate(eRoutes.USER_DETAILS_AUTH)}>test next</button> */}
-      <button
-        type="submit"
-        onClick={handleSubmit}
-        disabled={
-          !formData.occupation ||
-          !formData.income_source ||
-          !formData.annual_income ||
-          !formData.capital_commitment
-        }
-        className={`w-full py-4 px-8 text-base font-semibold transition-all duration-300
-                    ${
-                      formData.occupation &&
-                      formData.income_source &&
-                      formData.annual_income &&
-                      formData.capital_commitment
-                        ? "bg-[#00fb57] text-[#1a1a1a] cursor-pointer"
-                        : "bg-gray-700 text-gray-400 cursor-not-allowed"
-                    }
-                `}
-      >
-        Next
-      </button>
+
+      {/* Content section */}
+      <div className="flex-1 bg-white px-6 py-8 flex flex-col">
+        <div className="flex-1">
+          <h1 className="text-3xl font-bold text-black mb-4">
+            Professional Background
+          </h1>
+
+          <p className="text-gray-500 mb-8 text-base">
+            Share your Occupation details to help us better understand your background
+          </p>
+
+          {/* Form Sections */}
+          {renderOptionGrid("occupation", "Occupation")}
+          {renderOptionGrid("income_source", "Income Source")}
+          {renderOptionGrid("annual_income", "Annual Income")}
+          {renderOptionGrid("capital_commitment", "Capital Commitment (Over 5 Years)")}
+        </div>
+
+        {/* Action Button */}
+        <button
+          onClick={handleSubmit}
+          disabled={
+            !formData.occupation ||
+            !formData.income_source ||
+            !formData.annual_income ||
+            !formData.capital_commitment
+          }
+          className={`w-full py-4 px-8 text-base font-semibold rounded-lg transition-all duration-300 ${
+            formData.occupation &&
+            formData.income_source &&
+            formData.annual_income &&
+            formData.capital_commitment
+              ? "bg-[#4285F4] text-white cursor-pointer hover:bg-blue-600"
+              : "bg-gray-300 text-gray-500 cursor-not-allowed"
+          }`}
+        >
+          Continue
+        </button>
+      </div>
     </div>
   );
 };

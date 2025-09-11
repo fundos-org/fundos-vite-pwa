@@ -1,11 +1,13 @@
 import api from "@/lib/axiosInstance";
-import { eRoutes } from "@/RoutesEnum";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
 
-const UserDetails = () => {
-  const navigate = useNavigate();
+interface UserDetailsProps {
+  onNext: () => void;
+  onBack: () => void;
+}
+
+const UserDetails = ({ onNext, onBack }: UserDetailsProps) => {
   const [loading, setLoading] = useState(true);
   const [userProfile, setUserProfile] = useState({
     full_name: "",
@@ -19,10 +21,6 @@ const UserDetails = () => {
     resident: "",
     date_of_birth: "",
     tax_identity_number: "", // Add this field for backend compatibility
-  });
-  const [originalProfile, setOriginalProfile] = useState({
-    address: "",
-    father_name: "",
   });
   const [userId, setUserId] = useState("");
 
@@ -55,11 +53,15 @@ const UserDetails = () => {
   useEffect(() => {
     const fetchUserDetails = async () => {
       const storedUserId = sessionStorage.getItem("userId");
-      if (storedUserId) {
+      const storedPanNumber = sessionStorage.getItem("panNumber");
+      
+      if (storedUserId && storedPanNumber) {
         setUserId(storedUserId);
 
         api
-          .get("/onboarding/zoho/details")
+          .get("/onboarding/zoho/details", {
+            params: { pan_number: storedPanNumber }
+          })
           .then(({ data }) => {
             if (data) {
               const profileData = {
@@ -81,11 +83,6 @@ const UserDetails = () => {
               };
 
               setUserProfile(profileData);
-              // Store original editable values for comparison
-              setOriginalProfile({
-                address: profileData.address,
-                father_name: profileData.father_name,
-              });
             }
           })
           .catch((error) => {
@@ -95,6 +92,9 @@ const UserDetails = () => {
           .finally(() => {
             setLoading(false);
           });
+      } else {
+        toast.error("User ID or PAN number not found. Please complete KYC first.");
+        setLoading(false);
       }
     };
 
@@ -118,19 +118,17 @@ const UserDetails = () => {
       father_name: userProfile.father_name,
     };
 
-    api
-      .post("/onboarding/zoho/details/update", {
+    try {
+      await api.post("/onboarding/zoho/details/update", {
         user_id: userId,
         ...updateableFields,
-      })
-      .then(() => {
-        toast.success("Details Updated successfully");
-        navigate(eRoutes.CONTRIBUTION_AGREEMENT_AUTH);
-      })
-      .catch((error) => {
-        console.error("Error updating user details:", error);
-        toast.error("Failed to update user details");
       });
+      toast.success("Details Updated successfully");
+      onNext();
+    } catch (error) {
+      console.error("Error updating user details:", error);
+      toast.error("Failed to update user details");
+    }
   };
 
   const handleInputChange = (field: string, value: string) => {
@@ -138,14 +136,6 @@ const UserDetails = () => {
       ...prev,
       [field]: value,
     }));
-  };
-
-  // Check if user made changes to editable fields
-  const hasChanges = () => {
-    return (
-      userProfile.address !== originalProfile.address ||
-      userProfile.father_name !== originalProfile.father_name
-    );
   };
 
   if (loading) {
@@ -196,72 +186,105 @@ const UserDetails = () => {
   ];
 
   return (
-    <div className="flex flex-col items-center justify-center h-full w-full p-4">
-      <div>
-        <h1 className="text-white text-4xl font-bold mb-2.5">User Details</h1>
+    <div className="flex-1 bg-white px-6 py-8 flex flex-col gap-4">
+      <div className="flex-1">
+        <div className="flex items-center mb-4">
+          <button 
+            onClick={onBack}
+            className="text-gray-600 text-2xl mr-4 hover:text-gray-800 transition-colors"
+          >
+            ←
+          </button>
+          <h1 className="text-3xl font-bold text-black">
+            Review User Details
+          </h1>
+        </div>
 
-        <p className="text-gray-300 text-sm mb-8 leading-relaxed">
+        <p className="text-gray-500 mb-8 text-base">
           Review your KYC details. Only address and father's name can be edited.
           All other information is prefilled from your verification.
         </p>
 
-        {fields.map((field) => (
-          <div key={field.key} className="mb-4">
-            <label className="block mb-2 text-gray-200 text-sm">
-              {field.label}
-            </label>
-            {field.type === "textarea" ? (
-              <textarea
-                value={userProfile[field.key as keyof typeof userProfile]}
-                onChange={(e) => handleInputChange(field.key, e.target.value)}
-                disabled={!field.editable}
-                placeholder={
-                  field.editable ? `Enter ${field.label.toLowerCase()}` : ""
-                }
-                rows={3}
-                className={`
-                                    w-full p-3 text-base 
-                                    ${
-                                      field.editable
-                                        ? "border border-gray-700 bg-gray-700 text-white cursor-text"
-                                        : "border border-gray-600 bg-gray-600 text-gray-400 cursor-not-allowed"
-                                    }
-                                    outline-none resize-vertical
-                                `}
-              />
-            ) : (
-              <input
-                type={field.type}
-                value={userProfile[field.key as keyof typeof userProfile]}
-                onChange={(e) => handleInputChange(field.key, e.target.value)}
-                disabled={!field.editable}
-                placeholder={
-                  field.editable ? `Enter ${field.label.toLowerCase()}` : ""
-                }
-                className={`
-                                    w-full p-3 text-base 
-                                    ${
-                                      field.editable
-                                        ? "border border-gray-700 bg-gray-700 text-white cursor-text"
-                                        : "border border-gray-600 bg-gray-600 text-gray-400 cursor-not-allowed"
-                                    }
-                                    outline-none
-                                `}
-              />
-            )}
-          </div>
-        ))}
+        <div className="space-y-6">
+          {fields.map((field) => (
+            <div key={field.key}>
+              <label className="block text-black font-medium mb-2 text-base">
+                {field.label}
+              </label>
+              {field.type === "textarea" ? (
+                <textarea
+                  value={userProfile[field.key as keyof typeof userProfile]}
+                  onChange={(e) => handleInputChange(field.key, e.target.value)}
+                  disabled={!field.editable}
+                  placeholder={
+                    field.editable ? `Enter ${field.label.toLowerCase()}` : ""
+                  }
+                  rows={3}
+                  className={`w-full px-4 py-3 text-base border rounded-lg outline-none resize-vertical ${
+                    field.editable
+                      ? "border-gray-300 bg-white text-black cursor-text focus:border-[#4285F4] focus:ring-2 focus:ring-blue-100"
+                      : "border-gray-200 bg-gray-50 text-gray-500 cursor-not-allowed"
+                  }`}
+                />
+              ) : field.key === "phone_number" ? (
+                <div className="flex">
+                  <div className="flex items-center px-4 py-3 border border-gray-200 bg-gray-50 rounded-l-lg">
+                    <span className="text-gray-700 text-base">+91</span>
+                  </div>
+                  <input
+                    type={field.type}
+                    value={userProfile[field.key as keyof typeof userProfile]}
+                    disabled={!field.editable}
+                    className="flex-1 px-4 py-3 text-base border border-gray-200 bg-gray-50 text-gray-500 cursor-not-allowed rounded-r-lg outline-none"
+                  />
+                </div>
+              ) : (
+                <div className="relative">
+                  <input
+                    type={field.type}
+                    value={userProfile[field.key as keyof typeof userProfile]}
+                    onChange={(e) =>
+                      handleInputChange(field.key, e.target.value)
+                    }
+                    disabled={!field.editable}
+                    placeholder={
+                      field.editable ? `Enter ${field.label.toLowerCase()}` : ""
+                    }
+                    className={`w-full px-4 py-3 text-base border rounded-lg outline-none ${
+                      field.editable
+                        ? "border-gray-300 bg-white text-black cursor-text focus:border-[#4285F4] focus:ring-2 focus:ring-blue-100"
+                        : "border-gray-200 bg-gray-50 text-gray-500 cursor-not-allowed"
+                    }`}
+                  />
+                  {field.key === "date_of_birth" && (
+                    <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                      <svg
+                        className="w-5 h-5 text-gray-400"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                        />
+                      </svg>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
       </div>
 
       <button
-        type="submit"
         onClick={handleSubmit}
-        className={`
-                    bg-[#00fb57] text-[#1a1a1a] border-none py-4 px-8 text-base font-semibold 
-                    cursor-pointer w-full mt-4 transition-all duration-300 ease-in-out
-                `}
+        className="w-full py-4 px-8 text-base font-semibold rounded-lg transition-all duration-300 bg-[#4285F4] text-white cursor-pointer hover:bg-blue-600"
       >
-        {hasChanges() ? "Update Details" : "Next"}
+        Continue
       </button>
     </div>
   );
