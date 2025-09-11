@@ -9,10 +9,10 @@ const GetStarted = lazy(() => import("./pages/GetStarted"));
 const PhoneNumber = lazy(() => import("./pages/PhoneNumber"));
 const VerifyPhoneOTP = lazy(() => import("./pages/VerifyPhoneOtp"));
 const EmailInput = lazy(() => import("./pages/Auth/EmailInput"));
-const VerifyEmailOtp = lazy(() => import("./pages/Auth/VerifyEmailOtp"));
 const UsernamePassword = lazy(() => import("./pages/Auth/UsernamePassword"));
 const ChooseInvestor = lazy(() => import("./pages/Auth/ChooseInvestor"));
 const KycStart = lazy(() => import("./pages/Auth/KycStart"));
+const KYC = lazy(() => import("./pages/Auth/KYC"));
 const AadhaarVerification = lazy(
   () => import("./pages/Auth/AadhaarVerification")
 );
@@ -21,10 +21,7 @@ const BankVerification = lazy(() => import("./pages/Auth/BankVerification"));
 const ProfessionalBackground = lazy(
   () => import("./pages/Auth/ProfessionalBackground")
 );
-const UserDetails = lazy(() => import("./pages/Auth/UserDetails"));
-const ContributionAgreement = lazy(
-  () => import("./pages/Auth/ContributionAgreement")
-);
+
 const UploadPhoto = lazy(() => import("./pages/Auth/UploadPhoto"));
 const FinalApproval = lazy(() => import("./pages/Auth/FinalApproval"));
 const Dashboard = lazy(() => import("./pages/Home/Dashboard"));
@@ -65,7 +62,7 @@ const AppRoutes = () => {
         <Route
           path={eRoutes.PHONE_NUMBER}
           element={
-            <Layout backRoute={eRoutes.GET_STARTED}>
+            <Layout>
               <PhoneNumber />
             </Layout>
           }
@@ -73,7 +70,7 @@ const AppRoutes = () => {
         <Route
           path={eRoutes.VERIFY_PHONE_OTP}
           element={
-            <Layout backRoute={eRoutes.PHONE_NUMBER}>
+            <Layout>
               <VerifyPhoneOTP />
             </Layout>
           }
@@ -87,18 +84,11 @@ const AppRoutes = () => {
               </Layout>
             }
           />
-          <Route
-            path={eRoutes.EMAIL_VERIFY_AUTH}
-            element={
-              <Layout backRoute={eRoutes.EMAIL_AUTH}>
-                <VerifyEmailOtp />
-              </Layout>
-            }
-          />
+
           <Route
             path={eRoutes.CHOOSE_INVESTOR_AUTH}
             element={
-              <Layout backRoute={eRoutes.EMAIL_VERIFY_AUTH}>
+              <Layout>
                 <ChooseInvestor />
               </Layout>
             }
@@ -116,6 +106,14 @@ const AppRoutes = () => {
             element={
               <Layout backRoute={eRoutes.CHOOSE_INVESTOR_AUTH}>
                 <KycStart />
+              </Layout>
+            }
+          />
+          <Route
+            path={eRoutes.KYC_AUTH}
+            element={
+              <Layout>
+                <KYC />
               </Layout>
             }
           />
@@ -146,32 +144,24 @@ const AppRoutes = () => {
           <Route
             path={eRoutes.PROFESSIONAL_BACKGROUND_AUTH}
             element={
-              <Layout backRoute={eRoutes.PAN_AUTH}>
+              <Layout>
                 <ProfessionalBackground />
               </Layout>
             }
           />
 
           <Route
-            path={eRoutes.USER_DETAILS_AUTH}
+            path={eRoutes.KYC_AUTH}
             element={
-              <Layout backRoute={eRoutes.PROFESSIONAL_BACKGROUND_AUTH}>
-                <UserDetails />
-              </Layout>
-            }
-          />
-          <Route
-            path={eRoutes.CONTRIBUTION_AGREEMENT_AUTH}
-            element={
-              <Layout backRoute={eRoutes.PROFESSIONAL_BACKGROUND_AUTH}>
-                <ContributionAgreement />
+              <Layout>
+                <KYC />
               </Layout>
             }
           />
           <Route
             path={eRoutes.UPLOAD_PHOTO_AUTH}
             element={
-              <Layout backRoute={eRoutes.CONTRIBUTION_AGREEMENT_AUTH}>
+              <Layout>
                 <UploadPhoto />
               </Layout>
             }

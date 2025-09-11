@@ -1,7 +1,7 @@
 import api from "@/lib/axiosInstance";
 import { eRoutes } from "@/RoutesEnum";
 import { FC, useState } from "react";
-import { toast } from "react-hot-toast/headless";
+import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import portfolioService from "@/lib/portfolioService";
 
@@ -86,8 +86,7 @@ const VerifyPhoneOTP: FC = () => {
             
             navigate(eRoutes.DASHBOARD_HOME);
           } else {
-            toast.error("Please complete your email verification to continue");
-            navigate(eRoutes.EMAIL_AUTH);
+            navigate(eRoutes.CHOOSE_INVESTOR_AUTH);
           }
         } else {
           toast.error(
@@ -98,58 +97,137 @@ const VerifyPhoneOTP: FC = () => {
       .catch((error) => {
         console.error("Error verifying OTP:", error);
         toast.error(
-          "Failed to verify OTP. Please check your internet connection."
+          "Failed to verify OTP. Please try again."
         );
       });
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-full w-full p-4">
-      <div>
-        <h1 className="mb-4 text-4xl font-bold">Verify your number</h1>
-        <p className="text-[#00ffcc] mb-8 leading-relaxed text-sm">
-          We have sent a verification code to your number +91-{phoneNumber}.
-        </p>
-        <div className="mb-8">
-          <label className="block mb-4 text-gray-200 text-sm">
-            Enter 4-digit verification code
-          </label>
-          <div className="flex gap-5 justify-between">
-            {otp.map(
-              (
-                digit: string | number | readonly string[] | undefined,
-                index: number
-              ) => (
-                <input
-                  key={index}
-                  id={`phone-otp-${index}`}
-                  type="text"
-                  inputMode="numeric"
-                  pattern="[0-9]*"
-                  value={digit}
-                  onChange={(e) => handleOTPChange(index, e.target.value)}
-                  onKeyDown={(e) => handleKeyDown(index, e)}
-                  maxLength={1}
-                  className="w-1/4 md:w-17 h-17 text-center text-lg border border-gray-700 bg-gray-700 text-white outline-none"
-                />
-              )
-            )}
+    <div className="flex flex-col h-full w-full min-h-screen">
+      {/* Header section with blue background */}
+      <div className="relative bg-[#4285F4] text-white px-6 py-8">
+        {/* Background pattern */}
+        <div className="absolute inset-0 opacity-20">
+          <div className="absolute inset-0" style={{
+            backgroundImage: `
+              linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)
+            `,
+            backgroundSize: '20px 20px'
+          }}></div>
+          {/* Scattered dots */}
+          <div className="absolute inset-0">
+            {Array.from({ length: 15 }).map((_, i) => (
+              <div
+                key={i}
+                className="absolute w-1 h-1 bg-white rounded-full opacity-60"
+                style={{
+                  left: `${Math.random() * 100}%`,
+                  top: `${Math.random() * 100}%`,
+                }}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* Header content */}
+        <div className="relative z-10">
+          {/* Back arrow and logo */}
+          <div className="flex items-center justify-between mb-6">
+            <button 
+              onClick={() => navigate(eRoutes.PHONE_NUMBER)}
+              className="text-white text-2xl"
+            >
+              ←
+            </button>
+            <div className="text-2xl font-bold">
+              <span className="text-white">Fund</span>
+              <span className="text-orange-400">OS</span>
+            </div>
+            <div className="w-6"></div> {/* Spacer for centering */}
+          </div>
+
+          {/* Progress indicator */}
+          <div className="text-center mb-4">
+            <p className="text-white text-sm mb-2">Step 2 of 6</p>
+            <div className="w-full bg-white bg-opacity-30 rounded-full h-2">
+              <div 
+                className="bg-[#FF9635] h-2 rounded-full transition-all duration-300"
+                style={{ width: '16.66%' }} // 1/6 = 16.66%
+              ></div>
+            </div>
           </div>
         </div>
       </div>
-      {/* <button onClick={() => navigate(eRoutes.EMAIL_AUTH)}>test next</button> */}
-      <button
-        type="submit"
-        disabled={otp.join("").length !== 4}
-        onClick={handleSubmit}
-        className={`w-full border-none py-4 px-8 text-base font-semibold transition-all duration-300 ${
-          otp.join("").length === 4
-            ? "bg-[#00fb57] text-[#1a1a1a] cursor-pointer"
-            : "bg-gray-700 text-gray-400 cursor-not-allowed"
-        }`}
-      >
-        Verify
-      </button>
+
+      {/* Content section */}
+      <div className="flex-1 bg-white px-6 py-8 flex flex-col">
+        <div className="flex-1">
+          <h1 className="text-3xl font-bold text-black mb-4">
+            Check Your Phone
+          </h1>
+          
+          <p className="text-gray-500 mb-6 text-base">
+            We have sent a verification code to your number
+          </p>
+
+          {/* Phone number display with edit icon */}
+          <div className="flex items-center justify-center mb-8">
+            <span className="text-gray-600 text-lg">+91 {phoneNumber}</span>
+            <button 
+              onClick={() => navigate(eRoutes.PHONE_NUMBER)}
+              className="ml-2 text-blue-500"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+              </svg>
+            </button>
+          </div>
+
+          {/* OTP Input */}
+          <div className="mb-8">
+            <label className="block mb-4 text-gray-500 text-sm">
+              Enter 4-digit verification code
+            </label>
+            <div className="flex gap-4 justify-center">
+              {otp.map(
+                (
+                  digit: string | number | readonly string[] | undefined,
+                  index: number
+                ) => (
+                  <input
+                    key={index}
+                    id={`phone-otp-${index}`}
+                    type="text"
+                    inputMode="numeric"
+                    pattern="[0-9]*"
+                    value={digit}
+                    onChange={(e) => handleOTPChange(index, e.target.value)}
+                    onKeyDown={(e) => handleKeyDown(index, e)}
+                    maxLength={1}
+                    className="w-16 h-16 text-center text-xl border border-gray-300 bg-white text-black outline-none rounded-lg focus:border-[#4285F4] focus:ring-2 focus:ring-blue-100"
+                    placeholder="-"
+                  />
+                )
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Action Button */}
+        <button
+          type="submit"
+          disabled={otp.join("").length !== 4}
+          onClick={handleSubmit}
+          className={`w-full py-4 px-8 text-base font-semibold rounded-lg transition-all duration-300 ${
+            otp.join("").length === 4
+              ? "bg-[#4285F4] text-white cursor-pointer hover:bg-blue-600"
+              : "bg-gray-300 text-gray-500 cursor-not-allowed"
+          }`}
+        >
+          Verify & Continue
+        </button>
+      </div>
     </div>
   );
 };

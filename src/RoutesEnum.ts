@@ -21,6 +21,7 @@ export enum eRoutes {
     CHOOSE_INVESTOR_AUTH = "/auth/choose-investor",
     USERNAME_PASSWORD_AUTH = "/auth/username-password",
     COMPLETE_KYC_AUTH = "/auth/complete-kyc",
+    KYC_AUTH = "/auth/kyc",
     AADHAAR_AUTH = "/auth/aadhaar",
     PAN_AUTH = "/auth/pan",
     BANK_AUTH = "/auth/bank",
